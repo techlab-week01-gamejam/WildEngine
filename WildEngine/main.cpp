@@ -1,15 +1,15 @@
-#include <windows.h>
+ï»¿#include <windows.h>
 
-// D3D »ç¿ë¿¡ ÇÊ¿äÇÑ ¶óÀÌºê·¯¸®µéÀ» ¸µÅ©ÇÕ´Ï´Ù.
+// D3D ì‚¬ìš©ì— í•„ìš”í•œ ë¼ì´ë¸ŒëŸ¬ë¦¬ë“¤ì„ ë§í¬í•©ë‹ˆë‹¤.
 #pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
-// D3D »ç¿ë¿¡ ÇÊ¿äÇÑ Çì´õÆÄÀÏµéÀ» Æ÷ÇÔÇÕ´Ï´Ù.
+// D3D ì‚¬ìš©ì— í•„ìš”í•œ í—¤ë”íŒŒì¼ë“¤ì„ í¬í•¨í•©ë‹ˆë‹¤.
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-// ³ªÁß¿¡ GUI ÀÛ¾÷½Ã µû·Î ¿Å±â±â
+// ë‚˜ì¤‘ì— GUI ì‘ì—…ì‹œ ë”°ë¡œ ì˜®ê¸°ê¸°
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
@@ -21,7 +21,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// °¢Á¾ ¸Ş½ÃÁö¸¦ Ã³¸®ÇÒ ÇÔ¼ö
+// ê°ì¢… ë©”ì‹œì§€ë¥¼ ì²˜ë¦¬í•  í•¨ìˆ˜
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) {
         return true;
@@ -40,39 +40,39 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
-    // À©µµ¿ì Å¬·¡½º ÀÌ¸§
+    // ìœˆë„ìš° í´ë˜ìŠ¤ ì´ë¦„
     WCHAR WindowClass[] = L"Wild Engine";
 
-    // À©µµ¿ì Å¸ÀÌÆ²¹Ù¿¡ Ç¥½ÃµÉ ÀÌ¸§
+    // ìœˆë„ìš° íƒ€ì´í‹€ë°”ì— í‘œì‹œë  ì´ë¦„
     WCHAR Title[] = L"Wild Engine";
 
-    // °¢Á¾ ¸Ş½ÃÁö¸¦ Ã³¸®ÇÒ ÇÔ¼öÀÎ WndProcÀÇ ÇÔ¼ö Æ÷ÀÎÅÍ¸¦ WindowClass ±¸Á¶Ã¼¿¡ ³Ö´Â´Ù.
+    // ê°ì¢… ë©”ì‹œì§€ë¥¼ ì²˜ë¦¬í•  í•¨ìˆ˜ì¸ WndProcì˜ í•¨ìˆ˜ í¬ì¸í„°ë¥¼ WindowClass êµ¬ì¡°ì²´ì— ë„£ëŠ”ë‹¤.
     WNDCLASSW wndclass = { 0, WndProc, 0, 0, 0, 0, 0, 0, 0, WindowClass };
 
-    // À©µµ¿ì Å¬·¡½º µî·Ï
+    // ìœˆë„ìš° í´ë˜ìŠ¤ ë“±ë¡
     RegisterClassW(&wndclass);
 
-    // 1024 x 1024 Å©±â¿¡ À©µµ¿ì »ı¼º
+    // 1024 x 1024 í¬ê¸°ì— ìœˆë„ìš° ìƒì„±
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
 
-    // Renderer Class¸¦ »ı¼ºÇÕ´Ï´Ù.
+    // Renderer Classë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
     URenderer* MainRender = new URenderer;
 
-    // D3D11 »ı¼ºÇÏ´Â ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+    // D3D11 ìƒì„±í•˜ëŠ” í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
     MainRender->Create(hWnd);
-    // ·»´õ·¯ »ı¼º Á÷ÈÄ¿¡ ½¦ÀÌ´õ¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+    // ë Œë”ëŸ¬ ìƒì„± ì§í›„ì— ì‰ì´ë”ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
     MainRender->CreateShader();
     MainRender->CreateConstantBuffer();
 
     bool bIsExit = false;
 
-    // FPS Á¦ÇÑÀ» À§ÇÑ ¼³Á¤
+    // FPS ì œí•œì„ ìœ„í•œ ì„¤ì •
     const int targetFPS = 60;
-    const double targetFrameTime = 1000.0 / targetFPS; // ÇÑ ÇÁ·¹ÀÓÀÇ ¸ñÇ¥ ½Ã°£ (¹Ğ¸®ÃÊ ´ÜÀ§)
+    const double targetFrameTime = 1000.0 / targetFPS; // í•œ í”„ë ˆì„ì˜ ëª©í‘œ ì‹œê°„ (ë°€ë¦¬ì´ˆ ë‹¨ìœ„)
 
-    // °í¼º´É Å¸ÀÌ¸Ó ÃÊ±âÈ­
+    // ê³ ì„±ëŠ¥ íƒ€ì´ë¨¸ ì´ˆê¸°í™”
     LARGE_INTEGER frequency;
     QueryPerformanceFrequency(&frequency);
 
@@ -80,19 +80,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     double elapsedTime = 0.0;
     double deltaTime = 0.0;
 
-    // Main Loop (Quit Message°¡ µé¾î¿À±â Àü±îÁö ¾Æ·¡ Loop¸¦ ¹«ÇÑÈ÷ ½ÇÇàÇÏ°Ô µÊ)
+    // Main Loop (Quit Messageê°€ ë“¤ì–´ì˜¤ê¸° ì „ê¹Œì§€ ì•„ë˜ Loopë¥¼ ë¬´í•œíˆ ì‹¤í–‰í•˜ê²Œ ë¨)
     while (bIsExit == false) {
-        // ·çÇÁ ½ÃÀÛ ½Ã°£ ±â·Ï
+        // ë£¨í”„ ì‹œì‘ ì‹œê°„ ê¸°ë¡
         QueryPerformanceCounter(&startTime);
 
         MSG msg;
 
-        // Ã³¸®ÇÒ ¸Ş½ÃÁö°¡ ´õ ÀÌ»ó ¾øÀ»¶§ ±îÁö ¼öÇà
+        // ì²˜ë¦¬í•  ë©”ì‹œì§€ê°€ ë” ì´ìƒ ì—†ì„ë•Œ ê¹Œì§€ ìˆ˜í–‰
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-            // Å° ÀÔ·Â ¸Ş½ÃÁö¸¦ ¹ø¿ª
+            // í‚¤ ì…ë ¥ ë©”ì‹œì§€ë¥¼ ë²ˆì—­
             TranslateMessage(&msg);
 
-            // ¸Ş½ÃÁö¸¦ ÀûÀıÇÑ À©µµ¿ì ÇÁ·Î½ÃÀú¿¡ Àü´Ş, ¸Ş½ÃÁö°¡ À§¿¡¼­ µî·ÏÇÑ WndProc À¸·Î Àü´ŞµÊ
+            // ë©”ì‹œì§€ë¥¼ ì ì ˆí•œ ìœˆë„ìš° í”„ë¡œì‹œì €ì— ì „ë‹¬, ë©”ì‹œì§€ê°€ ìœ„ì—ì„œ ë“±ë¡í•œ WndProc ìœ¼ë¡œ ì „ë‹¬ë¨
             DispatchMessage(&msg);
 
             if (msg.message == WM_QUIT) {
@@ -108,10 +108,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             do {
                 Sleep(0);
 
-                // ·çÇÁ Á¾·á ½Ã°£ ±â·Ï
+                // ë£¨í”„ ì¢…ë£Œ ì‹œê°„ ê¸°ë¡
                 QueryPerformanceCounter(&endTime);
 
-                // ÇÑ ÇÁ·¹ÀÓÀÌ ¼Ò¿äµÈ ½Ã°£ °è»ê (¹Ğ¸®ÃÊ ´ÜÀ§·Î º¯È¯)
+                // í•œ í”„ë ˆì„ì´ ì†Œìš”ëœ ì‹œê°„ ê³„ì‚° (ë°€ë¦¬ì´ˆ ë‹¨ìœ„ë¡œ ë³€í™˜)
                 elapsedTime = (endTime.QuadPart - startTime.QuadPart) * 1000.0 / frequency.QuadPart;
 
             } while (elapsedTime < targetFrameTime);
@@ -119,7 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             deltaTime = elapsedTime / 1000.0;
         }
 
-        // ReleaseShader() Á÷Àü¿¡ ¼Ò¸ê ÇÔ¼ö¸¦ Ãß°¡ÇÕ´Ï´Ù.
+        // ReleaseShader() ì§ì „ì— ì†Œë©¸ í•¨ìˆ˜ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
         MainRender->ReleaseConstantBuffer();
         MainRender->ReleaseShader();
         MainRender->Release();
