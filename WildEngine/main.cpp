@@ -81,7 +81,7 @@ struct FVector3 {
     }
 };
 
-#include "Sphere.h"
+#include "Core/Sphere/Sphere.h"
 
 class URenderer {
 public:
