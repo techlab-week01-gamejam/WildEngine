@@ -1,0 +1,3 @@
+class UPrimitiveComponent : public USceneComponent
+{
+};

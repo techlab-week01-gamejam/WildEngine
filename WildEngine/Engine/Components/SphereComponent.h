@@ -1,0 +1,3 @@
+class USphereComp : public UPrimitiveComponent
+{
+};

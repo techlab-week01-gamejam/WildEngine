@@ -1,0 +1,3 @@
+class UCubeComp : public UPrimitiveComponent
+{
+};
