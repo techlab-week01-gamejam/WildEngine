@@ -30,7 +30,7 @@ struct FVector {
 	}
 
 	// 벡터 정규화
-	void NormaliZe() {
+	void Normalize() {
 		float L = Length();
 		if (L > 0.0001f)
 		{
