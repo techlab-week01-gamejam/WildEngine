@@ -2,8 +2,9 @@
 cbuffer constants : register(b0)
 {
     float3 Offset;
-    float Pad;
-    float4 ConstantColor;
+    //float Pad;
+    //float4 ConstantColor;
+    float Scale;
 }
 
 struct VS_INPUT
@@ -23,11 +24,11 @@ PS_INPUT mainVS(VS_INPUT input)
     PS_INPUT output;
     
     // Pass the position directly to the pixel shader (no transformation)
-    output.position = input.position * Pad + float4(Offset, 1); // float4(Offset, 0) + input.position * Pad;
+    output.position = float4(Offset + input.position.xyz * Scale, 1.0f);
     
     
     // Pass the color to the pixel shader
-    output.color = input.color * ConstantColor;
+    output.color = input.color;
     
     return output;
 }
