@@ -15,8 +15,8 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
 
-#include "Core/Sphere/Sphere.h"
-#include "Engine/Renderer/URenderer.h"
+#include "Sphere/Sphere.h"
+#include "Renderer/URenderer.h"
 
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

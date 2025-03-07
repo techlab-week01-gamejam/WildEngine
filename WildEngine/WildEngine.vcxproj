@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,10 +128,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Core\Cube\Cube.h" />
-    <ClInclude Include="Core\Math\FMatrix.h" />
-    <ClInclude Include="Core\Math\FVector.h" />
+    <ClInclude Include="Core\Math\Matrix.h" />
+    <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
     <ClInclude Include="Core\Sphere\Sphere.h" />
     <ClInclude Include="Core\Triangle\Triangle.h" />
@@ -155,7 +155,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

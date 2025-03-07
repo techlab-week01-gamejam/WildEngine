@@ -78,10 +78,10 @@
     <ClInclude Include="Core\Cube\Cube.h">
       <Filter>소스 파일\Core\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Math\FMatrix.h">
+    <ClInclude Include="Core\Math\Matrix.h">
       <Filter>소스 파일\Core\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Math\FVector.h">
+    <ClInclude Include="Core\Math\Vector.h">
       <Filter>소스 파일\Core\Math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Renderer\URenderer.h">
@@ -103,9 +103,6 @@
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Components\SphereComponent.h">
-      <Filter>소스 파일\Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,9 +138,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Renderer\URenderer.cpp">
       <Filter>소스 파일\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

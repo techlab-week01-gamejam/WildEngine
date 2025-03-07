@@ -4,7 +4,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "../../Core/Math/Vector.h"
+#include "Math/Vector.h"
 
 struct FVertexSimple
 {
