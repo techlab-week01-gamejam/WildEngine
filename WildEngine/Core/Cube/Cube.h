@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Engine/Renderer/URenderer.h"
 
 FVertexSimple cube_vertices[] =
 {
