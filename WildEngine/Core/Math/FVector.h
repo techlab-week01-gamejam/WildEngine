@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Types.h"
+#include "../Types/Types.h"
 
 struct FVector {
 	float X;
