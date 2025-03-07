@@ -127,16 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="WildEngine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="WildEngine.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Core\Sphere\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
