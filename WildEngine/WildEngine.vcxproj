@@ -127,12 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Core\Cube\Cube.h" />
     <ClInclude Include="Core\Math\FMatrix.h" />
     <ClInclude Include="Core\Math\FVector.h" />
+    <ClInclude Include="Core\Object\Object.h" />
     <ClInclude Include="Core\Sphere\Sphere.h" />
     <ClInclude Include="Core\Triangle\Triangle.h" />
     <ClInclude Include="Core\Types\Types.h" />
+    <ClInclude Include="Engine\Components\CubeComponent.h" />
+    <ClInclude Include="Engine\Components\PrimitiveComponent.h" />
+    <ClInclude Include="Engine\Components\SceneComponent.h" />
+    <ClInclude Include="Engine\Components\SphereComponent.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -149,6 +155,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

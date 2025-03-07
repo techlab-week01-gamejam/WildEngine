@@ -19,11 +19,32 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{ba0f7e85-d334-470a-8a7b-2577905c2764}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Core">
+      <UniqueIdentifier>{a022486d-6017-45ea-892d-d29938cc4fc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine">
+      <UniqueIdentifier>{f1f2a947-7cf7-4a2c-9d57-fd86e8632940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Math">
+      <UniqueIdentifier>{8a7cccea-8eb2-46c5-bb4b-690623ddfc5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Object">
+      <UniqueIdentifier>{4aae7b4b-e356-4bf7-b60f-4160396339da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Types">
+      <UniqueIdentifier>{50339565-3d52-4424-bbd5-3db19e10052f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Primitives">
+      <UniqueIdentifier>{e3de8f24-7cd1-45bc-aeae-4336acc14ab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Renderer">
+      <UniqueIdentifier>{8bd3b291-20a2-46a4-a2d4-75695d2f94b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Components">
+      <UniqueIdentifier>{c97f44da-9d41-45cc-a280-d939001a656f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Sphere\Sphere.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
       <Filter>ImGui</Filter>
     </ClInclude>
@@ -48,23 +69,44 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Math\FMatrix.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Math\FVector.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Types\Types.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Renderer\URenderer.h">
-	  <Filter>헤더 파일</Filter>
+    <ClInclude Include="Core\Sphere\Sphere.h">
+      <Filter>소스 파일\Core\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="Core\Triangle\Triangle.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Core\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="Core\Cube\Cube.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Core\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\FMatrix.h">
+      <Filter>소스 파일\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\FVector.h">
+      <Filter>소스 파일\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Renderer\URenderer.h">
+      <Filter>소스 파일\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Types\Types.h">
+      <Filter>소스 파일\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Object\Object.h">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\CubeComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\PrimitiveComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\SceneComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\SphereComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +140,10 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Renderer\URenderer.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
