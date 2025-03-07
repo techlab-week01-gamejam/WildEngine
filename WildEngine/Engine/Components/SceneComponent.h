@@ -1,3 +1,5 @@
+#pragma once
+
 class USceneComponent : public UObject
 {
 public:
