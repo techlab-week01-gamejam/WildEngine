@@ -17,7 +17,8 @@ public:
 
 private:
 	void Initialize();
-	void CreateProjectionView();
+	FMatrix CreateProjectionView();
+	FMatrix CreateOrthogonalView();
 
 private:
 	URenderer* Renderer = nullptr;

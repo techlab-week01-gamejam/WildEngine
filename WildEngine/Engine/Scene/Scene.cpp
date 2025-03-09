@@ -44,13 +44,13 @@ void UScene::Initialize()
     WorldMatrix = FMatrix::Identity();
 
     // Projection Init
-    CreateProjectionView();
+    ProjectionMatrix = CreateProjectionView();
 
     // Ortho
-    OrthoMatrix = FMatrix::Identity(); // XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+    OrthoMatrix = CreateOrthogonalView(); // XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 }
 
-void UScene::CreateProjectionView()
+FMatrix UScene::CreateProjectionView()
 {
     D3D11_VIEWPORT ViewPort = Renderer->ViewportInfo;
     float ScreenAspect = ViewPort.Width / ViewPort.Height; // 화면 비율 ex 1280x1080 = 1.18...
@@ -75,7 +75,29 @@ void UScene::CreateProjectionView()
 
     FMatrix FinalProjectionMatrix(Projection);
 
-    ProjectionMatrix = FinalProjectionMatrix;
+    return FinalProjectionMatrix;
+}
+
+FMatrix UScene::CreateOrthogonalView()
+{
+    D3D11_VIEWPORT ViewPort = Renderer->ViewportInfo;
+    
+    float Width = ViewPort.Width;
+    float Height = ViewPort.Height;
+
+    float FarZ = PrimaryCamera->FarZ;
+    float NearZ = PrimaryCamera->NearZ;
+
+    float Projection[4][4] = {
+        { 2.0f / Width, 0.0f,           0.0f,                   0.0f },
+        { 0.0f,         2.0f / Height,  0.0f,                   0.0f },
+        { 0.0f,         0.0f,         1.0f / (FarZ - NearZ),    0.0f },
+        { 0.0f,         0.0f,         -NearZ / (FarZ - NearZ),  1.0f }
+    };
+
+    FMatrix FinalOrthoMatrix(Projection);
+
+    return FinalOrthoMatrix;
 }
 
 void UScene::Render()
