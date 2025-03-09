@@ -129,6 +129,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="Core\Font\IconDefs.h" />
+    <ClInclude Include="Core\Font\RawFonts.h" />
+    <ClInclude Include="Core\Interface\ISwitchable.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
@@ -140,6 +143,13 @@
     <ClInclude Include="Engine\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Components\SphereComponent.h" />
     <ClInclude Include="Engine\Components\TriangleComponent.h" />
+    <ClInclude Include="Engine\Editor\EditorDesigner.h" />
+    <ClInclude Include="Engine\Editor\EditorWindow.h" />
+    <ClInclude Include="Engine\Editor\WildEditor.h" />
+    <ClInclude Include="Engine\Editor\Windows\ConsoleWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\ControlWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\PropertyWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\StatWindow.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="Engine\Scene\Scene.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -161,6 +171,11 @@
     <ClCompile Include="Engine\Components\CubeComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
+    <ClCompile Include="Engine\Editor\WildEditor.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ConsoleWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ControlWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\PropertyWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\StatWindow.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="Engine\Scene\Scene.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />

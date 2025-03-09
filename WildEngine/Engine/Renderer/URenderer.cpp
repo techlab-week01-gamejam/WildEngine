@@ -2,6 +2,7 @@
 
 #include "Scene/Scene.h"
 #include "Types/CommonTypes.h"
+#include "Editor/WildEditor.h"
 
 // 렌더러 초기화: 장치, 스왑 체인, 프레임 버퍼, 래스터라이저 상태 생성
 void URenderer::Create(HWND hWindow)
@@ -13,6 +14,13 @@ void URenderer::Create(HWND hWindow)
 
     CreateShader();
     CreateMatrixBuffer();
+
+    // Editor 생성
+    if (PrimaryEditor == nullptr)
+    {
+        PrimaryEditor = new UWildEditor();
+    }
+    PrimaryEditor->Create(Device, DeviceContext, hWindow);
 }
 
 // Direct3D 장치 및 스왑 체인 생성
@@ -128,19 +136,28 @@ void URenderer::Update(float deltaTime)
 
 
     // Loop Code
-    //
-    //
+
+    // Scene Render
     if (PrimaryScene)
     {
         PrimaryScene->Render();
     }
 
+    // Editor Render
+    if (PrimaryEditor)
+    {
+        PrimaryEditor->Render();
+    }
+
+    //
     SwapBuffer();
 }
 
 // 렌더러 종료 시 모든 리소스 해제
 void URenderer::Release()
 {
+    PrimaryEditor->Release();
+
     ReleaseMatrixBuffer();
     ReleaseShader();
 
