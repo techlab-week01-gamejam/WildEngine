@@ -7,6 +7,7 @@
 
 #include "Components/CameraComponent.h"
 #include "Components/CubeComponent.h"
+#include "Components/SphereComponent.h"
 
 #include "Math/Matrix.h"
 #include "Types/CommonTypes.h"
@@ -25,7 +26,6 @@ UScene::UScene(const UScene&)
 
 UScene::~UScene()
 {
-    delete PrimaryCamera;
 }
 
 void UScene::Initialize()
@@ -36,18 +36,29 @@ void UScene::Initialize()
     // Camera 설정
     if (PrimaryCamera == nullptr)
     {
+        //Cube1 = static_cast<UCubeComponent*>(ObjFactory.ConstructObject(UCubeComponent::GetClass()));
+        Cube1 = new UCubeComponent(Renderer);
+
+        if (Sphere1 == nullptr)
+            Sphere1 = new USphereComponent(Renderer);
+
+
         //PrimaryCamera = static_cast<UCameraComponent*>(ObjFactory.ConstructObject(UCameraComponent::GetClass()));
         PrimaryCamera = new UCameraComponent();
         if (!PrimaryCamera) {
             FDebugConsole::DebugPrint("error!");
         }
+
+        //delete PrimaryCamera;
+        //PrimaryCamera = nullptr;
+
     }
 
     // Test Cube
     if (Cube1 == nullptr)
     {
-        //Cube1 = static_cast<UCubeComponent*>(ObjFactory.ConstructObject(UCubeComponent::GetClass()));
-        Cube1 = new UCubeComponent(Renderer);
+
+
     }
 
     // 월드 행렬 초기화

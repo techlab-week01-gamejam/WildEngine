@@ -17,6 +17,7 @@ void UObjectManager::RegisterObject(UObject* Object)
 	GUObjectArray.push_back(Object);
 
 	FDebugConsole::DebugPrint("[UObjectManager] Registered: UUID = %d, InternalIndex = %d", Object->UUID, Object->InternalIndex);
+	FDebugConsole::DebugPrint("[UObjectManager] GUObjectArray Registered: UUID = %d, InternalIndex = %d", GUObjectArray[GUObjectArray.size() -1]->UUID, GUObjectArray[GUObjectArray.size() - 1]->InternalIndex);
 }
 
 void UObjectManager::UnregisterObject(UObject* Object)
@@ -24,6 +25,7 @@ void UObjectManager::UnregisterObject(UObject* Object)
 	if (!Object) return;
 
 	auto it = std::find(GUObjectArray.begin(), GUObjectArray.end(), Object);
+	FDebugConsole::DebugPrint("[UObjectManager] Unregistered: UUID = %d", Object->UUID);
 	if (it != GUObjectArray.end())
 	{
 		GUObjectArray.erase(it);
