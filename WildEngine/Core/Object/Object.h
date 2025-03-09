@@ -1,5 +1,5 @@
 #pragma once
-#include "../Types/Types.h"
+#include "Types/Types.h"
 
 class UObject
 {

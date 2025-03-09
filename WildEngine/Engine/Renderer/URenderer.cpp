@@ -1,4 +1,5 @@
 #include "URenderer.h"
+#include "Scene.h"
 
 // 렌더러 초기화: 장치, 스왑 체인, 프레임 버퍼, 래스터라이저 상태 생성
 void URenderer::Create(HWND hWindow)
@@ -124,8 +125,23 @@ void URenderer::Update(float deltaTime)
     // Loop Code
     //
     //
+    Render(MainScene);
 
     SwapBuffer();
+}
+
+void URenderer::Render(UScene* Scene)
+{
+    Scene->CalculateMVP();
+    for (UPrimitiveComponent* Obj : SceneObjects) {
+        UpdateConstant(Obj->GetMVPMatrix());
+        Obj->Render();
+    }
+}
+
+void URenderer::SetMainScene(UScene* Scene)
+{
+    MainScene = Scene;
 }
 
 // 렌더러 종료 시 모든 리소스 해제
@@ -283,15 +299,14 @@ void URenderer::ReleaseConstantBuffer()
 }
 
 // 상수 버퍼 업데이트 (쉐이더에 전달할 오프셋과 스케일)
-void URenderer::UpdateConstant(FVector Offset, float Scale)
+void URenderer::UpdateConstant(FMatrix MVP)
 {
     if (ConstantBuffer)
     {
         D3D11_MAPPED_SUBRESOURCE constantbufferMSR;
         DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantbufferMSR);
         FConstants* constants = reinterpret_cast<FConstants*>(constantbufferMSR.pData);
-        constants->Offset = Offset;
-        constants->Scale = Scale;
+        constants->MVP = MVP;
         DeviceContext->Unmap(ConstantBuffer, 0);
     }
 }

@@ -1,10 +1,7 @@
 // ShaderW0.hlsl
 cbuffer constants : register(b0)
 {
-    float3 Offset;
-    //float Pad;
-    //float4 ConstantColor;
-    float Scale;
+    row_major float4x4 MVP;
 }
 
 struct VS_INPUT
@@ -23,9 +20,9 @@ PS_INPUT mainVS(VS_INPUT input)
 {
     PS_INPUT output;
     
-    // Pass the position directly to the pixel shader (no transformation)
-    output.position = float4(Offset + input.position.xyz * Scale, 1.0f);
-    
+    input.position.w = 1.0f;
+	// v, m
+    output.position = mul(input.position, MVP);
     
     // Pass the color to the pixel shader
     output.color = input.color;

@@ -15,8 +15,10 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
 
-#include "Core/Sphere/Sphere.h"
-#include "Engine/Renderer/URenderer.h"
+#include "Sphere/Sphere.h"
+#include "Renderer/URenderer.h"
+#include "Renderer/Scene.h"
+#include "Components/CubeComponent.h"
 
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -57,6 +59,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
 
+
+
     // Renderer Class를 생성합니다.
     URenderer* MainRender = new URenderer;
 
@@ -65,6 +69,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // 렌더러 생성 직후에 쉐이더를 생성하는 함수를 호출합니다.
     MainRender->CreateShader();
     MainRender->CreateConstantBuffer();
+
+
+    // Scene Class를 생성합니다.
+    UScene* MainScene = new UScene();
+
+    // 카메라 생성
+    UCameraComponent* MainCamera = new UCameraComponent();
+
+    MainCamera->SetRelativeLocation(FVector(10.0f, 20.0f, -1.0f));
+    MainScene->SetActiveCamera(MainCamera);
+    MainRender->SetMainScene(MainScene);
+
+    // 씬에 오브젝트 추가
+    MainScene->AddObject(new UCubeComponent(MainRender));
+
 
     bool bIsExit = false;
 

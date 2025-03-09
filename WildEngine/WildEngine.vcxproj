@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,18 +128,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Core\Cube\Cube.h" />
-    <ClInclude Include="Core\Math\FMatrix.h" />
-    <ClInclude Include="Core\Math\FVector.h" />
+    <ClInclude Include="Core\Math\Matrix.h" />
+    <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
     <ClInclude Include="Core\Sphere\Sphere.h" />
     <ClInclude Include="Core\Triangle\Triangle.h" />
     <ClInclude Include="Core\Types\Types.h" />
+    <ClInclude Include="Engine\Components\CameraComponent.h" />
     <ClInclude Include="Engine\Components\CubeComponent.h" />
     <ClInclude Include="Engine\Components\PrimitiveComponent.h" />
     <ClInclude Include="Engine\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Components\SphereComponent.h" />
+    <ClInclude Include="Engine\Renderer\Scene.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -155,7 +157,11 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="Engine\Components\CameraComponent.cpp" />
+    <ClCompile Include="Engine\Components\CubeComponent.cpp" />
+    <ClCompile Include="Engine\Components\PrimitiveComponent.cpp" />
+    <ClCompile Include="Engine\Components\SceneComponent.cpp" />
+    <ClCompile Include="Engine\Renderer\Scene.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

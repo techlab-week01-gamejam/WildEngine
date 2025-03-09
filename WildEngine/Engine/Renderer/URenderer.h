@@ -4,7 +4,11 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "../../Core/Math/Vector.h"
+#include "Math/Vector.h"
+#include "Math/Matrix.h"
+#include "Components/PrimitiveComponent.h"
+
+class UScene;
 
 struct FVertexSimple
 {
@@ -36,6 +40,8 @@ public:
     ID3D11InputLayout* SimpleInputLayout = nullptr;
     unsigned int Stride = 0;
 
+    TArray<UPrimitiveComponent*> SceneObjects;
+
 public:
     // 생성 및 해제 관련 함수
     void Create(HWND hWindow);
@@ -52,7 +58,8 @@ public:
     // 상수 버퍼 관련 함수
     void CreateConstantBuffer();
     void ReleaseConstantBuffer();
-    void UpdateConstant(FVector Offset, float Scale);
+    void UpdateConstant(FMatrix MVP);
+
 
     // 쉐이더 생성/해제 함수
     void CreateShader();
@@ -69,12 +76,16 @@ public:
     void ReleaseRasterizerState();
 
     void Update(float deltaTime);
+    void Render(UScene* Scene);
+
+    void SetMainScene(UScene* Scene);
 
 private:
     // 상수 버퍼에 사용될 구조체
     struct FConstants
     {
-        FVector Offset;
-        float Scale;
+        FMatrix MVP;
     };
+
+    UScene* MainScene;
 };
