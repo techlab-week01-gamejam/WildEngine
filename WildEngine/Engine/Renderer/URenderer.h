@@ -40,8 +40,6 @@ public:
     ID3D11InputLayout* SimpleInputLayout = nullptr;
     unsigned int Stride = 0;
 
-    TArray<UPrimitiveComponent*> SceneObjects;
-
 public:
     // 생성 및 해제 관련 함수
     void Create(HWND hWindow);

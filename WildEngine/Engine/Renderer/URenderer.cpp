@@ -133,7 +133,7 @@ void URenderer::Update(float deltaTime)
 void URenderer::Render(UScene* Scene)
 {
     Scene->CalculateMVP();
-    for (UPrimitiveComponent* Obj : SceneObjects) {
+    for (UPrimitiveComponent* Obj : Scene->SceneObjects) {
         UpdateConstant(Obj->GetMVPMatrix());
         Obj->Render();
     }
