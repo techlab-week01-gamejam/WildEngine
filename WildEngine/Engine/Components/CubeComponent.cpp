@@ -30,11 +30,11 @@ UCubeComponent::~UCubeComponent()
 {
 }
 
-UClass* UCubeComponent::GetClass()
-{
-    static UClass CubeClass("UCubeComponent", []() -> UObject* { return new UCubeComponent(); });
-    return &CubeClass;
-}
+//UClass* UCubeComponent::GetClass()
+//{
+//    static UClass CubeClass("UCubeComponent", []() -> UObject* { return new UCubeComponent(); });
+//    return &CubeClass;
+//}
 
 void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {

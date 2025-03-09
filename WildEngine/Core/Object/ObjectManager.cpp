@@ -1,10 +1,10 @@
 #include "ObjectManager.h"
-
+#pragma optimize("", off);
 
 UObjectManager& UObjectManager::GetInstance()
 {
-	static UObjectManager instance;
-	return instance;
+	static UObjectManager Instance;
+	return Instance;
 }
 
 void UObjectManager::RegisterObject(UObject* Object)
@@ -17,7 +17,6 @@ void UObjectManager::RegisterObject(UObject* Object)
 	GUObjectArray.push_back(Object);
 
 	FDebugConsole::DebugPrint("[UObjectManager] Registered: UUID = %d, InternalIndex = %d", Object->UUID, Object->InternalIndex);
-	FDebugConsole::DebugPrint("[UObjectManager] GUObjectArray Registered: UUID = %d, InternalIndex = %d", GUObjectArray[GUObjectArray.size() -1]->UUID, GUObjectArray[GUObjectArray.size() - 1]->InternalIndex);
 }
 
 void UObjectManager::UnregisterObject(UObject* Object)
@@ -25,7 +24,6 @@ void UObjectManager::UnregisterObject(UObject* Object)
 	if (!Object) return;
 
 	auto it = std::find(GUObjectArray.begin(), GUObjectArray.end(), Object);
-	FDebugConsole::DebugPrint("[UObjectManager] Unregistered: UUID = %d", Object->UUID);
 	if (it != GUObjectArray.end())
 	{
 		GUObjectArray.erase(it);
@@ -62,3 +60,4 @@ void UObjectManager::PrintMemoryUsage()
 	FDebugConsole::DebugPrint("[UObjectManager] Total Allocated Objects: %d", TotalAllocationCount);
 	FDebugConsole::DebugPrint("[UObjectManager] Total Memory Used :: %d", TotalAllocationBytes);
 }
+#pragma optimize("", on);

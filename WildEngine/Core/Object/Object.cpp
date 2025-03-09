@@ -1,7 +1,8 @@
 #include "Object.h"
 
 UObject::UObject()
-{
+{    // Manager¿¡ °´Ã¼ µî·Ï
+    UObjectManager::GetInstance().RegisterObject(this);
 }
 
 UObject::~UObject()
@@ -19,9 +20,6 @@ void* UObject::operator new(size_t Size)
     void* Ptr = ::operator new(Size);
     UObject* NewObj = static_cast<UObject*>(Ptr);
 
-    // Manager¿¡ °´Ã¼ µî·Ï
-
-    UObjectManager::GetInstance().RegisterObject(NewObj);
     UObjectManager::GetInstance().RegisterAllocation(NewObj, Size);
 
     return Ptr;

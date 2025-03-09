@@ -31,11 +31,11 @@ USphereComponent::~USphereComponent()
 {
 }
 
-UClass* USphereComponent::GetClass()
-{
-    static UClass SphereClass("USphereComponent", []() -> UObject* { return new USphereComponent(); });
-    return &SphereClass;
-}
+//UClass* USphereComponent::GetClass()
+//{
+//    static UClass SphereClass("USphereComponent", []() -> UObject* { return new USphereComponent(); });
+//    return &SphereClass;
+//}
 
 void USphereComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
