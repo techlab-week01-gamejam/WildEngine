@@ -126,5 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     MainRender->Release();
 
+    _CrtDumpMemoryLeaks(); // 메모리 누수 체크
+
     return 0;
 }

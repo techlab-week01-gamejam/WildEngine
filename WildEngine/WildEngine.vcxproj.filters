@@ -43,6 +43,15 @@
     <Filter Include="소스 파일\Engine\Scene">
       <UniqueIdentifier>{ccfffda4-2401-4ff4-b26d-970b5840a364}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Core\Class">
+      <UniqueIdentifier>{3e48e044-df38-4a7d-aaaa-a9ba2c607992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Log">
+      <UniqueIdentifier>{dd1cc437-5a01-4058-bd10-a039c60b2e06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Statics">
+      <UniqueIdentifier>{1b133652-913b-46f1-8701-39a9e4d340e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -111,6 +120,21 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Class\Class.h">
+      <Filter>소스 파일\Core\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Log\DebugConsole.h">
+      <Filter>소스 파일\Core\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Object\ObjectFactory.h">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Object\ObjectManager.h">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Statics\EngineStatics.h">
+      <Filter>소스 파일\Engine\Statics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderW0.hlsl">
@@ -158,6 +182,24 @@
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\TriangleComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Object\ObjectManager.cpp">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Object\ObjectFactory.cpp">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Object\Object.cpp">
+      <Filter>소스 파일\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Log\DebugConsole.cpp">
+      <Filter>소스 파일\Core\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Statics\EngineStatics.cpp">
+      <Filter>소스 파일\Engine\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\PrimitiveComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>

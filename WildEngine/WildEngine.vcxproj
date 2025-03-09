@@ -129,9 +129,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="Core\Class\Class.h" />
+    <ClInclude Include="Core\Log\DebugConsole.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
+    <ClInclude Include="Core\Object\ObjectFactory.h" />
+    <ClInclude Include="Core\Object\ObjectManager.h" />
     <ClInclude Include="Core\Primitive.h" />
     <ClInclude Include="Core\Types\Types.h" />
     <ClInclude Include="Engine\Components\CameraComponent.h" />
@@ -142,6 +146,7 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="Engine\Scene\Scene.h" />
+    <ClInclude Include="Engine\Statics\EngineStatics.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -157,12 +162,18 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Log\DebugConsole.cpp" />
+    <ClCompile Include="Core\Object\Object.cpp" />
+    <ClCompile Include="Core\Object\ObjectFactory.cpp" />
+    <ClCompile Include="Core\Object\ObjectManager.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\CubeComponent.cpp" />
+    <ClCompile Include="Engine\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="Engine\Scene\Scene.cpp" />
+    <ClCompile Include="Engine\Statics\EngineStatics.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />

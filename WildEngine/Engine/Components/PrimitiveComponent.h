@@ -4,4 +4,9 @@
 
 class UPrimitiveComponent : public USceneComponent
 {
+public:
+	UPrimitiveComponent();
+	~UPrimitiveComponent();
+
+	static UClass* GetClass();
 };
