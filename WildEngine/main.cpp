@@ -15,9 +15,8 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
 
-#include "Sphere/Sphere.h"
 #include "Renderer/URenderer.h"
-
+#include "Scene/Scene.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -39,7 +38,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+{
     // 윈도우 클래스 이름
     WCHAR WindowClass[] = L"Wild Engine";
 
@@ -58,13 +58,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         nullptr, nullptr, hInstance, nullptr);
 
     // Renderer Class를 생성합니다.
-    URenderer* MainRender = new URenderer;
+    URenderer* MainRender = new URenderer();
 
     // D3D11 생성하는 함수를 호출합니다.
     MainRender->Create(hWnd);
-    // 렌더러 생성 직후에 쉐이더를 생성하는 함수를 호출합니다.
-    MainRender->CreateShader();
-    MainRender->CreateConstantBuffer();
+
+    // Scene 생성
+    UScene* MainScene = new UScene(MainRender);
+    MainRender->SetPrimaryScene(MainScene);
 
     bool bIsExit = false;
 
@@ -81,48 +82,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     double deltaTime = 0.0;
 
     // Main Loop (Quit Message가 들어오기 전까지 아래 Loop를 무한히 실행하게 됨)
-    while (bIsExit == false) {
+    while (bIsExit == false)
+    {
         // 루프 시작 시간 기록
         QueryPerformanceCounter(&startTime);
 
         MSG msg;
 
         // 처리할 메시지가 더 이상 없을때 까지 수행
-        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        {
             // 키 입력 메시지를 번역
             TranslateMessage(&msg);
 
             // 메시지를 적절한 윈도우 프로시저에 전달, 메시지가 위에서 등록한 WndProc 으로 전달됨
             DispatchMessage(&msg);
 
-            if (msg.message == WM_QUIT) {
+            if (msg.message == WM_QUIT)
+            {
                 bIsExit = true;
                 break;
             }
         }
+        // MainRender
+        // 
+        MainRender->Update(deltaTime);
 
-            // MainRender
-            // 
-            MainRender->Update(deltaTime);
 
-            do {
-                Sleep(0);
+        do
+        {
+            Sleep(0);
 
-                // 루프 종료 시간 기록
-                QueryPerformanceCounter(&endTime);
+            // 루프 종료 시간 기록
+            QueryPerformanceCounter(&endTime);
 
-                // 한 프레임이 소요된 시간 계산 (밀리초 단위로 변환)
-                elapsedTime = (endTime.QuadPart - startTime.QuadPart) * 1000.0 / frequency.QuadPart;
+            // 한 프레임이 소요된 시간 계산 (밀리초 단위로 변환)
+            elapsedTime = (endTime.QuadPart - startTime.QuadPart) * 1000.0 / frequency.QuadPart;
 
-            } while (elapsedTime < targetFrameTime);
+        } while (elapsedTime < targetFrameTime);
 
-            deltaTime = elapsedTime / 1000.0;
-        }
+        deltaTime = elapsedTime / 1000.0;
+    }
 
-        // ReleaseShader() 직전에 소멸 함수를 추가합니다.
-        MainRender->ReleaseConstantBuffer();
-        MainRender->ReleaseShader();
-        MainRender->Release();
+    MainRender->Release();
 
-        return 0;
+    return 0;
 }

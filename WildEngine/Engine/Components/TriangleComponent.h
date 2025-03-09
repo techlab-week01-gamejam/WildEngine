@@ -6,13 +6,12 @@
 
 class URenderer;
 
-class UCubeComponent : public UPrimitiveComponent
+class UTriangleComponent : public UPrimitiveComponent
 {
-
 public:
-	UCubeComponent(URenderer* InRenderer);
-	UCubeComponent(const UCubeComponent&);
-	~UCubeComponent();
+	UTriangleComponent(URenderer* InRenderer);
+	UTriangleComponent(const UTriangleComponent&);
+	~UTriangleComponent();
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
@@ -27,3 +26,4 @@ private:
 
 	float rot;
 };
+

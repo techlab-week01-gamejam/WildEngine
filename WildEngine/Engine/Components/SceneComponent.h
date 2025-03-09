@@ -1,7 +1,8 @@
 #pragma once
-#include "../../Core/Object/Object.h"
-#include "../../Core/Math/Vector.h"
-#include "../../Core/Math/Matrix.h"
+
+#include "Object/Object.h"
+#include "Math/Vector.h"
+#include "Math/Matrix.h"
 
 class USceneComponent : public UObject
 {

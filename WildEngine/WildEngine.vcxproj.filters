@@ -34,14 +34,14 @@
     <Filter Include="소스 파일\Core\Types">
       <UniqueIdentifier>{50339565-3d52-4424-bbd5-3db19e10052f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Core\Primitives">
-      <UniqueIdentifier>{e3de8f24-7cd1-45bc-aeae-4336acc14ab5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Engine\Renderer">
       <UniqueIdentifier>{8bd3b291-20a2-46a4-a2d4-75695d2f94b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Engine\Components">
       <UniqueIdentifier>{c97f44da-9d41-45cc-a280-d939001a656f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Scene">
+      <UniqueIdentifier>{ccfffda4-2401-4ff4-b26d-970b5840a364}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,15 +69,6 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Sphere\Sphere.h">
-      <Filter>소스 파일\Core\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Triangle\Triangle.h">
-      <Filter>소스 파일\Core\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Cube\Cube.h">
-      <Filter>소스 파일\Core\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Math\Matrix.h">
       <Filter>소스 파일\Core\Math</Filter>
     </ClInclude>
@@ -96,13 +87,28 @@
     <ClInclude Include="Engine\Components\CubeComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Components\PrimitiveComponent.h">
-      <Filter>소스 파일\Engine\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Components\SceneComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Components\SphereComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonTypes.h">
+      <Filter>소스 파일\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Scene.h">
+      <Filter>소스 파일\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\CameraComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Primitive.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\PrimitiveComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -138,6 +144,21 @@
     </ClCompile>
     <ClCompile Include="Engine\Renderer\URenderer.cpp">
       <Filter>소스 파일\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Scene.cpp">
+      <Filter>소스 파일\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\CameraComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\CubeComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\SphereComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\TriangleComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -8,6 +9,7 @@
 #include <stack>
 #include <utility>
 #include <string>
+#include <d3d11.h>
 
 // Unreal Engine 스타일의 컨테이너 정의
 template <typename T>

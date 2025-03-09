@@ -1,5 +1,8 @@
 #include "URenderer.h"
 
+#include "Scene/Scene.h"
+#include "Types/CommonTypes.h"
+
 // 렌더러 초기화: 장치, 스왑 체인, 프레임 버퍼, 래스터라이저 상태 생성
 void URenderer::Create(HWND hWindow)
 {
@@ -7,6 +10,9 @@ void URenderer::Create(HWND hWindow)
     CreateFrameBuffer();
     CreateRasterizerState();
     // (깊이 스텐실 버퍼 및 블렌드 상태 등 추가 상태 설정은 필요에 따라 구현)
+
+    CreateShader();
+    CreateMatrixBuffer();
 }
 
 // Direct3D 장치 및 스왑 체인 생성
@@ -124,6 +130,10 @@ void URenderer::Update(float deltaTime)
     // Loop Code
     //
     //
+    if (PrimaryScene)
+    {
+        PrimaryScene->Render();
+    }
 
     SwapBuffer();
 }
@@ -131,6 +141,9 @@ void URenderer::Update(float deltaTime)
 // 렌더러 종료 시 모든 리소스 해제
 void URenderer::Release()
 {
+    ReleaseMatrixBuffer();
+    ReleaseShader();
+
     if (RasterizerState)
     {
         RasterizerState->Release();
@@ -140,6 +153,7 @@ void URenderer::Release()
     {
         DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
     }
+
     ReleaseFrameBuffer();
     ReleaseDeviceAndSwapChain();
 }
@@ -177,7 +191,7 @@ void URenderer::CreateShader()
         &SimpleInputLayout);
 
     // 버텍스 구조체의 크기를 기준으로 스트라이드 설정 (FVertexSimple 정의 필요)
-    Stride = sizeof(FVertexSimple);
+    Stride = sizeof(FVertexType);
 
     vertexshaderCSO->Release();
     pixelshaderCSO->Release();
@@ -221,9 +235,9 @@ void URenderer::PrepareShader()
     DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
     DeviceContext->IASetInputLayout(SimpleInputLayout);
 
-    if (ConstantBuffer)
+    if (MatrixBuffer)
     {
-        DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+        DeviceContext->VSSetConstantBuffers(0, 1, &MatrixBuffer);
     }
 }
 
@@ -236,7 +250,7 @@ void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
 }
 
 // 정점 버퍼 생성
-ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth)
+ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexType* vertices, UINT byteWidth)
 {
     D3D11_BUFFER_DESC vertexbufferdesc = {};
     vertexbufferdesc.ByteWidth = byteWidth;
@@ -261,37 +275,50 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
 }
 
 // 상수 버퍼 생성
-void URenderer::CreateConstantBuffer()
+void URenderer::CreateMatrixBuffer()
 {
     D3D11_BUFFER_DESC constantbufferdesc = {};
-    constantbufferdesc.ByteWidth = (sizeof(FConstants) + 0xf) & 0xfffffff0; // 16바이트 배수 보장
+    constantbufferdesc.ByteWidth = (sizeof(FMatrix) + 0xf) & 0xfffffff0; // 16바이트 배수 보장
     constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;   // 매 프레임 CPU에 의해 업데이트
     constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-    Device->CreateBuffer(&constantbufferdesc, nullptr, &ConstantBuffer);
+    Device->CreateBuffer(&constantbufferdesc, nullptr, &MatrixBuffer);
 }
 
 // 상수 버퍼 해제
-void URenderer::ReleaseConstantBuffer()
+void URenderer::ReleaseMatrixBuffer()
 {
-    if (ConstantBuffer)
+    if (MatrixBuffer)
     {
-        ConstantBuffer->Release();
-        ConstantBuffer = nullptr;
+        MatrixBuffer->Release();
+        MatrixBuffer = nullptr;
     }
 }
 
-// 상수 버퍼 업데이트 (쉐이더에 전달할 오프셋과 스케일)
-void URenderer::UpdateConstant(FVector Offset, float Scale)
+// 행렬 버퍼 업데이트 (쉐이더에 전달할 오프셋과 스케일)
+void URenderer::UpdateShaderParameters(FMatrix World, FMatrix View, FMatrix Projection)
 {
-    if (ConstantBuffer)
+    if (MatrixBuffer)
     {
         D3D11_MAPPED_SUBRESOURCE constantbufferMSR;
-        DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantbufferMSR);
-        FConstants* constants = reinterpret_cast<FConstants*>(constantbufferMSR.pData);
-        constants->Offset = Offset;
-        constants->Scale = Scale;
-        DeviceContext->Unmap(ConstantBuffer, 0);
+
+        DeviceContext->Map(MatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantbufferMSR); // update constant buffer every frame
+        FMatrixType* constants = (FMatrixType*)constantbufferMSR.pData;
+        {
+            constants->MVP = World * View * Projection;
+        }
+        DeviceContext->Unmap(MatrixBuffer, 0);
     }
+}
+
+void URenderer::SetPrimaryScene(UScene* NewScene)
+{
+    if (PrimaryScene)
+    {
+        delete PrimaryScene;
+        PrimaryScene = nullptr;
+    }
+
+    PrimaryScene = NewScene;
 }

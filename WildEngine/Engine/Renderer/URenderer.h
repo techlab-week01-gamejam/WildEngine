@@ -4,13 +4,10 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "Math/Vector.h"
+#include "Math/Matrix.h"
 
-struct FVertexSimple
-{
-    float x, y, z;    // Position
-    float r, g, b, a; // Color
-};
+struct FVertexType;
+class UScene;
 
 // 렌더러 클래스 선언
 class URenderer
@@ -25,7 +22,7 @@ public:
     ID3D11Texture2D* FrameBuffer = nullptr;             // 백 버퍼 텍스처
     ID3D11RenderTargetView* FrameBufferRTV = nullptr;     // 렌더 타겟 뷰
     ID3D11RasterizerState* RasterizerState = nullptr;     // 래스터라이저 상태
-    ID3D11Buffer* ConstantBuffer = nullptr;             // 상수 버퍼
+    ID3D11Buffer* MatrixBuffer = nullptr;             // 상수 버퍼
 
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };  // 초기 클리어 색상 (RGBA)
     D3D11_VIEWPORT ViewportInfo;                        // 뷰포트 정보
@@ -36,23 +33,37 @@ public:
     ID3D11InputLayout* SimpleInputLayout = nullptr;
     unsigned int Stride = 0;
 
+
 public:
     // 생성 및 해제 관련 함수
     void Create(HWND hWindow);
     void Release();
 
+    // 업데이트 함수
+    void Update(float deltaTime);
+
+    // 상수 버퍼 업데이트
+    void UpdateShaderParameters(FMatrix World, FMatrix View, FMatrix Projection);
+
+    // 상수 버퍼 생성
+    ID3D11Buffer* CreateVertexBuffer(FVertexType* vertices, UINT byteWidth);
+
+    // 그리기
+    void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
+
+    void SetPrimaryScene(UScene* NewScene);
+
+private:
     // 렌더링 처리 함수
     void SwapBuffer();
     void Prepare();
     void PrepareShader();
-    void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
-    ID3D11Buffer* CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth);
+
     void ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer);
 
     // 상수 버퍼 관련 함수
-    void CreateConstantBuffer();
-    void ReleaseConstantBuffer();
-    void UpdateConstant(FVector Offset, float Scale);
+    void CreateMatrixBuffer();
+    void ReleaseMatrixBuffer();
 
     // 쉐이더 생성/해제 함수
     void CreateShader();
@@ -68,13 +79,12 @@ public:
     void CreateRasterizerState();
     void ReleaseRasterizerState();
 
-    void Update(float deltaTime);
-
 private:
-    // 상수 버퍼에 사용될 구조체
-    struct FConstants
+    UScene* PrimaryScene;
+
+    struct FMatrixType
     {
-        FVector Offset;
-        float Scale;
+        FMatrix MVP;
     };
+
 };
