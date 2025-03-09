@@ -111,6 +111,9 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Core\json.hpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderW0.hlsl">
