@@ -43,6 +43,12 @@
     <Filter Include="소스 파일\Engine\Scene">
       <UniqueIdentifier>{ccfffda4-2401-4ff4-b26d-970b5840a364}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Core\Input">
+      <UniqueIdentifier>{4cf0611d-5136-4074-92a4-02f1561b7b8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Interface">
+      <UniqueIdentifier>{2fc5c07b-ddef-48f0-ac7c-920349793f9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -111,6 +117,12 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Input\InputManager.h">
+      <Filter>소스 파일\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Interface\ISingleton.h">
+      <Filter>소스 파일\Core\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderW0.hlsl">
@@ -159,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Components\TriangleComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputManager.cpp">
+      <Filter>소스 파일\Core\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
