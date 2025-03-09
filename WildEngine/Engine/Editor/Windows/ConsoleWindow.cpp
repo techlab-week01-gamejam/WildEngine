@@ -3,8 +3,10 @@
 #endif
 
 #include "ConsoleWindow.h"
+#include "Types/Types.h"
 #include <cstdarg>
 #include <stdio.h>
+#include <Editor/EditorDesigner.h>
 
 ConsoleWindow::ConsoleWindow()
 {
@@ -16,6 +18,12 @@ ConsoleWindow::ConsoleWindow()
     Commands.push_back("HISTORY");
     Commands.push_back("CLEAR");
     Commands.push_back("CLASSIFY");
+    Commands.push_back("UE_LOG");
+    Commands.push_back("stat");
+    Commands.push_back("new");
+    Commands.push_back("save");
+    Commands.push_back("load");
+
     AutoScroll = true;
     ScrollToBottom = false;
     AddLog("Welcome to Wild Engine !");
@@ -338,6 +346,84 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
         int first = History.Size - 10;
         for (int i = first > 0 ? first : 0; i < History.Size; i++)
             AddLog("%3d: %s\n", i, History[i]);
+    }
+    else if (Stricmp(CommandLine, "stat") == 0)
+    {
+        auto Window = UEditorDesigner::Get().GetWindow("StatWindow");
+        if (Window)
+        {
+            // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+            if (ISwitchable* Stat = dynamic_cast<ISwitchable*>(Window.get()))
+            {
+                Stat->Toggle();
+            }
+        }
+    }
+
+    else if (Strncmp(CommandLine, "UE_LOG(", 7) == 0)
+    {
+        // UE_LOG( 이후 문자열 추출
+        FString args = CommandLine + 7;
+        size_t endPos = args.find_last_of(')');
+        if (endPos != FString::npos)
+        {
+            args = args.substr(0, endPos);
+        }
+
+        size_t commaPos = args.find(',');
+        if (commaPos != FString::npos)
+        {
+            FString formatPart = args.substr(0, commaPos); // 포맷 부분
+            FString argPart = args.substr(commaPos + 1);     // 인자 부분
+
+            size_t firstQuote = formatPart.find_first_of('"'); // 앞 따옴표
+            size_t lastQuote = formatPart.find_last_of('"');   // 뒷 따옴표
+
+            if (firstQuote != FString::npos &&
+                lastQuote != FString::npos &&
+                firstQuote != lastQuote)
+            {
+                FString formatStr = formatPart.substr(firstQuote + 1, lastQuote - firstQuote - 1);
+                char buffer[1024];
+
+                // %d, %f, %s 서식 지정자에 따른 변환 처리
+                if (formatStr.find("%d") != FString::npos)
+                {
+                    int argValue = atoi(argPart.c_str());
+                    snprintf(buffer, sizeof(buffer), formatStr.c_str(), argValue);
+                }
+                else if (formatStr.find("%f") != FString::npos)
+                {
+                    double argValue = atof(argPart.c_str());
+                    snprintf(buffer, sizeof(buffer), formatStr.c_str(), argValue);
+                }
+                else if (formatStr.find("%s") != FString::npos)
+                {
+                    // 인자가 따옴표로 감싸져 있다면 제거
+                    if (!argPart.empty() && argPart.front() == '"' && argPart.back() == '"')
+                    {
+                        argPart = argPart.substr(1, argPart.size() - 2);
+                    }
+                    snprintf(buffer, sizeof(buffer), formatStr.c_str(), argPart.c_str());
+                }
+                else
+                {
+                    // 서식 지정자가 없는 경우 기본적으로 인자를 정수로 처리
+                    int argValue = atoi(argPart.c_str());
+                    snprintf(buffer, sizeof(buffer), formatStr.c_str(), argValue);
+                }
+
+                AddLog("%s", buffer);
+            }
+            else
+            {
+                AddLog("FORMAT ERROR: '%s'\n", CommandLine);
+            }
+        }
+        else
+        {
+            AddLog("ARGUMENT ERROR: '%s'\n", CommandLine);
+        }
     }
     else
     {

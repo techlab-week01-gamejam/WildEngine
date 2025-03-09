@@ -99,7 +99,7 @@ void UWildEditor::PreferenceStyle()
     ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = ImVec4(0, 0.5, 0, 0.6f);
 
     // Text
-    ImGui::GetStyle().Colors[ImGuiCol_Text] = ImVec4(1, 1, 1, 0.8);
+    ImGui::GetStyle().Colors[ImGuiCol_Text] = ImVec4(1, 1, 1, 0.9);
     
 }
 
