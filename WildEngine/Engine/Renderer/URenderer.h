@@ -63,6 +63,9 @@ public:
 
     UScene* GetPrimaryScene() { return PrimaryScene; }
 
+    UWildEditor* GetPrimaryEditor() { return PrimaryEditor; }
+
+    void OnResize(uint32 Width, uint32 Height);
 private:
     // 렌더링 처리 함수
     void SwapBuffer();

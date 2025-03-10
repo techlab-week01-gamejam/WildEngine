@@ -1,6 +1,7 @@
 #include "GizmoComponent.h"
 #include "Renderer/URenderer.h"
 #include "Types/CommonTypes.h"
+#include <Input/InputManager.h>
 
 UGizmoComponent::UGizmoComponent(URenderer* InRenderer)
 {
@@ -31,6 +32,21 @@ UClass* UGizmoComponent::GetInstanceClass() const
 
 void UGizmoComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
+    if (FInputManager::GetInst().GetKey(0x31) == EKeyState::Pressed)
+    {
+        CurrentType = EGizmoType::Translation;
+    }
+
+    if (FInputManager::GetInst().GetKey(0x32) == EKeyState::Pressed)
+    {
+        CurrentType = EGizmoType::Rotation;
+    }
+
+    if (FInputManager::GetInst().GetKey(0x33) == EKeyState::Pressed)
+    {
+        CurrentType = EGizmoType::Scale;
+    }
+
     switch (CurrentType)
     {
         case EGizmoType::Translation:

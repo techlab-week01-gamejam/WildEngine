@@ -3,9 +3,9 @@
 #include "Windows.h"
 #include "Types/Types.h"
 #include "memory"
-#include "Windows/PropertyWindow.h"
 
 class URenderer;
+class UScene;
 
 class UWildEditor
 {
@@ -14,10 +14,12 @@ public:
 	UWildEditor(const UWildEditor&);
 	~UWildEditor();
 
-	void Create(ID3D11Device* Device, ID3D11DeviceContext* DeviceContext, HWND hWnd);
+	void Create(ID3D11Device* InDevice, ID3D11DeviceContext* InDeviceContext, HWND InHWND);
 	void Release();
 
 	void Render();
+
+	void OnResize();
 
 private:
 	void PreferenceStyle();
@@ -34,8 +36,14 @@ private:
 
 	void SetupPropertyWindow();
 
+	void SetupConsoleWindow();
+
 private:
 	URenderer* Renderer;
 	UScene* Scene;
+
+	ID3D11Device* Device;
+	ID3D11DeviceContext* DeviceContext;
+	HWND hWnd;
 };
 

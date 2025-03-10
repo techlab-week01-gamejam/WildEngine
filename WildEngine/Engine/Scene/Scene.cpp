@@ -71,6 +71,7 @@ void UScene::Initialize()
     if (Cube1 == nullptr)
     {
         //Cube1 = new UCubeComponent(Renderer);
+
         Cube1 = new UCubeComponent(Renderer);
         Cube1->SetRelativeLocation(FVector(1.f, 1.f, 1.f));
         Cube1->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
@@ -97,8 +98,6 @@ void UScene::Initialize()
     {
         SceneGizmo = new UGizmoComponent(Renderer);
     }
-
-    //CreateNewObject("cube", 2);
 
     // Test
     SelectedObject = Cube1;
