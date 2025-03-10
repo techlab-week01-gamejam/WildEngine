@@ -49,8 +49,9 @@
     <Filter Include="소스 파일\Core\Log">
       <UniqueIdentifier>{dd1cc437-5a01-4058-bd10-a039c60b2e06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Engine\Statics">
-      <UniqueIdentifier>{1b133652-913b-46f1-8701-39a9e4d340e2}</UniqueIdentifier>
+	<Filter Include="소스 파일\Engine\Statics">
+        <UniqueIdentifier>{1b133652-913b-46f1-8701-39a9e4d340e2}</UniqueIdentifier>
+	 </Filter>
     <Filter Include="소스 파일\Core\Input">
       <UniqueIdentifier>{4cf0611d-5136-4074-92a4-02f1561b7b8c}</UniqueIdentifier>
     </Filter>
@@ -143,8 +144,9 @@
     <ClInclude Include="Core\Input\InputManager.h">
       <Filter>소스 파일\Core\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Interface\ISingleton.h">
+	 <ClInclude Include="Core\Interface\ISingleton.h">
       <Filter>소스 파일\Core\Interface</Filter>
+	</ClInclude>
     <ClInclude Include="Engine\Components\GizmoComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
@@ -225,6 +227,7 @@
     </FxCompile>
     <ClCompile Include="Core\Input\InputManager.cpp">
       <Filter>소스 파일\Core\Input</Filter>
+	</ClCompile>
     <ClCompile Include="Engine\Components\GizmoComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
