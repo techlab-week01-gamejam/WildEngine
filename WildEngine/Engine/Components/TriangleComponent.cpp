@@ -33,6 +33,11 @@ UClass* UTriangleComponent::GetInstanceClass() const
     return GetClass();
 }
 
+bool UTriangleComponent::CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
+{
+    return false;
+}
+
 void UTriangleComponent::Initialize()
 {
     NumVertices = sizeof(triangle_vertices) / sizeof(FVertexType);

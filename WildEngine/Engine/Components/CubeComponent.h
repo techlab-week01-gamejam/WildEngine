@@ -19,6 +19,7 @@ public:
 	UClass* GetInstanceClass() const override;
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
+	bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) override;
 
 private:
 	void Initialize();

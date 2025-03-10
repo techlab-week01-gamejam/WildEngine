@@ -18,11 +18,11 @@ UPrimitiveComponent::~UPrimitiveComponent()
 void UPrimitiveComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
-    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(0, rot, 0);
+    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(RelativeRotation.X, RelativeRotation.Y, RelativeRotation.Z);
     FMatrix Scaling = FMatrix::Scaling(RelativeScale3D.X, RelativeScale3D.Y, RelativeScale3D.Z);
 
     WorldTransform = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
-
+    
     // 셰이더 상수 버퍼 업데이트
     Renderer->UpdateShaderParameters(WorldTransform, ViewMatrix, ProjectionMatrix);
 

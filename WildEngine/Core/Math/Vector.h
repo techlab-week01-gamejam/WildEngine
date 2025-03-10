@@ -134,5 +134,9 @@ struct FVector
         return *this;
     }
 
+    FVector operator-() const
+    {
+        return FVector(-X, -Y, -Z);
+    }
 
 };

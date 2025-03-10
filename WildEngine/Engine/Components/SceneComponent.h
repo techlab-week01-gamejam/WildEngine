@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Object/Object.h"
-#include "Math/Vector.h"
 #include "Math/Matrix.h"
 
 class USceneComponent : public UObject

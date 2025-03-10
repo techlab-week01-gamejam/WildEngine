@@ -191,7 +191,24 @@ void UCameraComponent::UpdateRotationFromMouse()
 
 FVector UCameraComponent::GetRayDirection(int ScreenX, int ScreenY)
 {
+	float SinFov;
+	float CosFov;
+	float ToRadian = DirectX::XMConvertToRadians(0.5 * FieldOfView);
+	DirectX::XMScalarSinCos(&SinFov, &CosFov, ToRadian);
+	float ProjectionHeight = CosFov / SinFov;
+	float ProjectionWidth = ProjectionHeight / (ViewportWidth / ViewportHeight);
 	//스크린 좌표를 정규화된 장치 좌표로 변환
-	//float NDC_X = (2.0f * ScreenX)  /
-	return FVector();
+	float NDC_X = ((2.0f * ScreenX) / ViewportWidth - 1.0f) / ProjectionWidth;
+	float NDC_Y = (1.0f - (2.0f * ScreenY) / ViewportHeight) / ProjectionHeight;
+
+	FVector RayOrigin = FVector(0.0f, 0.0f, 0.0f);
+	FVector RayDirection = FVector(NDC_X, NDC_Y, 1.0f);
+
+	// 뷰 좌표를 월드 좌표로 변환
+	FMatrix InverseViewMatrix = ViewMatrix.Inverse();
+	RayOrigin = InverseViewMatrix * RayOrigin;
+	RayDirection = FMatrix::TransformDirection(InverseViewMatrix, RayDirection);
+	RayDirection = RayDirection.Normalized();
+
+	return RayDirection;
 }
