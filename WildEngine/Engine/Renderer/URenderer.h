@@ -24,6 +24,8 @@ public:
     ID3D11Texture2D* FrameBuffer = nullptr;             // 백 버퍼 텍스처
     ID3D11RenderTargetView* FrameBufferRTV = nullptr;     // 렌더 타겟 뷰
     ID3D11RasterizerState* RasterizerState = nullptr;     // 래스터라이저 상태
+    ID3D11DepthStencilState* DepthStencilState = nullptr; // 스탠실 상태
+    ID3D11DepthStencilState* GizmoDepthStencilState = nullptr; // Gizmo 스탠실 상태
     ID3D11Buffer* MatrixBuffer = nullptr;             // 상수 버퍼
 
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };  // 초기 클리어 색상 (RGBA)
@@ -35,6 +37,8 @@ public:
     ID3D11InputLayout* SimpleInputLayout = nullptr;
     unsigned int Stride = 0;
 
+
+    ID3D11DepthStencilView* DepthStencilView = nullptr;
 
 public:
     // 생성 및 해제 관련 함수
@@ -52,6 +56,8 @@ public:
 
     // 그리기
     void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
+
+    void RenderGizmo(ID3D11Buffer* pBuffer, UINT numVertices);
 
     void SetPrimaryScene(UScene* NewScene);
 
@@ -78,8 +84,16 @@ private:
     // 프레임 버퍼 및 래스터라이저 상태 관리 함수
     void CreateFrameBuffer();
     void ReleaseFrameBuffer();
+    
+    // 레스터라이저 생성
     void CreateRasterizerState();
     void ReleaseRasterizerState();
+
+    // 스텐실 생성
+    void CreateStencilState();
+    void CreateStencilBuffer();
+    void ReleaseStencilState();
+    void ReleaseStencilBuffer();
 
 private:
     UScene* PrimaryScene;

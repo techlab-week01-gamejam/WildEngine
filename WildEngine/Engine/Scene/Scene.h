@@ -7,6 +7,9 @@ class URenderer;
 class UObject;
 class UCameraComponent;
 class UCubeComponent;
+class USphereComponent;
+class UGizmoComponent;
+
 
 class UScene : public IScene
 {
@@ -16,6 +19,10 @@ public:
 	~UScene();
 
 	void Render();
+	URenderer* GetRenderer() const
+	{
+		return Renderer;
+	};
 
 public:
 	//////////////////////
@@ -46,6 +53,8 @@ private:
 	URenderer* Renderer = nullptr;
 	UCameraComponent* PrimaryCamera = nullptr;
 	UCubeComponent* Cube1 = nullptr;
+	USphereComponent* Sphere1 = nullptr;
+	UGizmoComponent* SceneGizmo = nullptr;
 
 	UObject* SelectedObject = nullptr;
 

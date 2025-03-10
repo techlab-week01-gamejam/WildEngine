@@ -10,9 +10,12 @@ class USphereComponent : public UPrimitiveComponent
 {
 
 public:
+	USphereComponent();
 	USphereComponent(URenderer* InRenderer);
 	USphereComponent(const USphereComponent&);
 	~USphereComponent();
+
+	static UClass* GetClass();
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
