@@ -33,6 +33,7 @@ void UScene::Initialize()
     {
         PrimaryCamera = new UCameraComponent();
     }
+	PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
 
     // Test Cube
     if (Cube1 == nullptr)

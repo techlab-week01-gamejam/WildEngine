@@ -86,22 +86,24 @@ void UCameraComponent::Render()
 	// 마우스 이동량을 이용한 회전 처리
 	UpdateRotationFromMouse();
 
+	float MoveSpeed = 0.3f;
+
 	// 키보드 입력 처리
 	if(FInputManager::GetInst().GetKey('W') == EKeyState::Held)
 	{
-		CameraPosition += RotationMatrix * FVector(0.0f, 0.0f, 0.5f);
+		CameraPosition += RotationMatrix * FVector(0.0f, 0.0f, MoveSpeed);
 	}
 	if (FInputManager::GetInst().GetKey('A') == EKeyState::Held)
 	{
-		CameraPosition -= RotationMatrix * FVector(0.5f, 0.0f, 0.0f);
+		CameraPosition -= RotationMatrix * FVector(MoveSpeed, 0.0f, 0.0f);
 	}
 	if (FInputManager::GetInst().GetKey('S') == EKeyState::Held)
 	{
-		CameraPosition -= RotationMatrix * FVector(0.0f, 0.0f, 0.5f);
+		CameraPosition -= RotationMatrix * FVector(0.0f, 0.0f, MoveSpeed);
 	}
 	if (FInputManager::GetInst().GetKey('D') == EKeyState::Held)
 	{
-		CameraPosition += RotationMatrix * FVector(0.5f, 0.0f, 0.0f);
+		CameraPosition += RotationMatrix * FVector(MoveSpeed, 0.0f, 0.0f);
 	}
 
 	ViewMatrix = CreateLookAt();
@@ -122,6 +124,13 @@ void UCameraComponent::SetRotation(float x, float y, float z)
 	CameraRotation.X = x;
 	CameraRotation.Y = y;
 	CameraRotation.Z = z;
+}
+
+void UCameraComponent::SetViewportSize(float Width, float Height)
+{
+	// 뷰포트 설정
+	ViewportWidth = Width;
+	ViewportHeight = Height;
 }
 
 FVector UCameraComponent::GetPosition()
@@ -165,5 +174,12 @@ void UCameraComponent::UpdateRotationFromMouse()
 	float MaxPitch = DirectX::XMConvertToRadians(89.0f);
 	float MinPitch = DirectX::XMConvertToRadians(-89.0f);
 	CameraRotation.X = (CameraRotation.X < MinPitch) ? MinPitch : (CameraRotation.X > MaxPitch) ? MaxPitch : CameraRotation.X;
+}
+
+FVector UCameraComponent::GetRayDirection(int ScreenX, int ScreenY)
+{ 
+	//스크린 좌표를 정규화된 장치 좌표로 변환
+	//float NDC_X = (2.0f * ScreenX)  /
+	return FVector();
 }
 

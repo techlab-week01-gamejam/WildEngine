@@ -1,6 +1,8 @@
 #pragma once
 #include "Interface/ISingleton.h"
 #include "Types/Types.h"
+#include "Math/Vector.h"
+#include "Math/Matrix.h"
 #include <unordered_map>
 #include <Windows.h>
 
