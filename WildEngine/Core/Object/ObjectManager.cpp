@@ -1,12 +1,6 @@
 #include "ObjectManager.h"
 #pragma optimize("", off);
 
-UObjectManager& UObjectManager::GetInstance()
-{
-	static UObjectManager Instance;
-	return Instance;
-}
-
 void UObjectManager::RegisterObject(UObject* Object)
 {
 	if (!Object) return;
@@ -55,12 +49,10 @@ void UObjectManager::RegisterDeallocation(UObject* Object)
 	}
 }
 
-void UObjectManager::PrintMemoryUsage(UINT32& Objects, UINT32& Memory)
+void UObjectManager::PrintMemoryUsage()
 {
 	FDebugConsole::DebugPrint("[UObjectManager] Total Allocated Objects: %d", TotalAllocationCount);
 	FDebugConsole::DebugPrint("[UObjectManager] Total Memory Used :: %d", TotalAllocationBytes);
-
-	Objects = TotalAllocationCount;
-	Memory = TotalAllocationBytes;
 }
+
 #pragma optimize("", on);

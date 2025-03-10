@@ -58,10 +58,11 @@ void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix Pro
 {
    /* if (rot == 180) rot = 0;
     rot += 0.01f;*/
+    float Radian = 3.141592f / 180.0f;
 
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
-    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(0, rot, 0);
-    FMatrix Scaling = FMatrix::Scaling(1, 1, 1);
+    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(RelativeRotation.X * Radian, RelativeRotation.Y * Radian, RelativeRotation.Z * Radian);
+    FMatrix Scaling = FMatrix::Scaling(RelativeScale3D.X, RelativeScale3D.Y, RelativeScale3D.Z);
 
     WorldTransform = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
 

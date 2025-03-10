@@ -18,6 +18,9 @@
 #include "Font/IconDefs.h"
 #include "Font/RawFonts.h"
 
+#include "Scene/Scene.h"
+#include <Components/PrimitiveComponent.h>
+
 UWildEditor::UWildEditor(URenderer* InRenderer)
 {
     Renderer = InRenderer;
@@ -44,7 +47,7 @@ void UWildEditor::Create(ID3D11Device* Device, ID3D11DeviceContext* DeviceContex
     auto NewControlWindow = std::make_shared<ControlWindow>();
     UEditorDesigner::Get().AddWindow("ControlWindow", NewControlWindow);
 
-    auto NewPropertyWindow = std::make_shared<PropertyWindow>();
+    NewPropertyWindow = std::make_shared<PropertyWindow>();
     UEditorDesigner::Get().AddWindow("PropertyWindow", NewPropertyWindow);
 
     auto NewConsoleWindow = std::make_shared<ConsoleWindow>();
@@ -52,6 +55,7 @@ void UWildEditor::Create(ID3D11Device* Device, ID3D11DeviceContext* DeviceContex
 
     auto NewStatWindow = std::make_shared<StatWindow>();
     UEditorDesigner::Get().AddWindow("StatWindow", NewStatWindow);
+
 }
 
 void UWildEditor::Release()
@@ -71,9 +75,24 @@ void UWildEditor::Render()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    Scene = Renderer->GetPrimaryScene();
+    if (Scene) {
+        UPrimitiveComponent* SelectedObject = static_cast<UPrimitiveComponent*>(Scene->GetSelectedObject());
+        NewPropertyWindow->SetLocation(SelectedObject->RelativeLocation);
+        NewPropertyWindow->SetRotation(SelectedObject->RelativeRotation);
+        NewPropertyWindow->SetScale(SelectedObject->RelativeScale3D);
+        NewPropertyWindow->SetUUID(SelectedObject->UUID);
+    }
+    
     SetupControlWindow();
-
     UEditorDesigner::Get().Render();
+
+    if (Scene) {
+        UPrimitiveComponent* SelectedObject = static_cast<UPrimitiveComponent*>(Scene->GetSelectedObject());
+        SelectedObject->RelativeLocation = NewPropertyWindow->GetLocation();
+        SelectedObject->RelativeRotation = NewPropertyWindow->GetRotation();
+        SelectedObject->RelativeScale3D = NewPropertyWindow->GetScale();
+    }
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -141,7 +160,6 @@ void UWildEditor::SetupControlWindow()
     auto Window = UEditorDesigner::Get().GetWindow("ControlWindow");
     if (Window)
     {
-        // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
         if (ControlWindow* Control = dynamic_cast<ControlWindow*>(Window.get()))
         {
             Control->SetPrimaryGizmo(PrimaryScene->GetGizmo());

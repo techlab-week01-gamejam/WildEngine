@@ -32,8 +32,8 @@ UScene::~UScene()
 void UScene::Initialize()
 {
 
-    UObjectManager& ObjManager = UObjectManager::GetInstance();
-    UObjectFactory& ObjFactory = UObjectFactory::GetInsantce();
+    UObjectManager& ObjManager = UObjectManager::GetInst();
+    UObjectFactory& ObjFactory = UObjectFactory::GetInst();
 
     // Camera 설정
 
@@ -47,6 +47,8 @@ void UScene::Initialize()
     {
         Cube1 = new UCubeComponent(Renderer);
     }
+
+    SetSelectedObject(Cube1);
     
     if (SceneGizmo == nullptr)
     {
