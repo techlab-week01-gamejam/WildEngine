@@ -15,6 +15,11 @@ public:
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
+	bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) override;
+
+	// 삼각형 꼭짓점 설정 및 가져오기
+
+
 private:
 	void Initialize();
 
@@ -25,5 +30,6 @@ private:
 	ID3D11Buffer* VertexBuffer;
 
 	float rot;
+	FVector V0, V1, V2;
 };
 

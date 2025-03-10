@@ -19,6 +19,18 @@ public:
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
+	bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) override;
+
+	void SetRadius(float InRadius)
+	{
+		Radius = InRadius;
+	}
+	
+	float GetRadius() const
+	{
+		return Radius;
+	}
+
 private:
 	void Initialize();
 
@@ -28,5 +40,6 @@ private:
 	UINT NumVertices;
 	ID3D11Buffer* VertexBuffer;
 
+	float Radius = 1.0f;
 	float rot;
 };

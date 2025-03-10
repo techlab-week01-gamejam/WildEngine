@@ -145,6 +145,7 @@
     <ClInclude Include="Core\Object\ObjectFactory.h" />
     <ClInclude Include="Core\Object\ObjectManager.h" />
     <ClInclude Include="Core\Primitive.h" />
+    <ClInclude Include="Core\Types\CommonTypes.h" />
     <ClInclude Include="Core\Types\Types.h" />
     <ClInclude Include="Engine\Components\CameraComponent.h" />
     <ClInclude Include="Engine\Components\CubeComponent.h" />

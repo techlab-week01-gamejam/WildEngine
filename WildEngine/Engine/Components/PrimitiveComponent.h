@@ -8,5 +8,7 @@ public:
 	UPrimitiveComponent();
 	~UPrimitiveComponent();
 
+	virtual bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) = 0;
+
 	static UClass* GetClass();
 };

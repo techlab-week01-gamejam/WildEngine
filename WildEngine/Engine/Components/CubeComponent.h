@@ -19,6 +19,17 @@ public:
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
+	bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) override;
+
+	void SetSize(float InSize)
+	{
+		CubeSize = InSize;
+	}
+	float GetSize() const
+	{
+		return CubeSize;
+	}
+
 private:
 	void Initialize();
 
@@ -28,5 +39,6 @@ private:
 	UINT NumVertices;
 	ID3D11Buffer* VertexBuffer;
 
+	float CubeSize = 1.0f;
 	float rot;
 };

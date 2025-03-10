@@ -2,6 +2,7 @@
 
 #include "Math/Matrix.h"
 #include "Interface/IScene.h"
+#include "Types/CommonTypes.h"
 
 class URenderer;
 class UObject;
@@ -9,7 +10,6 @@ class UCameraComponent;
 class UCubeComponent;
 class USphereComponent;
 class UGizmoComponent;
-
 
 class UScene : public IScene
 {
@@ -44,10 +44,14 @@ public:
 	/* Construct New Object */
 	void CreateNewObject(UObject* newObject) override;
 
+	void OnMouseClink(int32 ScreenX, int32 ScreenY);
+
 private:
 	void Initialize();
 	FMatrix CreateProjectionView();
 	FMatrix CreateOrthogonalView();
+
+	bool RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult);
 
 private:
 	URenderer* Renderer = nullptr;

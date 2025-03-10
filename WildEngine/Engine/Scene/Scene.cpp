@@ -7,6 +7,7 @@
 
 #include "Components/CameraComponent.h"
 #include "Components/CubeComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/GizmoComponent.h"
 
 #include "Math/Matrix.h"
@@ -41,12 +42,25 @@ void UScene::Initialize()
     {
         PrimaryCamera = new UCameraComponent();
     }
+    PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
 
     // Test Cube
     if (Cube1 == nullptr)
     {
         Cube1 = new UCubeComponent(Renderer);
+		Cube1->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
+		Cube1->RelativeRotation = FVector(0.0f, 0.0f, 0.0f);
+		Cube1->RelativeScale3D = FVector(1.0f, 1.0f, 1.0f);
     }
+
+	// Test Sphere
+    if (Sphere1 == nullptr)
+    {
+		Sphere1 = new USphereComponent(Renderer);
+		Sphere1->RelativeLocation = FVector(5.0f, 0.0f, 0.0f);
+        Sphere1->SetRadius(0.5f);
+    }
+    
     
     if (SceneGizmo == nullptr)
     {
@@ -59,6 +73,8 @@ void UScene::Initialize()
 
     // Projection Init
     ProjectionMatrix = CreateProjectionView();
+    // 카메라에 투영 행렬 전달
+	PrimaryCamera->SetProjectionMatrix(ProjectionMatrix);
 
     // Ortho
     OrthoMatrix = CreateOrthogonalView(); // XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
@@ -115,6 +131,57 @@ FMatrix UScene::CreateOrthogonalView()
     return FinalOrthoMatrix;
 }
 
+// 모든 Primitive들과 Ray의 충돌을 검사
+bool UScene::RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
+{
+    bool bHasHit = false;
+    float MinDistance = FLT_MAX;
+
+	OutHitResult = FHitResult();
+
+    // 모든 Primitive를 순회하며 충돌 검사
+    UPrimitiveComponent* Primitives[] = { Cube1, Sphere1 };
+    for (UPrimitiveComponent* Primitive : Primitives)
+    {
+        FHitResult TempHit;
+        if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+        {
+            if (TempHit.Distance < MinDistance)
+            {
+                MinDistance = TempHit.Distance;
+                OutHitResult = TempHit;
+                bHasHit = true;
+            }
+        }
+    }
+    return bHasHit;
+
+  //  // 모든 Primitive를 순회하며 충돌 검사
+  //  
+  //  for ()
+  //  {
+
+  //      // 오브젝트 타입검사 , PrimitiveComponent가 아닌 경우 스킵
+  //      UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(Object);
+  //      if (!Primitive)
+  //      {
+  //          continue;
+  //      }
+
+  //      FHitResult TempHit;
+		//if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+		//{
+		//	if (TempHit.Distance < MinDistance)
+		//	{
+		//		MinDistance = TempHit.Distance;
+		//		OutHitResult = TempHit;
+		//		bHasHit = true;
+		//	}
+		//}
+  //  }
+  //  return bHasHit;
+}
+
 void UScene::Render()
 {
     // 카메라 위치에서 뷰 행렬 생성
@@ -123,10 +190,32 @@ void UScene::Render()
     // 뷰 행렬 가져오기
     PrimaryCamera->GetViewMatrix(ViewMatrix);
 
-    SceneGizmo->Render(Cube1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
-
     // 셰이더 상수 버퍼 업데이트
-    Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+    Cube1->Render(Cube1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
+
+    // Test Sphere
+	Sphere1->Render(Sphere1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
+
+    // 마우스 클릭시 오브젝트 선택
+	if (FInputManager::GetInst().GetKey(VK_LBUTTON) == EKeyState::Pressed ||
+        FInputManager::GetInst().GetKey(VK_LBUTTON) == EKeyState::Held)
+    {
+        OnMouseClink(FInputManager::GetInst().GetMouseX(), FInputManager::GetInst().GetMouseY());
+    }
+	
+
+
+
+    // 선택된 오브젝트가 있는 경우 기즈모 렌더링
+    if (nullptr != SelectedObject)
+    {
+        USceneComponent* SceneComponent = dynamic_cast<USceneComponent*>(SelectedObject);
+		if (SceneComponent)
+		{
+            FMatrix GizmoWorldMatrix = SceneComponent->GetWorldTransform();
+			SceneGizmo->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+		}
+    }
 
 }
 
@@ -160,6 +249,23 @@ UCameraComponent* UScene::GetPrimaryCamera()
 
 void UScene::CreateNewObject(UObject* newObject)
 {
+}
+
+void UScene::OnMouseClink(int32 ScreenX, int32 ScreenY)
+{
+	FVector RayOrigin = PrimaryCamera->GetPosition();
+	FVector RayDirection = PrimaryCamera->GetRayDirection(ScreenX, ScreenY);
+
+	FHitResult HitResult;
+	if (RayCast(RayOrigin, RayDirection, HitResult))
+	{
+		// 선택된 오브젝트 설정
+		SelectedObject = HitResult.HitObject;
+	}
+	else
+	{
+		SelectedObject = SelectedObject;
+	}
 }
 
 

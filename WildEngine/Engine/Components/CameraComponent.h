@@ -20,6 +20,8 @@ public:
 	// 뷰포트 크기 설정
 	void SetViewportSize(float Width, float Height);
 
+	void SetProjectionMatrix(FMatrix InProjectionMatrix);
+
 	FVector GetPosition();
 	FVector GetRotation();
 
@@ -54,12 +56,15 @@ private:
 	// Camera Rotation
 	FVector CameraRotation;
 
-	// Camera Target
-	//FVector CameraTarget;
-
 	// Camera ViewMatrix
 	FMatrix ViewMatrix;
+
+	// Projection Matrix
+	FMatrix ProjectionMatrix;
+
 	FMatrix RotationMatrix;
+
+
 
 	// Viewport 크기
 	float ViewportWidth;

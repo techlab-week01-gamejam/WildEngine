@@ -24,16 +24,21 @@ void UTriangleComponent::Initialize()
     RelativeLocation.X = 0.0f;
     RelativeLocation.Y = 0.0f;
     RelativeLocation.Z = 3.0f;
+
+    RelativeScale3D.X = 1.0f;
+	RelativeScale3D.Y = 1.0f;
+    RelativeScale3D.Z = 1.0f;
+
+	V0 = FVector(0.0f, 1.0f, 0.0f);
+	V1 = FVector(1.0f, -1.0f, 0.0f);
+	V2 = FVector(-1.0f, -1.0f, 0.0f);
 }
 
 void UTriangleComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
-    if (rot == 180) rot = 0;
-    rot += 0.01f;
-
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
     FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(rot, 0, rot);
-    FMatrix Scaling = FMatrix::Scaling(1, 1, 1);
+    FMatrix Scaling = FMatrix::Scaling(RelativeScale3D.X, RelativeScale3D.Y, RelativeScale3D.Y);
 
     FMatrix World = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
 
@@ -41,5 +46,10 @@ void UTriangleComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix
     Renderer->UpdateShaderParameters(World, ViewMatrix, ProjectionMatrix);
 
     Renderer->RenderPrimitive(VertexBuffer, NumVertices);
+}
+
+bool UTriangleComponent::CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
+{
+    return false;
 }
 
