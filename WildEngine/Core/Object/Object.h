@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Types/Types.h"
 #include "Class/Class.h"
 
@@ -11,18 +11,18 @@ public:
 	uint32 UUID;
 	uint32 InternalIndex; // Index of GUObjectArray
 
-	// Á¤Àû Å¬·¡½º Á¤º¸ ¹İÈ¯
+	// ì •ì  í´ë˜ìŠ¤ ì •ë³´ ë°˜í™˜
 	static UClass* GetClass();
 
-	// °´Ã¼ÀÇ µ¿Àû Å¬·¡½º Á¤º¸ ¹İÈ¯
+	// ê°ì²´ì˜ ë™ì  í´ë˜ìŠ¤ ì •ë³´ ë°˜í™˜
 	virtual UClass* GetInstanceClass() const { return GetClass(); }
 
-	// Æ¯Á¤ Å¬·¡½ºÀÎÁö È®ÀÎ
+	// íŠ¹ì • í´ë˜ìŠ¤ì¸ì§€ í™•ì¸
 	bool IsA(UClass* ClassType) const {
 		return GetInstanceClass()->IsChildOf(ClassType);
 	}
 
-	// new ¿¬»êÀÚ ¿À¹ö·Îµù
+	// new ì—°ì‚°ì ì˜¤ë²„ë¡œë”©
 	void* operator new(size_t size);
 	void operator delete(void* ptr);
 };

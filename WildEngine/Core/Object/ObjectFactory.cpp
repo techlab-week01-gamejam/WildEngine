@@ -1,4 +1,4 @@
-#include "ObjectFactory.h"
+ï»¿#include "ObjectFactory.h"
 #include "Log/DebugConsole.h"
 
 //UObject* UObjectFactory::ConstructObject(UClass* ClassType)
@@ -10,7 +10,7 @@
 //        return nullptr;
 //    }
 //
-//    // UClass¸¦ ±â¹ÝÀ¸·Î ÀÎ½ºÅÏ½º »ý¼º
+//    // UClassë¥¼ ê¸°ë°˜ìœ¼ë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
 //    UObject* NewObject = ClassType->CreateInstance();
 //    if (NewObject)
 //    {

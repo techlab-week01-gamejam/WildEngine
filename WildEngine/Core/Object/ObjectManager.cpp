@@ -1,11 +1,11 @@
-#include "ObjectManager.h"
+ï»¿#include "ObjectManager.h"
 
 void UObjectManager::RegisterObject(UObject* Object)
 {
 	if (!Object) return;
 
-	Object->UUID = UEngineStatics::GenUUID(); // Manager¿¡¼­ UUID »ı¼º
-	Object->InternalIndex = GUObjectArray.size(); // ÇöÀç ¹è¿­ Å©±â¸¦ ±â¹İÀ¸·Î Index ÇÒ´ç
+	Object->UUID = UEngineStatics::GenUUID(); // Managerì—ì„œ UUID ìƒì„±
+	Object->InternalIndex = GUObjectArray.size(); // í˜„ì¬ ë°°ì—´ í¬ê¸°ë¥¼ ê¸°ë°˜ìœ¼ë¡œ Index í• ë‹¹
 
 	GUObjectArray.push_back(Object);
 
@@ -24,7 +24,7 @@ void UObjectManager::UnregisterObject(UObject* Object)
 	}
 }
 
-// Heap ¸Ş¸ğ¸® ÇÒ´ç ÃßÀû
+// Heap ë©”ëª¨ë¦¬ í• ë‹¹ ì¶”ì 
 void UObjectManager::RegisterAllocation(UObject* Object, size_t Size)
 {
 	AllocationMap[Object] = Size;
@@ -34,7 +34,7 @@ void UObjectManager::RegisterAllocation(UObject* Object, size_t Size)
 	FDebugConsole::DebugPrint("[UObjectManager] Allocated: %d bytes. Total Memory: %d bytes. Total Object Count: %d", Size, TotalAllocationBytes, TotalAllocationCount);
 }
 
-//  Heap ¸Ş¸ğ¸® ÇØÁ¦ ÃßÀû
+//  Heap ë©”ëª¨ë¦¬ í•´ì œ ì¶”ì 
 void UObjectManager::RegisterDeallocation(UObject* Object)
 {
 	auto it = AllocationMap.find(Object);

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object/Object.h"
 #include "Log/DebugConsole.h"
 #include "Statics/EngineStatics.h"
@@ -30,7 +30,7 @@ private:
 
     TMap<void*, size_t> AllocationMap;
 
-    // ¸Ş¸ğ¸® »ç¿ë·® ÃßÀû
+    // ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰ ì¶”ì 
     uint32 TotalAllocationBytes = 0;
     uint32 TotalAllocationCount = 0;
 

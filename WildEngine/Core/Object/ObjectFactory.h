@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object.h"
 #include <unordered_map>
 #include <functional>
@@ -8,14 +8,14 @@ class UObjectFactory : public ISingleton<UObjectFactory>
 {
 public:
 
-    // UClass ±â¹İ µî·Ï (ÀÎÀÚ ¾ø´Â ±âº» »ı¼ºÀÚ)
+    // UClass ê¸°ë°˜ ë“±ë¡ (ì¸ì ì—†ëŠ” ê¸°ë³¸ ìƒì„±ì)
     template <typename T>
     void RegisterClass()
     {
         ClassMap[T::GetClass()] = []() -> UObject* { return new T(); };
     }
 
-    // UClass ±â¹İ µî·Ï (ÀÎÀÚ¸¦ ¹Ş´Â »ı¼ºÀÚ Áö¿ø)
+    // UClass ê¸°ë°˜ ë“±ë¡ (ì¸ìë¥¼ ë°›ëŠ” ìƒì„±ì ì§€ì›)
     template <typename T, typename... Args>
     void RegisterClassWithArgs()
     {
@@ -26,7 +26,7 @@ public:
             };
     }
 
-    // ÅÛÇÃ¸´ ±â¹İÀ¸·Î ¹İÈ¯ Å¸ÀÔÀ» º¯°æÇÏ¿© ¾ÈÀüÇÑ Ä³½ºÆÃ Áö¿ø
+    // í…œí”Œë¦¿ ê¸°ë°˜ìœ¼ë¡œ ë°˜í™˜ íƒ€ì…ì„ ë³€ê²½í•˜ì—¬ ì•ˆì „í•œ ìºìŠ¤íŒ… ì§€ì›
     template <typename T>
     T* ConstructObject(UClass* ClassType)
     {
@@ -38,7 +38,7 @@ public:
         return nullptr;
     }
 
-    // ÀÎÀÚ°¡ ÀÖ´Â °´Ã¼ »ı¼º (ÅÛÇÃ¸´ Àû¿ë)
+    // ì¸ìê°€ ìˆëŠ” ê°ì²´ ìƒì„± (í…œí”Œë¦¿ ì ìš©)
     template <typename T, typename... Args>
     T* ConstructObject(UClass* ClassType, Args... args)
     {
@@ -58,7 +58,7 @@ private:
     TMap<UClass*, CreateFunc> ClassMap;
     TMap<UClass*, CreateFuncWithArgs> ClassMapWithArgs;
 
-    // °¡º¯ ÀÎÀÚ »ı¼º (tuple È°¿ë)
+    // ê°€ë³€ ì¸ì ìƒì„± (tuple í™œìš©)
     template <typename T, typename... Args>
     static T* CreateWithArgs(std::tuple<Args...>& args)
     {

@@ -1,8 +1,8 @@
-#include "Object.h"
+ï»¿#include "Object.h"
 #include "Object/ObjectManager.h"
 
 UObject::UObject()
-{    // Manager¿¡ °´Ã¼ µî·Ï
+{    // Managerì— ê°ì²´ ë“±ë¡
     UObjectManager::GetInst().RegisterObject(this);
 }
 
