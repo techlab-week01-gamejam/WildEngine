@@ -4,12 +4,13 @@
 
 #include "Editor/EditorDesigner.h"
 #include "Components/GizmoComponent.h"
+#include "Interface/ICommand.h"
 
 ControlWindow::ControlWindow()
 {
 	FramePerSecond = 0;
 	
-	PrimtiveTypeNumber = 0;
+	PrimitiveTypeNumber = 0;
 	SpawnNumber = 0;
 	SceneName = "NewScene";
 	bIsOrthogonal = nullptr;
@@ -28,14 +29,22 @@ ControlWindow::ControlWindow()
     Rotation[2] = 0;
 
     WindowWidth = 360;
-    WindowHeight = 300;
+    WindowHeight = 320;
 }
 
 void ControlWindow::Render()
 {
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::SetNextWindowSize(ImVec2(WindowWidth, WindowHeight), ImGuiCond_Always);
+    float scaleX = io.DisplaySize.x / 1024.0f;
+    float scaleY = io.DisplaySize.y / 1024.0f;
+
+    ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
+
+    ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
+
+    // ImGui::SetNextWindowSize(ImVec2(WindowWidth, WindowHeight), ImGuiCond_Always);
 
 	ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
 
@@ -146,13 +155,27 @@ void ControlWindow::Render()
 	ImGui::Separator(); // 수평 구분선
     // 스폰 섹션
 
-	const char* items[] = { "Cube", "Sphere", "Triangle" };
+	const char* items[] = { "cube", "sphere", "triangle" };
     ImGui::SetNextItemWidth(100); // 원하는 너비
-	ImGui::Combo("Primitive", &PrimtiveTypeNumber, items, IM_ARRAYSIZE(items));
+	ImGui::Combo("Primitive", &PrimitiveTypeNumber, items, IM_ARRAYSIZE(items));
     
     ImGui::SameLine(0, 5.0f);
 
-    CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNumber, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal);
+    if (CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNumber, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal))
+    {
+        FString TargetPrimitiveStr = items[PrimitiveTypeNumber];
+        auto Window = UEditorDesigner::Get().GetWindow("ConsoleWindow");
+        if (Window)
+        {
+            // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+            if (ICommand* Console = dynamic_cast<ICommand*>(Window.get()))
+            {
+                FString Count = std::to_string(SpawnNumber);
+                FString CommandStr = "spawn " + TargetPrimitiveStr + " " + Count;
+                Console->Execute(CommandStr.c_str());
+            }
+        }
+    }
 
     // 스폰 섹션
     ImGui::Separator(); // 수평 구분선
@@ -214,6 +237,10 @@ void ControlWindow::Render()
 	ImGui::End();
 }
 
+void ControlWindow::OnResize(UINT32 Width, UINT32 Height)
+{
+}
+
 void ControlWindow::SetPrimaryGizmo(UGizmoComponent* NewGizmo)
 {
     if(PrimaryGizmo == NewGizmo) return;
@@ -253,7 +280,7 @@ bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_t
     ImGui::PushID(label);
     ImGui::SetNextItemWidth(ImMax(1.0f, ImGui::CalcItemWidth() - (button_size + style.ItemInnerSpacing.x) * 6 + 15));
     if (ImGui::InputText("", buf, IM_ARRAYSIZE(buf), flags))
-        value_changed = ImGui::DataTypeApplyFromText(buf, data_type, p_data, format, (flags & ImGuiInputTextFlags_ParseEmptyRefVal) ? p_data_default : NULL);
+        ImGui::DataTypeApplyFromText(buf, data_type, p_data, format, (flags & ImGuiInputTextFlags_ParseEmptyRefVal) ? p_data_default : NULL);
     IMGUI_TEST_ENGINE_ITEM_INFO(g.LastItemData.ID, label, g.LastItemData.StatusFlags | ImGuiItemStatusFlags_Inputable);
 
     // 기존의 Step 버튼(-, +) 부분을 제거하고, 대신 "spawn" 버튼을 추가합니다.
@@ -263,7 +290,7 @@ bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_t
         ImGui::BeginDisabled();
     ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
     ImGui::SameLine(0, style.ItemInnerSpacing.x);
-    if (ImGui::ButtonEx("Spawn", ImVec2(button_size * 4.2, button_size)))
+    if (ImGui::ButtonEx("Spawn", ImVec2(button_size * 4.2f, button_size)))
     {
         // "spawn" 버튼 클릭 시 원하는 동작을 수행합니다.
         // 예를 들어, 특별한 연산을 적용하거나 상태를 변경할 수 있습니다.

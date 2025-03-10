@@ -6,6 +6,7 @@
 #include "Types/Types.h"
 #include "EditorWindow.h"
 #include <memory>
+#include "../../ImGui/imgui_impl_dx11.h"
 
 class UEditorDesigner
 {
@@ -44,6 +45,13 @@ public:
 		return nullptr;
 	}
 
+	void OnResize(UINT32 Width, UINT32 Height)
+	{
+		bFinishClearWindows = false;
+		Windows.clear();
+		bFinishClearWindows = true;
+	}
+
 	void Render()
 	{
 		if (Windows.empty()) return;
@@ -53,6 +61,15 @@ public:
 			Window.second->Render();
 		}
 	}
+	bool IsClear()
+	{
+		return bFinishClearWindows;
+	}
+
+	void Clear()
+	{
+		bFinishClearWindows = false;
+	}
 
 private:
 	UEditorDesigner() = default;
@@ -61,5 +78,6 @@ private:
 	UEditorDesigner& operator=(const UEditorDesigner&) = delete;
 
 	TMap<FString, std::shared_ptr<UEditorWindow>> Windows;
-};
 
+	bool bFinishClearWindows;
+};

@@ -11,6 +11,7 @@ public:
 	PropertyWindow();
 
 	void Render() override;
+	void OnResize(UINT32 Width, UINT32 Height) override;
 
 	FVector GetLocation();
 	FVector GetRotation();

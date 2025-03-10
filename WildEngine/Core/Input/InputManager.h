@@ -34,6 +34,14 @@ public:
 	{
 		return MouseDeltaY;
 	}
+	int GetMouseX() const
+	{
+		return LastMouseX;
+	}
+	int GetMouseY() const
+	{
+		return LastMouseY;
+	}
 
 private:
 	friend class ISingleton<FInputManager>;

@@ -2,11 +2,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include "ConsoleWindow.h"
-#include "Types/Types.h"
 #include <cstdarg>
 #include <stdio.h>
-#include <Editor/EditorDesigner.h>
+
+#include "ConsoleWindow.h"
+#include "Types/Types.h"
+#include "Editor/EditorDesigner.h"
+#include "Object/ObjectFactory.h"
+#include "Components/CubeComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/TriangleComponent.h"
 
 ConsoleWindow::ConsoleWindow()
 {
@@ -50,11 +55,13 @@ void ConsoleWindow::Render()
 
     ImGuiIO& io = ImGui::GetIO();
 
-    // 원하는 정상 윈도우 높이
-    float normalHeight = 250.0f;
+    float scaleX = io.DisplaySize.x / 1024.0f;
+    float scaleY = io.DisplaySize.y / 1024.0f;
 
-    ImGui::SetNextWindowPos(ImVec2(5, io.DisplaySize.y - normalHeight - 5), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x - 255, normalHeight), ImGuiCond_Always);
+    ImVec2 WinSize(io.DisplaySize.x * 0.8f, io.DisplaySize.y * 0.3f);
+
+    ImGui::SetNextWindowPos(ImVec2(0, io.DisplaySize.y - WinSize.y - 5), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(WinSize, ImGuiCond_Once);
 
     ImGuiWindowFlags WindowFlags = 
         ImGuiWindowFlags_NoMove | 
@@ -190,9 +197,19 @@ void ConsoleWindow::Render()
     ImGui::End();
 }
 
+void ConsoleWindow::OnResize(UINT32 Width, UINT32 Height)
+{
+
+}
+
 void ConsoleWindow::Toggle()
 {
     bWasOpen = !bWasOpen;
+}
+
+void ConsoleWindow::Execute(const char* command)
+{
+    ExecCommand(command);
 }
 
 int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData* data)
@@ -391,6 +408,24 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
                     // 실제 객체 생성을 위한 로직 호출 부분
                     AddLog("Spawning %d %s(s)...\n", count, shape.c_str());
                     // 예: SpawnShape(shape, count);
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        FVector pos(i * 2, 0, 0);
+                        if (shape == "cube")
+                        {
+                            UCubeComponent* c = UObjectFactory::GetInst().ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), MainRenderer);
+                            c->SetRelativeLocation(pos);
+                        }
+                        else if (shape.compare("sphere"))
+                        {
+                            UObjectFactory::GetInst().ConstructObject<USphereComponent>(USphereComponent::GetClass(), MainRenderer);
+                        }
+                        else if (shape.compare("triangle"))
+                        {
+                            UObjectFactory::GetInst().ConstructObject<UTriangleComponent>(UTriangleComponent::GetClass(), MainRenderer);
+                        }
+                    }
                 }
                 else
                 {
