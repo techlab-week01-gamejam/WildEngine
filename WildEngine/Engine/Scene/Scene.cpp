@@ -1,4 +1,4 @@
-#include "Scene.h"
+﻿#include "Scene.h"
 
 #include "d3d11.h"
 #include "DirectXMath.h"
@@ -39,18 +39,15 @@ void UScene::Initialize()
 
     if (PrimaryCamera == nullptr)
     {
-        //PrimaryCamera = static_cast<UCameraComponent*>(ObjFactory.ConstructObject(UCameraComponent::GetClass()));
         PrimaryCamera = new UCameraComponent();
     }
-	PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
 
     // Test Cube
     if (Cube1 == nullptr)
     {
-        //Cube1 = static_cast<UCubeComponent*>(ObjFactory.ConstructObject(UCubeComponent::GetClass()));
         Cube1 = new UCubeComponent(Renderer);
     }
-
+    
     if (SceneGizmo == nullptr)
     {
         SceneGizmo = new UGizmoComponent(Renderer);
@@ -99,7 +96,7 @@ FMatrix UScene::CreateProjectionView()
 FMatrix UScene::CreateOrthogonalView()
 {
     D3D11_VIEWPORT ViewPort = Renderer->ViewportInfo;
-    
+
     float Width = ViewPort.Width;
     float Height = ViewPort.Height;
 
@@ -130,7 +127,7 @@ void UScene::Render()
 
     // 셰이더 상수 버퍼 업데이트
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
-    
+
 }
 
 UObject* UScene::GetSelectedObject()

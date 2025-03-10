@@ -1,4 +1,4 @@
-#include "URenderer.h"
+﻿#include "URenderer.h"
 
 #include "Scene/Scene.h"
 #include "Types/CommonTypes.h"
@@ -18,7 +18,6 @@ void URenderer::Create(HWND hWindow)
     CreateShader();
     CreateMatrixBuffer();
 
-    // Editor 생성
     if (PrimaryEditor == nullptr)
     {
         PrimaryEditor = new UWildEditor(this);
@@ -228,9 +227,10 @@ void URenderer::Update(float deltaTime)
     Prepare();
     PrepareShader();
 
+
     // Loop Code
     FInputManager::GetInst().Tick(deltaTime);
-
+    //
     if (PrimaryScene)
     {
         PrimaryScene->Render();
@@ -242,15 +242,12 @@ void URenderer::Update(float deltaTime)
         PrimaryEditor->Render();
     }
 
-    //
     SwapBuffer();
 }
 
-// 렌더러 종료 시 모든 리소스 해제guswo 
+// 렌더러 종료 시 모든 리소스 해제
 void URenderer::Release()
 {
-    PrimaryEditor->Release();
-
     ReleaseMatrixBuffer();
     ReleaseShader();
     ReleaseRasterizerState();
