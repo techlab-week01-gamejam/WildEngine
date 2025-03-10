@@ -189,27 +189,24 @@ void UCameraComponent::UpdateRotationFromMouse()
 
 FVector UCameraComponent::GetRayDirection(int ScreenX, int ScreenY)
 { 
+	float SinFov;
+	float CosFov;
+	float ToRadian = DirectX::XMConvertToRadians(0.5 * FieldOfView);
+	DirectX::XMScalarSinCos(&SinFov, &CosFov, ToRadian);
+	float ProjectionHeight = CosFov / SinFov;
+	float ProjectionWidth = ProjectionHeight / (ViewportWidth / ViewportHeight);
 	//스크린 좌표를 정규화된 장치 좌표로 변환
-	float NDC_X = (2.0f * ScreenX) / ViewportWidth - 1.0f;
-	float NDC_Y = 1.0f - (2.0f * ScreenY) / ViewportHeight;
+	float NDC_X = ((2.0f * ScreenX) / ViewportWidth - 1.0f) / ProjectionWidth;
+	float NDC_Y = (1.0f - (2.0f * ScreenY) / ViewportHeight) / ProjectionHeight;
 
-	// 정규화된 장치 좌표를 클립 좌표로 변환
-	FVector ClipCoords(NDC_X, NDC_Y, -1.0f);
-
-	/* 
-		역행렬 안쓰고 계산해보기 
-	*/
-
-	// 클립 좌표를 뷰 좌표로 변환
-	FMatrix InverseProjectionMatrix = ProjectionMatrix.Inverse(); 
-	FVector ViewCoords = InverseProjectionMatrix * ClipCoords;
+	FVector RayOrigin = FVector(0.0f, 0.0f, 0.0f);
+	FVector RayDirection = FVector(NDC_X, NDC_Y, 1.0f);
 
 	// 뷰 좌표를 월드 좌표로 변환
 	FMatrix InverseViewMatrix = ViewMatrix.Inverse();
-	FVector WorldCoords = InverseViewMatrix * ViewCoords;
-
-	// 방향 벡터 정규화
-	FVector RayDirection = (WorldCoords - CameraPosition).Normalized();
+	RayOrigin = InverseViewMatrix * RayOrigin;
+	RayDirection = FMatrix::TransformDirection(InverseViewMatrix, RayDirection);
+	RayDirection = RayDirection.Normalized();
 
 	return RayDirection;
 }

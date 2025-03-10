@@ -58,7 +58,8 @@ void UScene::Initialize()
     {
 		Sphere1 = new USphereComponent(Renderer);
 		Sphere1->RelativeLocation = FVector(5.0f, 0.0f, 0.0f);
-        Sphere1->SetRadius(0.5f);
+        Sphere1->RelativeRotation = FVector(0.f, 0.f, 0.f);
+        Sphere1->RelativeScale3D = FVector(1.f, 1.f, 1.f);
     }
     
     
@@ -213,7 +214,7 @@ void UScene::Render()
 		if (SceneComponent)
 		{
             FMatrix GizmoWorldMatrix = SceneComponent->GetWorldTransform();
-			SceneGizmo->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+			SceneGizmo->Render(GizmoWorldMatrix, ViewMatrix, ProjectionMatrix);
 		}
     }
 

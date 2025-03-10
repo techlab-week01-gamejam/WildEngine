@@ -42,13 +42,13 @@ USphereComponent::~USphereComponent()
 void USphereComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
-    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(rot, 0, rot);
-    FMatrix Scaling = FMatrix::Scaling(Radius, Radius, Radius);
+    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(RelativeRotation.X, RelativeRotation.Y, RelativeRotation.Z);
+    FMatrix Scaling = FMatrix::Scaling(RelativeScale3D.X, RelativeScale3D.Y, RelativeScale3D.Z);
 
-    FMatrix World = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
+   WorldTransform = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
 
     // 셰이더 상수 버퍼 업데이트
-    Renderer->UpdateShaderParameters(World, ViewMatrix, ProjectionMatrix);
+    Renderer->UpdateShaderParameters(WorldTransform, ViewMatrix, ProjectionMatrix);
 
     Renderer->RenderPrimitive(VertexBuffer, NumVertices);
 
@@ -57,7 +57,7 @@ void USphereComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix P
 bool USphereComponent::CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
 {
     FVector SphereCenter = RelativeLocation; // 구의 월드 좌표
-    float SphereRadius = Radius; // 구의 반지름
+    float SphereRadius = RelativeScale3D.X; // 구의 반지름
 
     FVector L = SphereCenter - RayOrigin;
     float tca = L.Dot(RayDirection);

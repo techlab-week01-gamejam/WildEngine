@@ -248,7 +248,7 @@ struct FMatrix
     }
 
     // 방향 벡터(e.g. RayDirection)에 행렬(InMatrix)의 회전과 스케일만 적용
-    FVector TransformDirection(const FMatrix& InMatrix, const FVector& InDirection)
+    static FVector TransformDirection(const FMatrix& InMatrix, const FVector& InDirection)
     {
         // X, Y, Z만 3×3에 해당하는 부분을 곱하고, 위치(translation)은 무시
         float x = (InDirection.X * InMatrix.M[0][0]) +
