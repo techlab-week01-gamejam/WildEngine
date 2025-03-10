@@ -18,6 +18,17 @@ UGizmoComponent::~UGizmoComponent()
 
 }
 
+UClass* UGizmoComponent::GetClass()
+{
+    static UClass GizmoClass("UGizmoComponent", UObject::GetClass());
+    return &GizmoClass;
+}
+
+UClass* UGizmoComponent::GetInstanceClass() const
+{
+    return GetClass();
+}
+
 void UGizmoComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
     switch (CurrentType)

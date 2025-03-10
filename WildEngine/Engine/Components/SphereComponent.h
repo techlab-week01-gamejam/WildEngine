@@ -23,6 +23,8 @@ public:
 
 	static UClass* GetClass();
 
+	UClass* GetInstanceClass() const override;
+
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
 private:

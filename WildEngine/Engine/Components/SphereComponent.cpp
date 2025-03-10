@@ -48,6 +48,17 @@ USphereComponent::~USphereComponent()
 {
 }
 
+UClass* USphereComponent::GetClass()
+{
+    static UClass SphereClass("USphereComponent", UObject::GetClass());
+    return &SphereClass;
+}
+
+UClass* USphereComponent::GetInstanceClass() const
+{
+    return GetClass();
+}
+
 //UClass* USphereComponent::GetClass()
 //{
 //    static UClass SphereClass("USphereComponent", []() -> UObject* { return new USphereComponent(); });

@@ -9,4 +9,6 @@ public:
 	~UPrimitiveComponent();
 
 	static UClass* GetClass();
+
+	UClass* GetInstanceClass() const override;
 };

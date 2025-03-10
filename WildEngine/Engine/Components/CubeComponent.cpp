@@ -48,6 +48,17 @@ UCubeComponent::~UCubeComponent()
 {
 }
 
+UClass* UCubeComponent::GetClass()
+{
+    static UClass CubeClass("UCubeComponent", UObject::GetClass());
+    return &CubeClass;
+}
+
+UClass* UCubeComponent::GetInstanceClass() const
+{
+    return GetClass();
+}
+
 //UClass* UCubeComponent::GetClass()
 //{
 //    static UClass CubeClass("UCubeComponent", []() -> UObject* { return new UCubeComponent(); });

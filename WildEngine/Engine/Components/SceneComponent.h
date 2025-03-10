@@ -15,6 +15,9 @@ public:
 
 	FMatrix WorldTransform;
 
+	static UClass* GetClass();
+	UClass* GetInstanceClass() const override;
+
 public:
 	virtual FMatrix GetWorldTransform() { return WorldTransform; };
 };

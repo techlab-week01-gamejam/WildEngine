@@ -1,28 +1,22 @@
-#include "ObjectFactory.h"
+ï»¿#include "ObjectFactory.h"
 #include "Log/DebugConsole.h"
 
-UObjectFactory& UObjectFactory::GetInsantce()
-{
-	static UObjectFactory Instance;
-	return Instance;
-}
-
-UObject* UObjectFactory::ConstructObject(UClass* ClassType)
-{
-    if (!ClassType)
-    {
-        FDebugConsole::DebugPrint("[FObjectFactory] ERROR: Null UClass provided!");
-
-        return nullptr;
-    }
-
-    // UClass¸¦ ±â¹ÝÀ¸·Î ÀÎ½ºÅÏ½º »ý¼º
-    UObject* NewObject = ClassType->CreateInstance();
-    if (NewObject)
-    {
-        FDebugConsole::DebugPrint("[FObjectFactory] Created Object of Type: %s", ClassType->GetName());
- 
-    }
-
-    return NewObject;
-}
+//UObject* UObjectFactory::ConstructObject(UClass* ClassType)
+//{
+//    if (!ClassType)
+//    {
+//        FDebugConsole::DebugPrint("[FObjectFactory] ERROR: Null UClass provided!");
+//
+//        return nullptr;
+//    }
+//
+//    // UClassë¥¼ ê¸°ë°˜ìœ¼ë¡œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+//    UObject* NewObject = ClassType->CreateInstance();
+//    if (NewObject)
+//    {
+//        FDebugConsole::DebugPrint("[FObjectFactory] Created Object of Type: %s", ClassType->GetName());
+// 
+//    }
+//
+//    return NewObject;
+//}

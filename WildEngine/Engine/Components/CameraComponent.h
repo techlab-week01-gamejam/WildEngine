@@ -11,6 +11,7 @@ public:
 	~UCameraComponent();
 
 	static UClass* GetClass();
+	UClass* GetInstanceClass() const override;
 
 	void Render();
 

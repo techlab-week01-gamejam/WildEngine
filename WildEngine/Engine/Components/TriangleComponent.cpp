@@ -34,6 +34,17 @@ UTriangleComponent::~UTriangleComponent()
 {
 }
 
+UClass* UTriangleComponent::GetClass()
+{
+    static UClass TriangleClass("UTriangleComponent", UObject::GetClass());
+    return &TriangleClass;
+}
+
+UClass* UTriangleComponent::GetInstanceClass() const
+{
+    return GetClass();
+}
+
 void UTriangleComponent::Initialize()
 {
     NumVertices = sizeof(triangle_vertices) / sizeof(FVertexType);

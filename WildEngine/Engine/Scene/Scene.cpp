@@ -35,17 +35,26 @@ void UScene::Initialize()
     UObjectManager& ObjManager = UObjectManager::GetInst();
     UObjectFactory& ObjFactory = UObjectFactory::GetInst();
 
+    ObjFactory.RegisterClass<UCameraComponent>();
+    ObjFactory.RegisterClassWithArgs<UCubeComponent, URenderer*>();
+
     // Camera 설정
 
     if (PrimaryCamera == nullptr)
     {
-        PrimaryCamera = new UCameraComponent();
+        //PrimaryCamera = new UCameraComponent();
+        PrimaryCamera = ObjFactory.ConstructObject<UCameraComponent>(UCameraComponent::GetClass());
+        if (PrimaryCamera && PrimaryCamera->IsA(UCameraComponent::GetClass())) {
+            FDebugConsole::DebugPrint("CameraComponent class selected!");
+        }
     }
 
     // Test Cube
     if (Cube1 == nullptr)
     {
-        Cube1 = new UCubeComponent(Renderer);
+        //Cube1 = new UCubeComponent(Renderer);
+        Cube1 = ObjFactory.ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), Renderer);
+
     }
 
     SetSelectedObject(Cube1);
