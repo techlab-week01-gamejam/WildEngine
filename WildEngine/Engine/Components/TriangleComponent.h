@@ -9,26 +9,18 @@ class URenderer;
 class UTriangleComponent : public UPrimitiveComponent
 {
 public:
+	UTriangleComponent();
 	UTriangleComponent(URenderer* InRenderer);
+	UTriangleComponent(URenderer* InRenderer, const FVector& InLocation);
 	UTriangleComponent(const UTriangleComponent&);
-	UTriangleComponent(URenderer* InRenderer, FVector Location);
-	UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation);
-	UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale);
-
-
 	~UTriangleComponent();
+
+	static UClass* GetClass();
+	UClass* GetInstanceClass() const override;
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
 private:
 	void Initialize();
-
-private:
-	URenderer* Renderer;
-
-	UINT NumVertices;
-	ID3D11Buffer* VertexBuffer;
-
-	float rot;
 };
 

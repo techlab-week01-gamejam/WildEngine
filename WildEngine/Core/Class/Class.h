@@ -1,23 +1,21 @@
 #pragma once
+#include <cstring>
 
-class UObject;
 
 class UClass
 {
 public:
-    // UObject를 생성할 함수 포인터 타입
-    using ConstructorType = UObject * (*)();
+    const char* ClassName;
+    UClass* ParentClass;
 
-    UClass(const char* InName, ConstructorType InConstructor)
-        : Name(InName), Constructor(InConstructor) {
+    UClass(const char* InClassName, UClass* InParent = nullptr)
+        : ClassName(InClassName), ParentClass(InParent) {
     }
 
-    const char* GetName() const { return Name; }
-    UObject* CreateInstance() const { return Constructor ? Constructor() : nullptr; }
-
-
-
-private:
-    const char* Name;
-    ConstructorType Constructor;
+    bool IsChildOf(UClass* BaseClass) const {
+        for (const UClass* Current = this; Current; Current = Current->ParentClass) {
+            if (Current == BaseClass) return true;
+        }
+        return false;
+    }
 };

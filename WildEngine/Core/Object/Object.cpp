@@ -1,7 +1,8 @@
-#include "Object.h"
+ï»¿#include "Object.h"
+#include "Object/ObjectManager.h"
 
 UObject::UObject()
-{    // Manager¿¡ °´Ã¼ µî·Ï
+{    // Managerì— ê°ì²´ ë“±ë¡
     UObjectManager::GetInst().RegisterObject(this);
 }
 
@@ -11,8 +12,8 @@ UObject::~UObject()
 
 UClass* UObject::GetClass()
 {
-     static UClass BaseObjectClass("UObject", []() -> UObject* { return new UObject(); });
-     return &BaseObjectClass;
+    static UClass ObjectClass("UObjectComponent", nullptr);
+    return &ObjectClass;
 }
 
 void* UObject::operator new(size_t Size)

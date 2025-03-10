@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object/Object.h"
 #include "Log/DebugConsole.h"
 #include "Statics/EngineStatics.h"
@@ -21,6 +21,8 @@ public:
     template <typename T>
     TArray<T*> GetObjectsOfType();
 
+    TArray<UObject*>& GetObjectsArray() { return GUObjectArray; }
+	uint32 GetNextUUID() { return NextUUID; }
 
 private:
     friend class ISingleton<UObjectManager>;
@@ -30,10 +32,11 @@ private:
 
     TMap<void*, size_t> AllocationMap;
 
-    // ¸Ş¸ğ¸® »ç¿ë·® ÃßÀû
+    // ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰ ì¶”ì 
     uint32 TotalAllocationBytes = 0;
     uint32 TotalAllocationCount = 0;
 
+    uint32 NextUUID = 1;
 };
 
 template<typename T>

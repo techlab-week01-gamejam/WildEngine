@@ -134,6 +134,7 @@
     <ClInclude Include="Core\Interface\IScene.h" />
     <ClInclude Include="Core\Interface\ISwitchable.h" />
     <ClInclude Include="Core\Class\Class.h" />
+    <ClInclude Include="Core\json.hpp" />
     <ClInclude Include="Core\Log\DebugConsole.h" />
     <ClInclude Include="Core\Input\InputManager.h" />
     <ClInclude Include="Core\Interface\ISingleton.h" />

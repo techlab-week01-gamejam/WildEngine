@@ -27,7 +27,7 @@ void UCameraComponent::Initialize()
 
 	CameraPosition.X = 0.0f;
 	CameraPosition.Y = 0.0f;
-	CameraPosition.Z = 0.0f;
+	CameraPosition.Z = -5.0f;
 
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;
@@ -85,8 +85,13 @@ FMatrix UCameraComponent::CreateLookAt()
 
 UClass* UCameraComponent::GetClass()
 {
-	static UClass CameraClass("UCameraComponent", []() -> UObject* { return new UCameraComponent(); });
+	static UClass CameraClass("UCameraComponent", UObject::GetClass());
 	return &CameraClass;
+}
+
+UClass* UCameraComponent::GetInstanceClass() const
+{
+	return GetClass();
 }
 
 void UCameraComponent::Render()

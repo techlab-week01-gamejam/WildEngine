@@ -28,6 +28,12 @@ private:
 
 	void SetupControlWindow();
 
+	void NewScene(FString SceneName);
+	void LoadScene(FString SceneName);
+	void SaveScene(FString SceneName);
+
+	FString CleanTypeName(const FString& rawName);
+
 	void SetupPropertyWindow();
 
 private:

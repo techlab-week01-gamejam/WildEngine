@@ -1,7 +1,6 @@
-#pragma once
+ï»¿#pragma once
 #include "Types/Types.h"
 #include "Class/Class.h"
-#include "ObjectManager.h"
 
 class UObject
 {
@@ -12,9 +11,18 @@ public:
 	uint32 UUID;
 	uint32 InternalIndex; // Index of GUObjectArray
 
-	static UClass* GetClass(); // Å¬·¡½º¿¡¼­ È£Ãâ °¡´É
+	// ì •ì  í´ë˜ìŠ¤ ì •ë³´ ë°˜í™˜
+	static UClass* GetClass();
 
-	// new ¿¬»êÀÚ ¿À¹ö·Îµù
+	// ê°ì²´ì˜ ë™ì  í´ë˜ìŠ¤ ì •ë³´ ë°˜í™˜
+	virtual UClass* GetInstanceClass() const { return GetClass(); }
+
+	// íŠ¹ì • í´ë˜ìŠ¤ì¸ì§€ í™•ì¸
+	bool IsA(UClass* ClassType) const {
+		return GetInstanceClass()->IsChildOf(ClassType);
+	}
+
+	// new ì—°ì‚°ì ì˜¤ë²„ë¡œë”©
 	void* operator new(size_t size);
 	void operator delete(void* ptr);
 };
