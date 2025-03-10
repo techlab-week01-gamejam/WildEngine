@@ -280,12 +280,18 @@ void UWildEditor::SetupPropertyWindow()
     {
         if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
         {
-            if (Scene->GetSelectedObject()) {
+            if (Scene->GetSelectedObject() != nullptr) {
                 Property->SetLocation(Scene->GetSelectedObject()->RelativeLocation);
                 Property->SetRotation(Scene->GetSelectedObject()->RelativeRotation);
                 Property->SetScale(Scene->GetSelectedObject()->RelativeScale3D);
 
                 Property->SetUUID(Scene->GetSelectedObject()->UUID);
+
+                Property->SetFocusObject(true);
+            }
+            else
+            {
+                Property->SetFocusObject(false);
             }
         }
     }
