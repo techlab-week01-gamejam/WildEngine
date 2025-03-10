@@ -22,6 +22,11 @@ public:
 	void SetCameraFOV(float& fov) { FOV = &fov; };
 	void SetOrthogonal(bool& State) { bIsOrthogonal = &State; };
 
+	FString GetSceneName() { return SceneName; }
+	bool NewScene = false;
+	bool LoadScene = false;
+	bool SaveScene = false;
+
 private:
 	bool CreateCustomInputInt(const char* label, ImGuiDataType data_type, void* p_data, const char* format, ImGuiInputTextFlags flags);
 

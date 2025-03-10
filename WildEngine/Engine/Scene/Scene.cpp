@@ -11,7 +11,6 @@
 
 #include "Math/Matrix.h"
 #include "Types/CommonTypes.h"
-#include "Object/ObjectManager.h"
 #include "Object/ObjectFactory.h"
 
 UScene::UScene(URenderer* InRenderer)
@@ -148,8 +147,18 @@ void UScene::Render()
         SceneGizmo->Render(SelectedObject->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
     }
 
-    // 셰이더 상수 버퍼 업데이트
-    Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+    // Object array 렌더링
+    for (uint32 i = 0; i < GUObjectArray.size(); i++)
+    {
+        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        {
+            if (Primitive)
+            {
+                Primitive->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+            }
+        }
+    }
+
 }
 
 USceneComponent* UScene::GetSelectedObject()

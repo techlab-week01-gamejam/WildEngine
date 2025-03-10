@@ -19,8 +19,13 @@
 #include "Font/IconDefs.h"
 #include "Font/RawFonts.h"
 
-#include "Scene/Scene.h"
-#include "Components/PrimitiveComponent.h"
+#include "../Core/json.hpp"
+#include <fstream>
+#include "../Core/Object/ObjectManager.h"
+#include "../Engine/Components/PrimitiveComponent.h"
+#include "../Engine/Components/CubeComponent.h"
+#include "../Engine/Components/TriangleComponent.h"
+#include "../Engine/Components/SphereComponent.h"
 
 UWildEditor::UWildEditor(URenderer* InRenderer)
 {
@@ -154,7 +159,93 @@ void UWildEditor::SetupControlWindow()
             Control->SetCameraRotation(Scene->GetPrimaryCamera()->CameraRotation);
             Control->SetCameraFOV(Scene->GetPrimaryCamera()->FieldOfView);
             Control->SetOrthogonal(Scene->GetPrimaryCamera()->bIsOrthogonal);
+            FString SceneName = Control->GetSceneName();
+            if (Control->NewScene) {
+				NewScene(SceneName);
+            }
+			if (Control->LoadScene) {
+				LoadScene(SceneName);
+			}
+            if (Control->SaveScene) {
+				SaveScene(SceneName);
+            }
         }
+    }
+}
+
+void UWildEditor::NewScene(FString SceneName)
+{
+    TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
+    for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; i--)
+    {
+        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        {
+            delete Primitive;
+        }
+    }
+}
+
+void UWildEditor::LoadScene(FString SceneName)
+{
+    std::ifstream inFile(SceneName + ".Scene");
+    if (inFile.is_open())
+    {
+        TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
+        for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; i--)
+        {
+            if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+            {
+                delete Primitive;
+            }
+        }
+
+        FString jsonData;
+        inFile.seekg(0, std::ios::end);
+        jsonData.reserve(inFile.tellg());
+        inFile.seekg(0, std::ios::beg);
+        jsonData.assign((std::istreambuf_iterator<char>(inFile)),
+            std::istreambuf_iterator<char>());
+        json::JSON Scene = json::JSON::Load(jsonData);
+        uint32 Version = Scene["Version"].ToInt();
+        uint32 NextUUID = Scene["NextUUID"].ToInt();
+        json::JSON Primitives = Scene["Primitives"];
+
+        for (auto it = Primitives.ObjectRange().begin(); it != Primitives.ObjectRange().end(); ++it)
+        {
+            uint32 UUID = std::stoi(it->first);
+            json::JSON Primitive = it->second;
+            FString Type = Primitive["Type"].ToString();
+            FVector Location = json::JSONToFVector(Primitive["Location"]);
+            FVector Rotation = json::JSONToFVector(Primitive["Rotation"]);
+            FVector Scale = json::JSONToFVector(Primitive["Scale"]);
+            if (!Type.compare("Sphere"))
+            {
+                USphereComponent* Sphere = new USphereComponent(Renderer);
+                Sphere->UUID = UUID;
+                Sphere->RelativeLocation = Location;
+                Sphere->RelativeRotation = Rotation;
+                Sphere->RelativeScale3D = Scale;
+            }
+            else if (!Type.compare("Cube"))
+            {
+                UCubeComponent* Cube = new UCubeComponent(Renderer);
+                Cube->UUID = UUID;
+                Cube->RelativeLocation = Location;
+                Cube->RelativeRotation = Rotation;
+                Cube->RelativeScale3D = Scale;
+            }
+            else if (!Type.compare("Triangle"))
+            {
+                UTriangleComponent* Triangle = new UTriangleComponent(Renderer);
+                Triangle->UUID = UUID;
+                Triangle->RelativeLocation = Location;
+                Triangle->RelativeRotation = Rotation;
+                Triangle->RelativeScale3D = Scale;
+            }
+        }
+
+    }
+    else {
     }
 }
 
@@ -174,4 +265,62 @@ void UWildEditor::SetupPropertyWindow()
             }
         }
     }
+}
+
+void UWildEditor::SaveScene(FString SceneName)
+{
+    uint32 Version = 1;
+    uint32 NextUUID = UObjectManager::GetInst().GetNextUUID();
+    TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
+
+    json::JSON Scene;
+    Scene["Version"] = Version;
+    Scene["NextUUID"] = NextUUID;
+
+    // GUObjectArray�� �� ��ü�� ���� JSON �����͸� �߰�
+    for (uint32 i = 0; i < GUObjectArray.size(); i++)
+    {
+        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        {
+            // UUID �Ǵ� ���ϴ� �ε����� ���ڿ� Ű�� ���
+            FString key = std::to_string(Primitive->UUID);
+            Scene["Primitives"][key]["Location"] = json::FVectorToJSON(Primitive->RelativeLocation);
+            Scene["Primitives"][key]["Rotation"] = json::FVectorToJSON(Primitive->RelativeRotation);
+            Scene["Primitives"][key]["Scale"] = json::FVectorToJSON(Primitive->RelativeScale3D);
+            FString RawTypeName = typeid(*Primitive).name();
+            Scene["Primitives"][key]["Type"] = CleanTypeName(RawTypeName);
+        }
+    }
+
+    FString jsonData = Scene.dump();
+    std::ofstream outFile(SceneName + ".Scene");
+    if (outFile.is_open())
+    {
+        outFile << jsonData;
+        outFile.close();
+    }
+    else {
+    }
+}
+
+FString UWildEditor::CleanTypeName(const FString& rawName)
+{
+    FString result = rawName;
+
+    // "class U" ���ξ� ����
+    const FString prefix = "class U";
+    if (result.find(prefix) == 0)  // ���ξ ���ڿ��� ���ۿ� ������
+    {
+        result = result.substr(prefix.length());
+    }
+
+    // "Component" ���̾� ����
+    const FString suffix = "Component";
+    size_t pos = result.rfind(suffix);
+    if (pos != FString::npos)
+    {
+        result = result.substr(0, pos);
+    }
+
+    return result;
 }

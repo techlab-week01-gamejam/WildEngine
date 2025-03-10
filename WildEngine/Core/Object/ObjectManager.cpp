@@ -5,6 +5,7 @@ void UObjectManager::RegisterObject(UObject* Object)
 	if (!Object) return;
 
 	Object->UUID = UEngineStatics::GenUUID(); // Manager에서 UUID 생성
+	NextUUID = Object->UUID;
 	Object->InternalIndex = GUObjectArray.size(); // 현재 배열 크기를 기반으로 Index 할당
 
 	GUObjectArray.push_back(Object);

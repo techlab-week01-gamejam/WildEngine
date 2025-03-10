@@ -160,11 +160,14 @@ void ControlWindow::Render()
 
     ImGui::PushFont(UnicodeFont);
     
-    ImGui::Button(u8"\ue96d", ControlButtonSize); // New Scene
+    NewScene = ImGui::Button(u8"\ue96d", ControlButtonSize); // New Scene
+
     ImGui::SameLine(0, 5.0f);
-    ImGui::Button(u8"\ue950", ControlButtonSize); // Load Scene
+    LoadScene = ImGui::Button(u8"\ue950", ControlButtonSize); // Load Scene
+
     ImGui::SameLine(0, 5.0f);
-    ImGui::Button(u8"\ue9d6", ControlButtonSize); // Save Scene
+    SaveScene = ImGui::Button(u8"\ue9d6", ControlButtonSize); // Save Scene
+
     
     ImGui::PopFont();
 

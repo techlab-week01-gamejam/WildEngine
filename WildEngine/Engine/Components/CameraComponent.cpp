@@ -27,7 +27,7 @@ void UCameraComponent::Initialize()
 
 	CameraPosition.X = 0.0f;
 	CameraPosition.Y = 0.0f;
-	CameraPosition.Z = 0.0f;
+	CameraPosition.Z = -5.0f;
 
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;

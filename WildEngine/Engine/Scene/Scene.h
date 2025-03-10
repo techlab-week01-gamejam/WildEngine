@@ -2,6 +2,7 @@
 
 #include "Math/Matrix.h"
 #include "Interface/IScene.h"
+#include "Object/ObjectManager.h"
 
 class URenderer;
 class UObject;
@@ -59,6 +60,8 @@ private:
 	USphereComponent* Sphere1 = nullptr;
 	UGizmoComponent* SceneGizmo = nullptr;
 
+	UCubeComponent* Cube2 = nullptr;
+    TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
 	USceneComponent* SelectedObject = nullptr;
 
 	FMatrix WorldMatrix;

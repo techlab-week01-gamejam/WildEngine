@@ -21,6 +21,8 @@ public:
     template <typename T>
     TArray<T*> GetObjectsOfType();
 
+    TArray<UObject*>& GetObjectsArray() { return GUObjectArray; }
+	uint32 GetNextUUID() { return NextUUID; }
 
 private:
     friend class ISingleton<UObjectManager>;
@@ -34,6 +36,7 @@ private:
     uint32 TotalAllocationBytes = 0;
     uint32 TotalAllocationCount = 0;
 
+    uint32 NextUUID = 1;
 };
 
 template<typename T>
