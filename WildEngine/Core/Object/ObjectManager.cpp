@@ -55,9 +55,12 @@ void UObjectManager::RegisterDeallocation(UObject* Object)
 	}
 }
 
-void UObjectManager::PrintMemoryUsage()
+void UObjectManager::PrintMemoryUsage(UINT32& Objects, UINT32& Memory)
 {
 	FDebugConsole::DebugPrint("[UObjectManager] Total Allocated Objects: %d", TotalAllocationCount);
 	FDebugConsole::DebugPrint("[UObjectManager] Total Memory Used :: %d", TotalAllocationBytes);
+
+	Objects = TotalAllocationCount;
+	Memory = TotalAllocationBytes;
 }
 #pragma optimize("", on);

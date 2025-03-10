@@ -14,7 +14,7 @@ public:
     void RegisterDeallocation(UObject* Object);
 
 
-    void PrintMemoryUsage();
+    void PrintMemoryUsage(UINT32& Objects, UINT32& Memory);
 
     template <typename T>
     TArray<T*> GetObjectsOfType();
