@@ -1,12 +1,12 @@
 ﻿#include "Scene.h"
 
-#include "d3d11.h"
 #include "DirectXMath.h"
-
 #include "Renderer/URenderer.h"
 
 #include "Components/CameraComponent.h"
 #include "Components/CubeComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/TriangleComponent.h"
 #include "Components/GizmoComponent.h"
 
 #include "Math/Matrix.h"
@@ -52,6 +52,8 @@ void UScene::Initialize()
     {
         SceneGizmo = new UGizmoComponent(Renderer);
     }
+
+    CreateNewObject("cube", 2);
 
     // Test
     SelectedObject = Cube1;
@@ -129,7 +131,6 @@ void UScene::Render()
 
     // 셰이더 상수 버퍼 업데이트
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
-
 }
 
 UObject* UScene::GetSelectedObject()
@@ -160,8 +161,29 @@ UCameraComponent* UScene::GetPrimaryCamera()
     return PrimaryCamera;
 }
 
-void UScene::CreateNewObject(UObject* newObject)
+void UScene::CreateNewObject(FString ObjectType, int Count)
 {
+    if (Count <= 0) return;
+
+    FVector Location;
+
+    for (int i = 0; i < Count; ++i)
+    {
+        if (ObjectType.compare("cube"))
+        {
+            new UCubeComponent(Renderer, Location);
+        }
+        else if (ObjectType.compare("sphere"))
+        {
+            new USphereComponent(Renderer, Location);
+        }
+        else if (ObjectType.compare("triangle"))
+        {
+            new UTriangleComponent(Renderer, Location);
+        }
+
+        Location.X += 1;
+    }
 }
 
 

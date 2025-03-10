@@ -42,7 +42,7 @@ public:
 	UCameraComponent* GetPrimaryCamera() override;
 
 	/* Construct New Object */
-	void CreateNewObject(UObject* newObject) override;
+	void CreateNewObject(FString ObjectType, int Count) override;
 
 	/* Gizmo */
 	virtual UGizmoComponent* GetGizmo() { return SceneGizmo; };

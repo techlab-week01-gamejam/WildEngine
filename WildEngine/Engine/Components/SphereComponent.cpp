@@ -16,6 +16,23 @@ USphereComponent::USphereComponent(const USphereComponent&)
 {
 }
 
+USphereComponent::USphereComponent(URenderer* InRenderer, FVector Location)
+{
+    RelativeLocation = Location;
+}
+
+USphereComponent::USphereComponent(URenderer* InRenderer, FVector Location, FVector Rotation)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+}
+
+USphereComponent::USphereComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+    RelativeScale3D = Scale;
+}
 
 void USphereComponent::Initialize()
 {

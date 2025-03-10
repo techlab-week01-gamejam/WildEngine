@@ -23,6 +23,7 @@ ConsoleWindow::ConsoleWindow()
     Commands.push_back("new");
     Commands.push_back("save");
     Commands.push_back("load");
+    Commands.push_back("spawn");
 
     AutoScroll = true;
     ScrollToBottom = false;
@@ -357,6 +358,53 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
             {
                 Stat->Toggle();
             }
+        }
+    }
+
+    else if (Strnicmp(CommandLine, "spawn ", 6) == 0)
+    {
+        // "spawn " 이후 문자열 추출
+        FString args = CommandLine + 6;
+        // 첫 번째 공백을 찾아 shape와 count 분리
+        size_t pos = args.find(' ');
+        if (pos != FString::npos)
+        {
+            FString shape = args.substr(0, pos);
+            FString countStr = args.substr(pos + 1);
+
+            // 인자 앞뒤의 공백 제거 (필요시)
+            while (!shape.empty() && isspace(shape.front()))
+                shape.erase(shape.begin());
+            while (!shape.empty() && isspace(shape.back()))
+                shape.pop_back();
+            while (!countStr.empty() && isspace(countStr.front()))
+                countStr.erase(countStr.begin());
+            while (!countStr.empty() && isspace(countStr.back()))
+                countStr.pop_back();
+
+            // shape가 cube, sphere, triangle 중 하나인지 확인
+            if (shape == "cube" || shape == "sphere" || shape == "triangle")
+            {
+                int count = atoi(countStr.c_str());
+                if (count > 0)
+                {
+                    // 실제 객체 생성을 위한 로직 호출 부분
+                    AddLog("Spawning %d %s(s)...\n", count, shape.c_str());
+                    // 예: SpawnShape(shape, count);
+                }
+                else
+                {
+                    AddLog(u8"잘못된 개수입니다: %s\n", countStr.c_str());
+                }
+            }
+            else
+            {
+                AddLog(u8"알 수 없는 객체 타입입니다: '%s'\n", shape.c_str());
+            }
+        }
+        else
+        {
+            AddLog(u8"사용법: spawn <cube|sphere|triangle> <count>\n");
         }
     }
 

@@ -200,11 +200,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ShaderW0.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -236,9 +231,6 @@
       <Filter>소스 파일\Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\CameraComponent.cpp">
-      <Filter>소스 파일\Engine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Components\CubeComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\SphereComponent.cpp">
@@ -286,11 +278,11 @@
     <ClCompile Include="Engine\Components\CubeComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Components\CubeComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ShaderW0.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <ClCompile Include="Core\Input\InputManager.cpp">
       <Filter>소스 파일\Core\Input</Filter>
     </ClCompile>

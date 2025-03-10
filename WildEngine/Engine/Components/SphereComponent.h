@@ -13,6 +13,12 @@ public:
 	USphereComponent();
 	USphereComponent(URenderer* InRenderer);
 	USphereComponent(const USphereComponent&);
+
+	USphereComponent(URenderer* InRenderer, FVector Location);
+	USphereComponent(URenderer* InRenderer, FVector Location, FVector Rotation);
+	USphereComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale);
+
+
 	~USphereComponent();
 
 	static UClass* GetClass();

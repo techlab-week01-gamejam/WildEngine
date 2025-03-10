@@ -183,8 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Input\InputManager.cpp" />
-    <ClCompile Include="Engine\Components\CameraComponent.cpp" />
-    <ClCompile Include="Engine\Components\CubeComponent.cpp" />
     <ClCompile Include="Engine\Components\GizmoComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
