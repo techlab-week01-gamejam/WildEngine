@@ -32,8 +32,8 @@ UScene::~UScene()
 void UScene::Initialize()
 {
 
-    UObjectManager& ObjManager = UObjectManager::GetInstance();
-    UObjectFactory& ObjFactory = UObjectFactory::GetInsantce();
+    UObjectManager& ObjManager = UObjectManager::GetInst();
+    UObjectFactory& ObjFactory = UObjectFactory::GetInst();
 
     // Camera 설정
 
@@ -129,6 +129,8 @@ void UScene::Render()
 
     // 셰이더 상수 버퍼 업데이트
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+
+    SetSelectedObject(Cube1);
 
 }
 

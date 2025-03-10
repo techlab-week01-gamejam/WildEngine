@@ -1,5 +1,6 @@
 #include "StatWindow.h"
 #include "../../../ImGui/imgui.h"
+#include "Object/ObjectManager.h"
 
 StatWindow::StatWindow()
 {
@@ -32,17 +33,11 @@ void StatWindow::Render()
         return;
     }
 
-    ImGui::Text(u8"Spawnned Objects: ");
+    ImGui::Text(u8"Spawnned Objects: %d", UObjectManager::GetInst().GetTotalAllocationCount());
     
-    ImGui::SameLine(0, 5.0f);
-
-    ImGui::Text(u8"0");
-    
-    ImGui::Text(u8"Memory Usage: ");
+    ImGui::Text(u8"Memory Usage: %d bytes", UObjectManager::GetInst().GetTotalAllocationBytes());
 
     ImGui::SameLine(0, 5.0f);
-
-    ImGui::Text(u8"0");
 
     ImGui::End();
 }

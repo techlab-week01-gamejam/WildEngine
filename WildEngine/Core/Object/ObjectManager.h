@@ -2,25 +2,28 @@
 #include "Object/Object.h"
 #include "Log/DebugConsole.h"
 #include "Statics/EngineStatics.h"
+#include "Interface/ISingleton.h"
 
-class UObjectManager {
+class UObjectManager : public ISingleton<UObjectManager> 
+{
 public:
-    static UObjectManager& GetInstance();
-
     void RegisterObject(UObject* Object);
     void UnregisterObject(UObject* Object);
 
     void RegisterAllocation(UObject* Object, size_t Size);
     void RegisterDeallocation(UObject* Object);
 
-
     void PrintMemoryUsage();
+
+    uint32 GetTotalAllocationBytes() { return TotalAllocationBytes; };
+    uint32 GetTotalAllocationCount() { return TotalAllocationCount; };
 
     template <typename T>
     TArray<T*> GetObjectsOfType();
 
 
 private:
+    friend class ISingleton<UObjectManager>;
     UObjectManager() = default;
 
     TArray<UObject*> GUObjectArray;
