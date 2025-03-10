@@ -53,6 +53,8 @@ void UScene::Initialize()
         SceneGizmo = new UGizmoComponent(Renderer);
     }
 
+    // Test
+    SelectedObject = Cube1;
 
     // 월드 행렬 초기화
     WorldMatrix = FMatrix::Identity();

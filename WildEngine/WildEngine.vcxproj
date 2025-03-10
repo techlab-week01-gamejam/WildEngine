@@ -129,7 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="Core\Font\IconDefs.h" />
     <ClInclude Include="Core\Font\RawFonts.h" />
     <ClInclude Include="Core\Interface\IScene.h" />
@@ -145,6 +144,7 @@
     <ClInclude Include="Core\Object\ObjectFactory.h" />
     <ClInclude Include="Core\Object\ObjectManager.h" />
     <ClInclude Include="Core\Primitive.h" />
+    <ClInclude Include="Core\Types\CommonTypes.h" />
     <ClInclude Include="Core\Types\Types.h" />
     <ClInclude Include="Engine\Components\CameraComponent.h" />
     <ClInclude Include="Engine\Components\CubeComponent.h" />
@@ -180,9 +180,6 @@
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\CubeComponent.cpp" />
     <ClCompile Include="Engine\Components\PrimitiveComponent.cpp" />
-    <FxCompile Include="ShaderW0.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Input\InputManager.cpp" />
@@ -207,12 +204,6 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="ShaderW0.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

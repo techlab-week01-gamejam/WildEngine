@@ -34,5 +34,7 @@ private:
 
 	float WindowWidth;
 	float WindowHeight;
+
+	void* OnClickNewScene;
 };
 
