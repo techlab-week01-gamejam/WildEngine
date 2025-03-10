@@ -7,6 +7,7 @@
 
 #include "Components/CameraComponent.h"
 #include "Components/CubeComponent.h"
+#include "Components/GizmoComponent.h"
 
 #include "Math/Matrix.h"
 #include "Types/CommonTypes.h"
@@ -40,6 +41,12 @@ void UScene::Initialize()
         Cube1 = new UCubeComponent(Renderer);
     }
 
+    if (SceneGizmo == nullptr)
+    {
+        SceneGizmo = new UGizmoComponent(Renderer);
+    }
+
+
     // 월드 행렬 초기화
     WorldMatrix = FMatrix::Identity();
 
@@ -59,7 +66,8 @@ void UScene::CreateProjectionView()
 
     float SinFov;
     float CosFov;
-    DirectX::XMScalarSinCos(&SinFov, &CosFov, 0.5 * PrimaryCamera->FieldOfView);
+    float ToRadian = DirectX::XMConvertToRadians(0.5 * PrimaryCamera->FieldOfView);
+    DirectX::XMScalarSinCos(&SinFov, &CosFov, ToRadian);
 
     // 0~1 사이의 정규화된 값으로 Height와 width가 표현되어야함
     float Height = CosFov / SinFov; // tan(0.5*FOV);
@@ -86,8 +94,11 @@ void UScene::Render()
     // 뷰 행렬 가져오기
     PrimaryCamera->GetViewMatrix(ViewMatrix);
 
+    SceneGizmo->Render(Cube1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
+
     // 셰이더 상수 버퍼 업데이트
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
+    
 }
 
 

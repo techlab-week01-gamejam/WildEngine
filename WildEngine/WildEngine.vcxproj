@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="Core\Gizmo.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Core\Types\Types.h" />
     <ClInclude Include="Engine\Components\CameraComponent.h" />
     <ClInclude Include="Engine\Components\CubeComponent.h" />
+    <ClInclude Include="Engine\Components\GizmoComponent.h" />
     <ClInclude Include="Engine\Components\PrimitiveComponent.h" />
     <ClInclude Include="Engine\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Components\SphereComponent.h" />
@@ -159,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\CubeComponent.cpp" />
+    <ClCompile Include="Engine\Components\GizmoComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
