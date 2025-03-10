@@ -111,6 +111,7 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Core\json.hpp">
     <ClInclude Include="Engine\Components\GizmoComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
