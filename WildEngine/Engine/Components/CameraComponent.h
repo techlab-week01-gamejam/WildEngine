@@ -42,6 +42,9 @@ private:
 	// Camera Rotation
 	FVector CameraRotation;
 
+	// Camera Target
+	FVector CameraTarget;
+
 	// Camera ViewMatrix
 	FMatrix ViewMatrix;
 };

@@ -18,6 +18,9 @@
 #include "Renderer/URenderer.h"
 #include "Scene/Scene.h"
 
+// Manager
+#include "Input/InputManager.h"
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // 각종 메시지를 처리할 함수
@@ -56,6 +59,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
+
+
+    // 매니저 Class 초기화
+    FInputManager::GetInst().Init();
 
     // Renderer Class를 생성합니다.
     URenderer* MainRender = new URenderer();

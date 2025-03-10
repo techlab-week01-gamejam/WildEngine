@@ -6,6 +6,7 @@ void FInputManager::Init()
 	// ¿¹½Ã) KeyStateMap[VK_SPACE] = EKeyState::None;
 	// or KeyStateMap.insert(std::make_pair(VK_SPACE, EKeyState::None));
 	// or KeyStateMap.emplace(VK_SPACE, EKeyState::None);
+	KeyStateMap['W'] = EKeyState::None; KeyStateMap['A'] = EKeyState::None; KeyStateMap['S'] = EKeyState::None; KeyStateMap['D'] = EKeyState::None;
 }
 
 void FInputManager::Tick(float DeltaTime)

@@ -11,13 +11,13 @@ public:
 	}
 
 protected:
-	ISingleton() {} = default;
-	virtual ~ISingleton() {} = default;
+	ISingleton() = default;
+	virtual ~ISingleton() = default;
 
 	// 복사 및 이동 방지
 	ISingleton(const ISingleton&) = delete;
 	ISingleton& operator=(const ISingleton&) = delete;
 	ISingleton(ISingleton&&) = delete;
-	ISingleton& opreator = (const ISingleton&&) = delete;
+	ISingleton& operator=(ISingleton&&) = delete;
 };
 

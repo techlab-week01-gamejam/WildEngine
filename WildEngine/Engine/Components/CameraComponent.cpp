@@ -1,4 +1,5 @@
 #include "CameraComponent.h"
+#include "Input/InputManager.h"
 
 UCameraComponent::UCameraComponent()
 {
@@ -27,6 +28,9 @@ void UCameraComponent::Initialize()
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;
 	CameraRotation.Z = 0.0;
+
+	// 목표점을 월드 좌표의 고정된 위치로 설정
+	CameraTarget = FVector(0.0f, 0.0f, 0.0f);
 }
 
 FMatrix UCameraComponent::CreateLookAt()
@@ -40,7 +44,8 @@ FMatrix UCameraComponent::CreateLookAt()
 	FVector Up = RotationMatrix * FVector(0.0f, 1.0f, 0.0f);
 
 	// 3. LookAt 좌표 계산: 카메라 위치에서 Forward 방향으로 한 단위 이동
-	FVector LookAt = CameraPosition + Forward;
+	// -> 목표점은 CameraTarget을 사용하여 고정된 좌표로 지정
+	FVector LookAt = CameraTarget;
 
 	// 4. 정규직교 좌표계 구성
 	//    ForwardNormalized는 카메라가 바라보는 실제 방향
@@ -63,11 +68,29 @@ FMatrix UCameraComponent::CreateLookAt()
 		{ 0.0f,            0.0f,            0.0f,            1.0f }
 	};
 
+
 	return FMatrix(m);
 }
 
 void UCameraComponent::Render()
 {
+	if(FInputManager::GetInst().GetKey('W') == EKeyState::Held)
+	{
+		CameraPosition.Z += 0.5f;
+	}
+	if (FInputManager::GetInst().GetKey('A') == EKeyState::Held)
+	{
+		CameraPosition.X -= 0.5f;
+	}
+	if (FInputManager::GetInst().GetKey('S') == EKeyState::Held)
+	{
+		CameraPosition.Z -= 0.5f;
+	}
+	if (FInputManager::GetInst().GetKey('D') == EKeyState::Held)
+	{
+		CameraPosition.X += 0.5f;
+	}
+
 	ViewMatrix = CreateLookAt();
 }
 
