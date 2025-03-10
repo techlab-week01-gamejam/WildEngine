@@ -4,7 +4,7 @@ UPrimitiveComponent::UPrimitiveComponent()
 {
 	RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
 	RelativeRotation = FVector(0.0f, 0.0f, 0.0f);
-	RelativeScale3D = FVector(1.0f, 1.0f, 1.0f);
+	RelativeScale3D = FVector(1.0f, 1.0f, 3.0f);
 }
 
 UPrimitiveComponent::UPrimitiveComponent(const UPrimitiveComponent&)
@@ -22,7 +22,7 @@ void UPrimitiveComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatri
     FMatrix Scaling = FMatrix::Scaling(RelativeScale3D.X, RelativeScale3D.Y, RelativeScale3D.Z);
 
     WorldTransform = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
-
+    
     // 셰이더 상수 버퍼 업데이트
     Renderer->UpdateShaderParameters(WorldTransform, ViewMatrix, ProjectionMatrix);
 

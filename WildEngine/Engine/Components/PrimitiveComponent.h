@@ -21,6 +21,8 @@ public:
 
 	UClass* GetInstanceClass() const override;
 
+	virtual bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) = 0;
+
 	URenderer* Renderer;
 
 	UINT NumVertices;

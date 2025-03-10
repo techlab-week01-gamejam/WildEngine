@@ -28,6 +28,23 @@ UScene::~UScene()
     delete PrimaryCamera;
 }
 
+void UScene::OnMouseClink(int32 ScreenX, int32 ScreenY)
+{
+    FVector RayOrigin = PrimaryCamera->GetPosition();
+    FVector RayDirection = PrimaryCamera->GetRayDirection(ScreenX, ScreenY);
+
+    FHitResult HitResult;
+    if (RayCast(RayOrigin, RayDirection, HitResult))
+    {
+        // 선택된 오브젝트 설정
+        SelectedObject = HitResult.HitObject;
+    }
+    else
+    {
+        SelectedObject = SelectedObject;
+    }
+}
+
 void UScene::Initialize()
 {
 
@@ -36,26 +53,46 @@ void UScene::Initialize()
 
     ObjFactory.RegisterClass<UCameraComponent>();
     ObjFactory.RegisterClassWithArgs<UCubeComponent, URenderer*>();
+	ObjFactory.RegisterClassWithArgs<USphereComponent, URenderer*>();
 
     // Camera 설정
 
     if (PrimaryCamera == nullptr)
     {
-        //PrimaryCamera = new UCameraComponent();
-        PrimaryCamera = ObjFactory.ConstructObject<UCameraComponent>(UCameraComponent::GetClass());
+        PrimaryCamera = new UCameraComponent();
+        //PrimaryCamera = ObjFactory.ConstructObject<UCameraComponent>(UCameraComponent::GetClass());
         if (PrimaryCamera && PrimaryCamera->IsA(UCameraComponent::GetClass())) {
             FDebugConsole::DebugPrint("CameraComponent class selected!");
         }
     }
+    PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
 
     // Test Cube
     if (Cube1 == nullptr)
     {
         //Cube1 = new UCubeComponent(Renderer);
-        Cube1 = ObjFactory.ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), Renderer);
+
+        Cube1 = new UCubeComponent(Renderer);
+        Cube1->SetRelativeLocation(FVector(1.f, 1.f, 1.f));
+        Cube1->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
     }
 
-    SetSelectedObject(Cube1);
+    if (Cube2 == nullptr)
+    {
+        Cube2 = new UCubeComponent(Renderer);
+        Cube2->RelativeLocation = FVector(5.f, 0.f, 0.f);
+        Cube2->RelativeScale3D = FVector(2.f, 2.f, 2.f);
+    }
+
+    // Test Sphere
+    if (Sphere1 == nullptr)
+    {
+        //Sphere1 = ObjFactory.ConstructObject<USphereComponent>(USphereComponent::GetClass(), Renderer);
+		Sphere1 = new USphereComponent(Renderer);
+        Sphere1->RelativeLocation = FVector(10.0f, 0.0f, 0.0f);
+        Sphere1->RelativeRotation = FVector(0.f, 0.f, 0.f);
+        Sphere1->RelativeScale3D = FVector(1.f, 1.f, 1.f);
+    }
     
     if (SceneGizmo == nullptr)
     {
@@ -126,6 +163,56 @@ FMatrix UScene::CreateOrthogonalView()
     return FinalOrthoMatrix;
 }
 
+bool UScene::RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
+{
+    bool bHasHit = false;
+    float MinDistance = FLT_MAX;
+
+    OutHitResult = FHitResult();
+
+    // 모든 Primitive를 순회하며 충돌 검사
+    UPrimitiveComponent* Primitives[] = { Cube1, Cube2, Sphere1 };
+    for (UPrimitiveComponent* Primitive : Primitives)
+    {
+        FHitResult TempHit;
+        if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+        {
+            if (TempHit.Distance < MinDistance)
+            {
+                MinDistance = TempHit.Distance;
+                OutHitResult = TempHit;
+                bHasHit = true;
+            }
+        }
+    }
+    return bHasHit;
+
+    //  // 모든 Primitive를 순회하며 충돌 검사
+    //  
+    //  for ()
+    //  {
+
+    //      // 오브젝트 타입검사 , PrimitiveComponent가 아닌 경우 스킵
+    //      UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(Object);
+    //      if (!Primitive)
+    //      {
+    //          continue;
+    //      }
+
+    //      FHitResult TempHit;
+          //if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+          //{
+          //	if (TempHit.Distance < MinDistance)
+          //	{
+          //		MinDistance = TempHit.Distance;
+          //		OutHitResult = TempHit;
+          //		bHasHit = true;
+          //	}
+          //}
+    //  }
+    //  return bHasHit;
+}
+
 void UScene::Render()
 {
     // 카메라 위치에서 뷰 행렬 생성
@@ -136,6 +223,13 @@ void UScene::Render()
 
     // 투영 행렬 가져오기 (ortho or pers)
     ProjectionMatrix = PrimaryCamera->bIsOrthogonal ? CreateOrthogonalView() : CreateProjectionView();
+
+    // 마우스 클릭시 오브젝트 선택
+    if (FInputManager::GetInst().GetKey(VK_LBUTTON) == EKeyState::Pressed ||
+        FInputManager::GetInst().GetKey(VK_LBUTTON) == EKeyState::Held)
+    {
+        OnMouseClink(FInputManager::GetInst().GetMouseX(), FInputManager::GetInst().GetMouseY());
+    }
 
     // 선택된 오브젝트가 있는 경우
     if (SelectedObject)
