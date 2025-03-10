@@ -54,6 +54,7 @@ void UScene::Initialize()
     ObjFactory.RegisterClass<UCameraComponent>();
     ObjFactory.RegisterClassWithArgs<UCubeComponent, URenderer*>();
 	ObjFactory.RegisterClassWithArgs<USphereComponent, URenderer*>();
+    ObjFactory.RegisterClassWithArgs<UTriangleComponent, URenderer*>();
 
     // Camera 설정
 
@@ -82,6 +83,12 @@ void UScene::Initialize()
         Cube2 = new UCubeComponent(Renderer);
         Cube2->RelativeLocation = FVector(5.f, 0.f, 0.f);
         Cube2->RelativeScale3D = FVector(2.f, 2.f, 2.f);
+    }
+
+    if (Triangle1 == nullptr)
+    {
+        Triangle1 = new UTriangleComponent(Renderer);
+        Triangle1->RelativeLocation = FVector(-2.f, 0.f, 0.f);
     }
 
     // Test Sphere

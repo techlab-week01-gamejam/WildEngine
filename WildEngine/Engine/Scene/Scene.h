@@ -9,6 +9,7 @@ class UObject;
 class UCameraComponent;
 class UCubeComponent;
 class USphereComponent;
+class UTriangleComponent;
 class UGizmoComponent;
 struct FHitResult;
 
@@ -63,6 +64,7 @@ private:
 	UCubeComponent* Cube1 = nullptr;
 	USphereComponent* Sphere1 = nullptr;
 	UGizmoComponent* SceneGizmo = nullptr;
+	UTriangleComponent* Triangle1 = nullptr;
 
 	UCubeComponent* Cube2 = nullptr;
     TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();

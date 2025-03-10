@@ -417,13 +417,15 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
                             UCubeComponent* c = UObjectFactory::GetInst().ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), MainRenderer);
                             c->SetRelativeLocation(pos);
                         }
-                        else if (shape.compare("sphere"))
+                        else if (shape == "sphere")
                         {
-                            UObjectFactory::GetInst().ConstructObject<USphereComponent>(USphereComponent::GetClass(), MainRenderer);
+                            USphereComponent* s = UObjectFactory::GetInst().ConstructObject<USphereComponent>(USphereComponent::GetClass(), MainRenderer);
+                            s->SetRelativeLocation(pos);
                         }
-                        else if (shape.compare("triangle"))
+                        else if (shape == "triangle")
                         {
-                            UObjectFactory::GetInst().ConstructObject<UTriangleComponent>(UTriangleComponent::GetClass(), MainRenderer);
+                            UTriangleComponent* t = UObjectFactory::GetInst().ConstructObject<UTriangleComponent>(UTriangleComponent::GetClass(), MainRenderer);
+                            t->SetRelativeLocation(pos);
                         }
                     }
                 }
