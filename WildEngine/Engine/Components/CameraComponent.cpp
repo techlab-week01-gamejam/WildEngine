@@ -1,5 +1,7 @@
 #include "CameraComponent.h"
 #include "Input/InputManager.h"
+#include "DirectXMath.h"
+#include "Math/Matrix.h"
 
 UCameraComponent::UCameraComponent()
 {
@@ -16,27 +18,27 @@ UCameraComponent::~UCameraComponent()
 
 void UCameraComponent::Initialize()
 {
-	FieldOfView = 90.0f;
+	FieldOfView = 60.f;
 
 	NearZ = 0.1f;
 	FarZ = 1000.0f;
 
-	CameraPosition.X = 10.0f;
-	CameraPosition.Y = 20.0f;
-	CameraPosition.Z = -1.0f;
+	CameraPosition.X = 0.0f;
+	CameraPosition.Y = 0.0f;
+	CameraPosition.Z = -5.0f;
 
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;
 	CameraRotation.Z = 0.0;
 
 	// 목표점을 월드 좌표의 고정된 위치로 설정
-	CameraTarget = FVector(0.0f, 0.0f, 0.0f);
+	//CameraTarget = FVector(0.0f, 0.0f, 0.0f);
 }
 
 FMatrix UCameraComponent::CreateLookAt()
 {
 	// 1. 카메라 회전 행렬 생성 (입력 각도는 라디안 단위)
-	FMatrix RotationMatrix = FMatrix::CreateRotationRollPitchYaw(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
+	RotationMatrix = FMatrix::CreateRotationRollPitchYaw(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
 
 	// 2. 회전 행렬을 사용해 기본 forward와 up 벡터 변환
 	//    (LH 좌표계에서 기본 forward = (0, 0, 1), up = (0, 1, 0))
@@ -45,7 +47,7 @@ FMatrix UCameraComponent::CreateLookAt()
 
 	// 3. LookAt 좌표 계산: 카메라 위치에서 Forward 방향으로 한 단위 이동
 	// -> 목표점은 CameraTarget을 사용하여 고정된 좌표로 지정
-	FVector LookAt = CameraTarget;
+	FVector LookAt = CameraPosition + Forward;
 
 	// 4. 정규직교 좌표계 구성
 	//    ForwardNormalized는 카메라가 바라보는 실제 방향
@@ -61,11 +63,18 @@ FMatrix UCameraComponent::CreateLookAt()
 	float D2 = -ForwardNormalized.Dot(CameraPosition);
 
 	// 6. 뷰 행렬 구성 (row-major 방식)
-	float m[4][4] = {
+	/*float m[4][4] = {
 		{ Right.X,         Right.Y,         Right.Z,         D0 },
 		{ NewUp.X,         NewUp.Y,         NewUp.Z,         D1 },
 		{ ForwardNormalized.X, ForwardNormalized.Y, ForwardNormalized.Z, D2 },
 		{ 0.0f,            0.0f,            0.0f,            1.0f }
+	};*/
+
+	float m[4][4] = {
+		{ Right.X,		NewUp.X,    ForwardNormalized.X,	0.0f },
+		{ Right.Y,		NewUp.Y,    ForwardNormalized.Y,	0.0f },
+		{ Right.Z,		NewUp.Z,    ForwardNormalized.Z,	0.0f },
+		{	   D0,           D1,				     D2,	1.0f }
 	};
 
 
@@ -74,24 +83,31 @@ FMatrix UCameraComponent::CreateLookAt()
 
 void UCameraComponent::Render()
 {
+	// 마우스 이동량을 이용한 회전 처리
+	UpdateRotationFromMouse();
+
+	// 키보드 입력 처리
 	if(FInputManager::GetInst().GetKey('W') == EKeyState::Held)
 	{
-		CameraPosition.Z += 0.5f;
+		CameraPosition += RotationMatrix * FVector(0.0f, 0.0f, 0.5f);
 	}
 	if (FInputManager::GetInst().GetKey('A') == EKeyState::Held)
 	{
-		CameraPosition.X -= 0.5f;
+		CameraPosition -= RotationMatrix * FVector(0.5f, 0.0f, 0.0f);
 	}
 	if (FInputManager::GetInst().GetKey('S') == EKeyState::Held)
 	{
-		CameraPosition.Z -= 0.5f;
+		CameraPosition -= RotationMatrix * FVector(0.0f, 0.0f, 0.5f);
 	}
 	if (FInputManager::GetInst().GetKey('D') == EKeyState::Held)
 	{
-		CameraPosition.X += 0.5f;
+		CameraPosition += RotationMatrix * FVector(0.5f, 0.0f, 0.0f);
 	}
 
 	ViewMatrix = CreateLookAt();
+
+	// 마우스 델타 초기화
+	FInputManager::GetInst().ResetMouseDeltas();
 }
 
 void UCameraComponent::SetPosition(float x, float y, float z)
@@ -123,5 +139,31 @@ void UCameraComponent::GetViewMatrix(FMatrix& InViewMatrix)
 {
 	InViewMatrix = ViewMatrix;
 	return;
+}
+
+void UCameraComponent::UpdateRotationFromMouse()
+{
+	// 마우스 우클릭이 눌리지 않았다면 회전하지 않음 
+	if (FInputManager::GetInst().GetKey(VK_RBUTTON) != EKeyState::Held)
+	{
+		return;
+	}
+
+	// 마우스 이동량 가져오기
+	float DeltaX = FInputManager::GetInst().GetMouseDeltaX();
+	float DeltaY = FInputManager::GetInst().GetMouseDeltaY();
+
+
+	// 감도 설정
+	float Sensitivity = 0.002f;
+
+	// 회전 값 업데이트
+	CameraRotation.Y += DeltaX * Sensitivity; // Yaw (좌우 회전)
+	CameraRotation.X += DeltaY * Sensitivity; // Pitch (상하 회전)
+
+	// Pitch 회전 제한 (고개가 너무 많이 꺾이는 것 방지)
+	float MaxPitch = DirectX::XMConvertToRadians(89.0f);
+	float MinPitch = DirectX::XMConvertToRadians(-89.0f);
+	CameraRotation.X = (CameraRotation.X < MinPitch) ? MinPitch : (CameraRotation.X > MaxPitch) ? MaxPitch : CameraRotation.X;
 }
 

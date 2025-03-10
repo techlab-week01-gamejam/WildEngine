@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface/ISingleton.h"
+#include "Types/Types.h"
 #include <unordered_map>
 #include <Windows.h>
 
@@ -20,10 +21,27 @@ public:
 	bool GetKeyState(int Key, EKeyState KeyState) const;
 	EKeyState GetKey(int Key) const;
 
+	// 마우스 입력 관련 함수 추가
+	void ProcessMouseMovement(int CurrentX, int CurrentY);
+	void ResetMouseDeltas();
+	float GetMouseDeltaX() const
+	{
+		return MouseDeltaX;
+	}
+	float GetMouseDeltaY() const
+	{
+		return MouseDeltaY;
+	}
+
 private:
 	friend class ISingleton<FInputManager>;
 	FInputManager() = default;
 
-	std::unordered_map<int, EKeyState> KeyStateMap;
+	TMap<int, EKeyState> KeyStateMap;
+
+	int LastMouseX = 0;
+	int LastMouseY = 0;
+	float MouseDeltaX = 0.0f;
+	float MouseDeltaY = 0.0f;
 };
 

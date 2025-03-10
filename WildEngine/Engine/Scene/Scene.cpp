@@ -59,7 +59,8 @@ void UScene::CreateProjectionView()
 
     float SinFov;
     float CosFov;
-    DirectX::XMScalarSinCos(&SinFov, &CosFov, 0.5 * PrimaryCamera->FieldOfView);
+    float FovRadian = DirectX::XMConvertToRadians(PrimaryCamera->FieldOfView);
+    DirectX::XMScalarSinCos(&SinFov, &CosFov, 0.5f * FovRadian);
 
     // 0~1 사이의 정규화된 값으로 Height와 width가 표현되어야함
     float Height = CosFov / SinFov; // tan(0.5*FOV);

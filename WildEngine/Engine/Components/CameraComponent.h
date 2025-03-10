@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components/SceneComponent.h"
+#include "Input/InputManager.h"
 
 class UCameraComponent : public USceneComponent
 {
@@ -18,6 +19,9 @@ public:
 	FVector GetRotation();
 
 	void GetViewMatrix(FMatrix& InViewMatrix);
+
+	// 마우스로 회전 처리
+	void UpdateRotationFromMouse();
 
 public:
 	// Default FOV : 90
@@ -43,9 +47,10 @@ private:
 	FVector CameraRotation;
 
 	// Camera Target
-	FVector CameraTarget;
+	//FVector CameraTarget;
 
 	// Camera ViewMatrix
 	FMatrix ViewMatrix;
+	FMatrix RotationMatrix;
 };
 

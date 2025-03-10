@@ -28,8 +28,8 @@ UCubeComponent::~UCubeComponent()
 
 void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
-    if (rot == 180) rot = 0;
-    rot += 0.01f;
+   /* if (rot == 180) rot = 0;
+    rot += 0.01f;*/
 
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
     FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(rot, 0, rot);

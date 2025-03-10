@@ -30,6 +30,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     }
 
     switch (message) {
+    case WM_MOUSEMOVE:
+    {
+        int32 x = LOWORD(lParam);
+        int32 y = HIWORD(lParam);
+        FInputManager::GetInst().ProcessMouseMovement(x, y);
+    }
+    break;
     case WM_DESTROY:
         // Signal that the app should quit
         PostQuitMessage(0);
@@ -37,7 +44,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
-
     return 0;
 }
 
