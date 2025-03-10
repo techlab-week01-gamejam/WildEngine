@@ -25,6 +25,8 @@ private:
 	void CreateUsingFont();
 
 	void SetupControlWindow();
+	void SetupPropertyWindow();
+	void SetupSelectedObject();
 
 private:
 	URenderer* Renderer;
