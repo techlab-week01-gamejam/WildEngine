@@ -20,6 +20,8 @@ void UCameraComponent::Initialize()
 {
 	FieldOfView = 60.f;
 
+	bIsOrthogonal = false;
+
 	NearZ = 0.1f;
 	FarZ = 1000.0f;
 

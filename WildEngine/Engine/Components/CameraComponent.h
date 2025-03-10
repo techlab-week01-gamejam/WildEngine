@@ -42,6 +42,14 @@ public:
 	// Default Far : 1000
 	float FarZ;
 
+	// Perspective or Orthogonal
+	bool bIsOrthogonal;
+
+	// Camera Position
+	FVector CameraPosition;
+
+	// Camera Rotation
+	FVector CameraRotation;
 private:
 	void Initialize();
 
@@ -49,12 +57,6 @@ private:
 
 
 private:
-	// Camera Position
-	FVector CameraPosition;
-
-	// Camera Rotation
-	FVector CameraRotation;
-
 	// Camera Target
 	//FVector CameraTarget;
 

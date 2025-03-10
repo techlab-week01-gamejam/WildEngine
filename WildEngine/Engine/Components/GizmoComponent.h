@@ -19,6 +19,8 @@ public:
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
 	void SetGizmoType(EGizmoType NewType);
+
+	EGizmoType GetCurrentGizmo() { return CurrentType; }
 private:
 	URenderer* Renderer;
 

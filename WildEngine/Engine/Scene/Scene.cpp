@@ -122,7 +122,7 @@ FMatrix UScene::CreateOrthogonalView()
         { 2.0f / Width, 0.0f,           0.0f,                   0.0f },
         { 0.0f,         2.0f / Height,  0.0f,                   0.0f },
         { 0.0f,         0.0f,         1.0f / (FarZ - NearZ),    0.0f },
-        { 0.0f,         0.0f,         -NearZ / (FarZ - NearZ),  1.0f }
+        { 0.0f,         0.0f,         NearZ / (FarZ - NearZ),   1.0f }
     };
 
     FMatrix FinalOrthoMatrix(Projection);
@@ -138,18 +138,26 @@ void UScene::Render()
     // 뷰 행렬 가져오기
     PrimaryCamera->GetViewMatrix(ViewMatrix);
 
-    SceneGizmo->Render(Cube1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
+    // 투영 행렬 가져오기 (ortho or pers)
+    ProjectionMatrix = PrimaryCamera->bIsOrthogonal ? CreateOrthogonalView() : CreateProjectionView();
+
+    // 선택된 오브젝트가 있는 경우
+    if (SelectedObject)
+    {
+        // 기즈모 렌더링
+        SceneGizmo->Render(SelectedObject->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
+    }
 
     // 셰이더 상수 버퍼 업데이트
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
 }
 
-UObject* UScene::GetSelectedObject()
+USceneComponent* UScene::GetSelectedObject()
 {
     return SelectedObject;
 }
 
-void UScene::SetSelectedObject(UObject* newSelectObject)
+void UScene::SetSelectedObject(USceneComponent* newSelectObject)
 {
     SelectedObject = newSelectObject;
 }

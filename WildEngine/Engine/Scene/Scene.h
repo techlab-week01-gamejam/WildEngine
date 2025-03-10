@@ -30,8 +30,8 @@ public:
 	//////////////////////
 
 	/* Selected Object */
-	UObject* GetSelectedObject() override;
-	void SetSelectedObject(UObject* newSelectObject) override;
+	USceneComponent* GetSelectedObject() override;
+	void SetSelectedObject(USceneComponent* newSelectObject) override;
 	bool wasSelectedObject() override;
 
 	/* Load & Save */
@@ -59,7 +59,7 @@ private:
 	USphereComponent* Sphere1 = nullptr;
 	UGizmoComponent* SceneGizmo = nullptr;
 
-	UObject* SelectedObject = nullptr;
+	USceneComponent* SelectedObject = nullptr;
 
 	FMatrix WorldMatrix;
 	FMatrix ViewMatrix;
