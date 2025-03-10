@@ -13,7 +13,7 @@ public:
     void RegisterAllocation(UObject* Object, size_t Size);
     void RegisterDeallocation(UObject* Object);
 
-    void PrintMemoryUsage();
+    void PrintMemoryUsage(UINT32& Objects, UINT32& Memory);
 
     uint32 GetTotalAllocationBytes() { return TotalAllocationBytes; };
     uint32 GetTotalAllocationCount() { return TotalAllocationCount; };

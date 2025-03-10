@@ -2,6 +2,9 @@
 #include "../../../ImGui/imgui.h"
 #include "Object/ObjectManager.h"
 
+#include "Types/Types.h"
+#include "Object/ObjectManager.h"
+
 StatWindow::StatWindow()
 {
     bWasOpen = true;
@@ -32,6 +35,7 @@ void StatWindow::Render()
         ImGui::End(); // 반드시 호출해야 함
         return;
     }
+
 
     ImGui::Text(u8"Spawnned Objects: %d", UObjectManager::GetInst().GetTotalAllocationCount());
     

@@ -11,11 +11,10 @@ public:
 
 	FVector RelativeLocation;
 	FVector RelativeRotation;
-	FVector RelativeScale3D;
+	FVector RelativeScale3D = FVector(1, 1, 1);
 
 	FMatrix WorldTransform;
 
 public:
 	virtual FMatrix GetWorldTransform() { return WorldTransform; };
-
 };

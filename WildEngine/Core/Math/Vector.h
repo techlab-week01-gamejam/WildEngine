@@ -69,6 +69,11 @@ struct FVector
         return FVector(-X, -Y, -Z);
     }
 
+    FVector operator=(const FVector& rhs) const
+    {
+        return FVector(rhs.X, rhs.Y, rhs.Z);
+    }
+
     // 벡터 덧셈 연산자
     FVector operator+(const FVector& rhs) const
     {

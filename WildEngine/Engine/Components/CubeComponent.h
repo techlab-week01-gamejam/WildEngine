@@ -12,6 +12,9 @@ class UCubeComponent : public UPrimitiveComponent
 public:
 	UCubeComponent();
 	UCubeComponent(URenderer* InRenderer);
+	UCubeComponent(URenderer* InRenderer, FVector Location);
+	UCubeComponent(URenderer* InRenderer, FVector Location, FVector Rotation);
+	UCubeComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale);
 	UCubeComponent(const UCubeComponent&);
 	~UCubeComponent();
 

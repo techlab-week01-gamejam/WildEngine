@@ -11,6 +11,11 @@ class UTriangleComponent : public UPrimitiveComponent
 public:
 	UTriangleComponent(URenderer* InRenderer);
 	UTriangleComponent(const UTriangleComponent&);
+	UTriangleComponent(URenderer* InRenderer, FVector Location);
+	UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation);
+	UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale);
+
+
 	~UTriangleComponent();
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);

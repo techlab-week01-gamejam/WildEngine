@@ -12,6 +12,24 @@ UTriangleComponent::UTriangleComponent(const UTriangleComponent&)
 {
 }
 
+UTriangleComponent::UTriangleComponent(URenderer* InRenderer, FVector Location)
+{
+    RelativeLocation = Location;
+}
+
+UTriangleComponent::UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+}
+
+UTriangleComponent::UTriangleComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+    RelativeScale3D = Scale;
+}
+
 UTriangleComponent::~UTriangleComponent()
 {
 }

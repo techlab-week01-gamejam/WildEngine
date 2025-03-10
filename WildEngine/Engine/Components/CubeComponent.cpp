@@ -12,6 +12,24 @@ UCubeComponent::UCubeComponent(URenderer* InRenderer)
     Initialize();
 }
 
+UCubeComponent::UCubeComponent(URenderer* InRenderer, FVector Location)
+{
+    RelativeLocation = Location;
+}
+
+UCubeComponent::UCubeComponent(URenderer* InRenderer, FVector Location, FVector Rotation)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+}
+
+UCubeComponent::UCubeComponent(URenderer* InRenderer, FVector Location, FVector Rotation, FVector Scale)
+{
+    RelativeLocation = Location;
+    RelativeRotation = Rotation;
+    RelativeScale3D = Scale;
+}
+
 UCubeComponent::UCubeComponent(const UCubeComponent&)
 {
 }

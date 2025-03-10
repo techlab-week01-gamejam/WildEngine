@@ -21,7 +21,7 @@ public:
 	virtual UCameraComponent* GetPrimaryCamera() = 0;
 
 	/* Construct New Object */
-	virtual void CreateNewObject(UObject*) = 0;
+	virtual void CreateNewObject(FString, int) = 0;
 
 	/* Gizmo */
 	virtual UGizmoComponent* GetGizmo() = 0;
