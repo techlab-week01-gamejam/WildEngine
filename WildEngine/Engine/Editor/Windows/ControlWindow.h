@@ -36,7 +36,7 @@ private:
 private:
 	UINT FramePerSecond;
 
-	int32 PrimtiveTypeNumber;
+	int32 PrimitiveTypeNumber;
 	int32 SpawnNumber;
 	FString SceneName;
 

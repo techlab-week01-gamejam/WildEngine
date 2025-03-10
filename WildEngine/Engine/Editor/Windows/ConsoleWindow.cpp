@@ -2,11 +2,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include "ConsoleWindow.h"
-#include "Types/Types.h"
 #include <cstdarg>
 #include <stdio.h>
-#include <Editor/EditorDesigner.h>
+
+#include "ConsoleWindow.h"
+#include "Types/Types.h"
+#include "Editor/EditorDesigner.h"
+#include "Object/ObjectFactory.h"
+#include "Components/CubeComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/TriangleComponent.h"
 
 ConsoleWindow::ConsoleWindow()
 {
@@ -200,6 +205,11 @@ void ConsoleWindow::OnResize(UINT32 Width, UINT32 Height)
 void ConsoleWindow::Toggle()
 {
     bWasOpen = !bWasOpen;
+}
+
+void ConsoleWindow::Execute(const char* command)
+{
+    ExecCommand(command);
 }
 
 int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData* data)
@@ -398,6 +408,22 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
                     // 실제 객체 생성을 위한 로직 호출 부분
                     AddLog("Spawning %d %s(s)...\n", count, shape.c_str());
                     // 예: SpawnShape(shape, count);
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (shape.compare("cube"))
+                        {
+                            UObjectFactory::GetInst().ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), MainRenderer);
+                        }
+                        else if (shape.compare("sphere"))
+                        {
+                            UObjectFactory::GetInst().ConstructObject<USphereComponent>(USphereComponent::GetClass(), MainRenderer);
+                        }
+                        else if (shape.compare("triangle"))
+                        {
+                            UObjectFactory::GetInst().ConstructObject<UTriangleComponent>(UTriangleComponent::GetClass(), MainRenderer);
+                        }
+                    }
                 }
                 else
                 {

@@ -53,7 +53,6 @@ void UScene::Initialize()
     {
         //Cube1 = new UCubeComponent(Renderer);
         Cube1 = ObjFactory.ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), Renderer);
-
     }
 
     SetSelectedObject(Cube1);
@@ -62,8 +61,6 @@ void UScene::Initialize()
     {
         SceneGizmo = new UGizmoComponent(Renderer);
     }
-
-    CreateNewObject("cube", 2);
 
     // Test
     SelectedObject = Cube1;

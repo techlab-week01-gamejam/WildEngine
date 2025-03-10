@@ -10,7 +10,7 @@ class UCubeComponent : public UPrimitiveComponent
 {
 public:
 	UCubeComponent();
-	UCubeComponent(URenderer* InRenderer, const FVector& InLocation);
+	UCubeComponent(URenderer* InRenderer, FVector InLocation);
 	UCubeComponent(URenderer* InRenderer);
 	UCubeComponent(const UCubeComponent&);
 	~UCubeComponent();

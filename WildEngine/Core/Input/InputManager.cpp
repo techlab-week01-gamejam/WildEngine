@@ -9,6 +9,7 @@ void FInputManager::Init()
 	KeyStateMap['W'] = EKeyState::None; KeyStateMap['A'] = EKeyState::None; KeyStateMap['S'] = EKeyState::None; KeyStateMap['D'] = EKeyState::None;
 	KeyStateMap[VK_RBUTTON] = EKeyState::None;
 	KeyStateMap[VK_LBUTTON] = EKeyState::None;
+	KeyStateMap[0x31] = EKeyState::None; KeyStateMap[0x32] = EKeyState::None; KeyStateMap[0x33] = EKeyState::None;
 }
 
 void FInputManager::Tick(float DeltaTime)

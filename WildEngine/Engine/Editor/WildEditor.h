@@ -36,6 +36,8 @@ private:
 
 	void SetupPropertyWindow();
 
+	void SetupConsoleWindow();
+
 private:
 	URenderer* Renderer;
 	UScene* Scene;

@@ -290,6 +290,18 @@ void UWildEditor::SetupPropertyWindow()
     }
 }
 
+void UWildEditor::SetupConsoleWindow()
+{
+    auto Window = UEditorDesigner::Get().GetWindow("ConsoleWindow");
+    if (Window)
+    {
+        if (ConsoleWindow* Console = dynamic_cast<ConsoleWindow*>(Window.get()))
+        {
+            Console->SetRenderer(Scene->GetRenderer());
+        }
+    }
+}
+
 void UWildEditor::SaveScene(FString SceneName)
 {
     uint32 Version = 1;

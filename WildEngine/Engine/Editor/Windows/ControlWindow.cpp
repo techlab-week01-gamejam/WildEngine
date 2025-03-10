@@ -4,12 +4,13 @@
 
 #include "Editor/EditorDesigner.h"
 #include "Components/GizmoComponent.h"
+#include "Interface/ICommand.h"
 
 ControlWindow::ControlWindow()
 {
 	FramePerSecond = 0;
 	
-	PrimtiveTypeNumber = 0;
+	PrimitiveTypeNumber = 0;
 	SpawnNumber = 0;
 	SceneName = "NewScene";
 	bIsOrthogonal = nullptr;
@@ -154,13 +155,27 @@ void ControlWindow::Render()
 	ImGui::Separator(); // 수평 구분선
     // 스폰 섹션
 
-	const char* items[] = { "Cube", "Sphere", "Triangle" };
+	const char* items[] = { "cube", "sphere", "triangle" };
     ImGui::SetNextItemWidth(100); // 원하는 너비
-	ImGui::Combo("Primitive", &PrimtiveTypeNumber, items, IM_ARRAYSIZE(items));
+	ImGui::Combo("Primitive", &PrimitiveTypeNumber, items, IM_ARRAYSIZE(items));
     
     ImGui::SameLine(0, 5.0f);
 
-    CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNumber, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal);
+    if (CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNumber, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal))
+    {
+        FString TargetPrimitiveStr = items[PrimitiveTypeNumber];
+        auto Window = UEditorDesigner::Get().GetWindow("ConsoleWindow");
+        if (Window)
+        {
+            // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+            if (ICommand* Console = dynamic_cast<ICommand*>(Window.get()))
+            {
+                FString Count = std::to_string(SpawnNumber);
+                FString CommandStr = "spawn " + TargetPrimitiveStr + " " + Count;
+                Console->Execute(CommandStr.c_str());
+            }
+        }
+    }
 
     // 스폰 섹션
     ImGui::Separator(); // 수평 구분선
@@ -265,7 +280,7 @@ bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_t
     ImGui::PushID(label);
     ImGui::SetNextItemWidth(ImMax(1.0f, ImGui::CalcItemWidth() - (button_size + style.ItemInnerSpacing.x) * 6 + 15));
     if (ImGui::InputText("", buf, IM_ARRAYSIZE(buf), flags))
-        value_changed = ImGui::DataTypeApplyFromText(buf, data_type, p_data, format, (flags & ImGuiInputTextFlags_ParseEmptyRefVal) ? p_data_default : NULL);
+        ImGui::DataTypeApplyFromText(buf, data_type, p_data, format, (flags & ImGuiInputTextFlags_ParseEmptyRefVal) ? p_data_default : NULL);
     IMGUI_TEST_ENGINE_ITEM_INFO(g.LastItemData.ID, label, g.LastItemData.StatusFlags | ImGuiItemStatusFlags_Inputable);
 
     // 기존의 Step 버튼(-, +) 부분을 제거하고, 대신 "spawn" 버튼을 추가합니다.

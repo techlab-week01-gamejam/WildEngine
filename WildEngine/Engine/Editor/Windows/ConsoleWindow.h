@@ -1,11 +1,14 @@
 #pragma once
 #include "Editor/EditorWindow.h"
 #include "Interface/ISwitchable.h"
+#include "Interface/ICommand.h"
 
 #include "../ImGui/imgui.h"
 #include <ctype.h>
 
-class ConsoleWindow : public UEditorWindow, public ISwitchable
+class URenderer;
+
+class ConsoleWindow : public UEditorWindow, public ISwitchable, public ICommand
 {
 public:
 	ConsoleWindow();
@@ -15,6 +18,7 @@ public:
     void OnResize(UINT32 Width, UINT32 Height) override;
 
     void Toggle() override;
+    void Execute(const char*) override;
 
     static int   Stricmp(const char* s1, const char* s2) { int d; while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; } return d; }
     static int   Strnicmp(const char* s1, const char* s2, int n) { int d = 0; while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; n--; } return d; }
@@ -30,6 +34,7 @@ public:
 
     int TextEditCallback(ImGuiInputTextCallbackData* data);
 
+    void SetRenderer(URenderer* InRenderer) { MainRenderer = InRenderer; }
 private:
     void AddLog(const char* fmt, ...);
 
@@ -48,5 +53,7 @@ private:
     bool                  ScrollToBottom;
 
     bool bWasOpen;
+
+    URenderer* MainRenderer;
 };
 

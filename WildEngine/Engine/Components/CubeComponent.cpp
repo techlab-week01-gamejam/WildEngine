@@ -4,7 +4,7 @@
 UCubeComponent::UCubeComponent()
 {
 }
-UCubeComponent::UCubeComponent(URenderer* InRenderer, const FVector& InLocation)
+UCubeComponent::UCubeComponent(URenderer* InRenderer, FVector InLocation)
 {
     Renderer = InRenderer;
     RelativeLocation = InLocation;
