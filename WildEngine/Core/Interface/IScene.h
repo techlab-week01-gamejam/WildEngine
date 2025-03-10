@@ -1,6 +1,6 @@
 #pragma once
 
-class UObject;
+class USceneComponent;
 class UCameraComponent;
 class UGizmoComponent;
 
@@ -9,8 +9,8 @@ class IScene
 public:
 	
 	/* Selected Object */
-	virtual UObject* GetSelectedObject() = 0;
-	virtual void SetSelectedObject(UObject*) = 0;
+	virtual USceneComponent* GetSelectedObject() = 0;
+	virtual void SetSelectedObject(USceneComponent*) = 0;
 	virtual bool wasSelectedObject() = 0;
 
 	/* Load & Save */

@@ -12,20 +12,20 @@ ControlWindow::ControlWindow()
 	PrimtiveTypeNumber = 0;
 	SpawnNumber = 0;
 	SceneName = "NewScene";
-	bIsOrthogonal = false;
+	bIsOrthogonal = nullptr;
 
-	FOV = 60;
-	CameraLocation.Set(0,1,0);
-	CameraRotation.Set(0,0,0);
+	FOV = nullptr;
+	CameraLocation = nullptr;
+	CameraRotation = nullptr;
 
-    Location[0] = CameraLocation.X;
-    Location[1] = CameraLocation.Y;
-    Location[2] = CameraLocation.Z;
+    Location[0] = 0;
+    Location[1] = 0;
+    Location[2] = 0;
 
 
-    Rotation[0] = CameraRotation.X;
-    Rotation[1] = CameraRotation.Y;
-    Rotation[2] = CameraRotation.Z;
+    Rotation[0] = 0;
+    Rotation[1] = 0;
+    Rotation[2] = 0;
 
     WindowWidth = 360;
     WindowHeight = 300;
@@ -50,33 +50,52 @@ void ControlWindow::Render()
     ImVec2 ControlButtonSize = ImVec2(32, 32);
 
     ImGui::PushFont(UnicodeFont);
-    if (ImGui::Button(u8"\ue9bc", ControlButtonSize)) 
+    ImVec4 ActiveColor = ImVec4(0, 0.5, 0, 0.6f);
+
+    bool isTranslationActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Translation);
+    if (isTranslationActive)
+        ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor); // 활성 상태 색상
+    if (ImGui::Button(u8"\ue9bc", ControlButtonSize))
     {
-        if (nullptr != PrimaryGizmo)
+        if (PrimaryGizmo)
         {
             PrimaryGizmo->SetGizmoType(EGizmoType::Translation);
         }
-    } // MOVE
+    }
+    if (isTranslationActive)
+        ImGui::PopStyleColor();
 
     ImGui::SameLine(0, 5.0f);
 
+    // Rotation 버튼 (활성 상태이면 색상을 변경)
+    bool isRotationActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Rotation);
+    if (isRotationActive)
+        ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
     if (ImGui::Button(u8"\ue9d3", ControlButtonSize))
     {
-        if (nullptr != PrimaryGizmo)
+        if (PrimaryGizmo)
         {
             PrimaryGizmo->SetGizmoType(EGizmoType::Rotation);
         }
-    }// ROTATE
+    }
+    if (isRotationActive)
+        ImGui::PopStyleColor();
 
     ImGui::SameLine(0, 5.0f);
 
+    // Scale 버튼 (활성 상태이면 색상을 변경)
+    bool isScaleActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Scale);
+    if (isScaleActive)
+        ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
     if (ImGui::Button(u8"\ue9ab", ControlButtonSize))
     {
-        if (nullptr != PrimaryGizmo)
+        if (PrimaryGizmo)
         {
             PrimaryGizmo->SetGizmoType(EGizmoType::Scale);
         }
-    } // SCALE
+    }
+    if (isScaleActive)
+        ImGui::PopStyleColor();
 
     ImGui::SameLine();
     // 창 내부의 전체 콘텐츠 영역 너비를 가져옵니다.
@@ -163,22 +182,30 @@ void ControlWindow::Render()
     // 씬 섹션
     ImGui::Separator(); // 수평 구분선
 
-    ImGui::Checkbox("Orthogonal", &bIsOrthogonal);
-
-    ImGui::DragFloat("FOV", &FOV, 1, 0, 120);
-
-    if (ImGui::DragFloat3("Camera Location", Location))
+    if (ImGui::Checkbox("Orthogonal", bIsOrthogonal))
     {
-        CameraLocation.X = Location[0];
-        CameraLocation.Y = Location[1];
-        CameraLocation.Z = Location[2];
+
     }
 
+    if (ImGui::DragFloat("FOV", FOV, 1, 0, 120))
+    {
+
+    }
+
+    UpdateVectorToFloat(CameraLocation, Location);
+    if (ImGui::DragFloat3("Camera Location", Location))
+    {
+        CameraLocation->X = Location[0];
+        CameraLocation->Y = Location[1];
+        CameraLocation->Z = Location[2];
+    }
+
+    UpdateVectorToFloat(CameraRotation, Rotation);
     if (ImGui::DragFloat3("Camera Rotation", Rotation))
     {
-        CameraRotation.X = Rotation[0];
-        CameraRotation.Y = Rotation[1];
-        CameraRotation.Z = Rotation[2];
+        CameraRotation->X = Rotation[0];
+        CameraRotation->Y = Rotation[1];
+        CameraRotation->Z = Rotation[2];
     }
 
 	ImGui::End();
@@ -254,4 +281,11 @@ bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_t
         ImGui::MarkItemEdited(g.LastItemData.ID);
 
     return value_changed;
+}
+
+void ControlWindow::UpdateVectorToFloat(FVector* v, float f[])
+{
+    f[0] = v->X;
+    f[1] = v->Y;
+    f[2] = v->Z;
 }

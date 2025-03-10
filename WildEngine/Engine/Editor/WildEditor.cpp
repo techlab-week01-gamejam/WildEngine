@@ -8,6 +8,7 @@
 
 #include "Renderer/URenderer.h"
 #include "Scene/Scene.h"
+#include "Components/CameraComponent.h"
 
 #include "EditorDesigner.h"
 #include "Editor/Windows/ControlWindow.h"
@@ -19,7 +20,7 @@
 #include "Font/RawFonts.h"
 
 #include "Scene/Scene.h"
-#include <Components/PrimitiveComponent.h>
+#include "Components/PrimitiveComponent.h"
 
 UWildEditor::UWildEditor(URenderer* InRenderer)
 {
@@ -149,6 +150,10 @@ void UWildEditor::SetupControlWindow()
         if (ControlWindow* Control = dynamic_cast<ControlWindow*>(Window.get()))
         {
             Control->SetPrimaryGizmo(Scene->GetGizmo());
+            Control->SetCameraLocation(Scene->GetPrimaryCamera()->CameraPosition);
+            Control->SetCameraRotation(Scene->GetPrimaryCamera()->CameraRotation);
+            Control->SetCameraFOV(Scene->GetPrimaryCamera()->FieldOfView);
+            Control->SetOrthogonal(Scene->GetPrimaryCamera()->bIsOrthogonal);
         }
     }
 }
