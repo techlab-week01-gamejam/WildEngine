@@ -10,7 +10,7 @@ class UCameraComponent;
 class UCubeComponent;
 class USphereComponent;
 class UGizmoComponent;
-
+struct FHitResult;
 
 class UScene : public IScene
 {
@@ -48,10 +48,14 @@ public:
 	/* Gizmo */
 	virtual UGizmoComponent* GetGizmo() { return SceneGizmo; };
 
+	void OnMouseClink(int32 ScreenX, int32 ScreenY);
+
 private:
 	void Initialize();
 	FMatrix CreateProjectionView();
 	FMatrix CreateOrthogonalView();
+
+	bool RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult);
 
 private:
 	URenderer* Renderer = nullptr;
