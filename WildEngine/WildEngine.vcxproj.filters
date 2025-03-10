@@ -43,6 +43,19 @@
     <Filter Include="소스 파일\Engine\Scene">
       <UniqueIdentifier>{ccfffda4-2401-4ff4-b26d-970b5840a364}</UniqueIdentifier>
     </Filter>
+
+    <Filter Include="소스 파일\Engine\Editor">
+      <UniqueIdentifier>{5e51bb81-8d50-4eed-82a5-b76d43560b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Editor\Window">
+      <UniqueIdentifier>{6e820ed8-15f6-46f6-aa27-21d394b90f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Interface">
+      <UniqueIdentifier>{d1947a6d-7b40-42c0-8b44-9fdaa68915e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Core\Font">
+      <UniqueIdentifier>{e0102012-7207-4b5a-a3f0-687a5b0de92b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\Core\Class">
       <UniqueIdentifier>{3e48e044-df38-4a7d-aaaa-a9ba2c607992}</UniqueIdentifier>
     </Filter>
@@ -126,6 +139,39 @@
     <ClInclude Include="Engine\Components\TriangleComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Editor\EditorDesigner.h">
+      <Filter>소스 파일\Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EditorWindow.h">
+      <Filter>소스 파일\Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\WildEditor.h">
+      <Filter>소스 파일\Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\Windows\ConsoleWindow.h">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\Windows\ControlWindow.h">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\Windows\PropertyWindow.h">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\Windows\StatWindow.h">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Interface\ISwitchable.h">
+      <Filter>소스 파일\Core\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Font\RawFonts.h">
+      <Filter>소스 파일\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Font\IconDefs.h">
+      <Filter>소스 파일\Core\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Interface\IScene.h">
+      <Filter>소스 파일\Core\Interface</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Class\Class.h">
       <Filter>소스 파일\Core\Class</Filter>
     </ClInclude>
@@ -201,6 +247,21 @@
     </ClCompile>
     <ClCompile Include="Engine\Components\TriangleComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\WildEditor.cpp">
+      <Filter>소스 파일\Engine\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\Windows\ConsoleWindow.cpp">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\Windows\ControlWindow.cpp">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\Windows\PropertyWindow.cpp">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\Windows\StatWindow.cpp">
+      <Filter>소스 파일\Engine\Editor\Window</Filter>
     </ClCompile>
     <ClCompile Include="Core\Object\ObjectManager.cpp">
       <Filter>소스 파일\Core\Object</Filter>

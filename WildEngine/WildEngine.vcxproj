@@ -130,6 +130,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="Core\Font\IconDefs.h" />
+    <ClInclude Include="Core\Font\RawFonts.h" />
+    <ClInclude Include="Core\Interface\IScene.h" />
+    <ClInclude Include="Core\Interface\ISwitchable.h" />
     <ClInclude Include="Core\Class\Class.h" />
     <ClInclude Include="Core\Log\DebugConsole.h" />
     <ClInclude Include="Core\Input\InputManager.h" />
@@ -149,6 +153,13 @@
     <ClInclude Include="Engine\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Components\SphereComponent.h" />
     <ClInclude Include="Engine\Components\TriangleComponent.h" />
+    <ClInclude Include="Engine\Editor\EditorDesigner.h" />
+    <ClInclude Include="Engine\Editor\EditorWindow.h" />
+    <ClInclude Include="Engine\Editor\WildEditor.h" />
+    <ClInclude Include="Engine\Editor\Windows\ConsoleWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\ControlWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\PropertyWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\StatWindow.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="Engine\Scene\Scene.h" />
     <ClInclude Include="Engine\Statics\EngineStatics.h" />
@@ -180,6 +191,11 @@
     <ClCompile Include="Engine\Components\GizmoComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
+    <ClCompile Include="Engine\Editor\WildEditor.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ConsoleWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ControlWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\PropertyWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\StatWindow.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="Engine\Scene\Scene.cpp" />
     <ClCompile Include="Engine\Statics\EngineStatics.cpp" />
