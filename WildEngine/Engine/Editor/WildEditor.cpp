@@ -76,23 +76,13 @@ void UWildEditor::Render()
     ImGui::NewFrame();
 
     Scene = Renderer->GetPrimaryScene();
-    if (Scene) {
-        UPrimitiveComponent* SelectedObject = static_cast<UPrimitiveComponent*>(Scene->GetSelectedObject());
-        NewPropertyWindow->SetLocation(SelectedObject->RelativeLocation);
-        NewPropertyWindow->SetRotation(SelectedObject->RelativeRotation);
-        NewPropertyWindow->SetScale(SelectedObject->RelativeScale3D);
-        NewPropertyWindow->SetUUID(SelectedObject->UUID);
-    }
-    
+
     SetupControlWindow();
+    SetupPropertyWindow();
+
     UEditorDesigner::Get().Render();
 
-    if (Scene) {
-        UPrimitiveComponent* SelectedObject = static_cast<UPrimitiveComponent*>(Scene->GetSelectedObject());
-        SelectedObject->RelativeLocation = NewPropertyWindow->GetLocation();
-        SelectedObject->RelativeRotation = NewPropertyWindow->GetRotation();
-        SelectedObject->RelativeScale3D = NewPropertyWindow->GetScale();
-    }
+    SetupSelectedObject();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -155,14 +145,48 @@ void UWildEditor::CreateUsingFont()
 
 void UWildEditor::SetupControlWindow()
 {
-    UScene* PrimaryScene = Renderer->GetPrimaryScene();
-
     auto Window = UEditorDesigner::Get().GetWindow("ControlWindow");
     if (Window)
     {
         if (ControlWindow* Control = dynamic_cast<ControlWindow*>(Window.get()))
         {
-            Control->SetPrimaryGizmo(PrimaryScene->GetGizmo());
+            Control->SetPrimaryGizmo(Scene->GetGizmo());
         }
     }
 }
+
+void UWildEditor::SetupPropertyWindow()
+{
+    auto Window = UEditorDesigner::Get().GetWindow("PropertyWindow");
+    if (Window)
+    {
+        // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+        if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
+        {
+            if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
+                Property->SetLocation(SelectedObject->RelativeLocation);
+                Property->SetRotation(SelectedObject->RelativeRotation);
+                Property->SetScale(SelectedObject->RelativeScale3D);
+                Property->SetUUID(SelectedObject->UUID);
+            }
+        }
+    }
+}
+
+void UWildEditor::SetupSelectedObject()
+{
+    auto Window = UEditorDesigner::Get().GetWindow("PropertyWindow");
+    if (Window)
+    {
+        // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+        if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
+        {
+            if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
+                SelectedObject->RelativeLocation = NewPropertyWindow->GetLocation();
+                SelectedObject->RelativeRotation = NewPropertyWindow->GetRotation();
+                SelectedObject->RelativeScale3D = NewPropertyWindow->GetScale();
+            }
+        }
+    }
+}
+
