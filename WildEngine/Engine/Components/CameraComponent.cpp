@@ -81,6 +81,12 @@ FMatrix UCameraComponent::CreateLookAt()
 	return FMatrix(m);
 }
 
+UClass* UCameraComponent::GetClass()
+{
+	static UClass CameraClass("UCameraComponent", []() -> UObject* { return new UCameraComponent(); });
+	return &CameraClass;
+}
+
 void UCameraComponent::Render()
 {
 	// 마우스 이동량을 이용한 회전 처리

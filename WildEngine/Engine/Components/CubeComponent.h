@@ -10,9 +10,12 @@ class UCubeComponent : public UPrimitiveComponent
 {
 
 public:
+	UCubeComponent();
 	UCubeComponent(URenderer* InRenderer);
 	UCubeComponent(const UCubeComponent&);
 	~UCubeComponent();
+
+	static UClass* GetClass();
 
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 

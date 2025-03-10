@@ -2,6 +2,10 @@
 
 #include "Renderer/URenderer.h"
 
+UCubeComponent::UCubeComponent()
+{
+}
+
 UCubeComponent::UCubeComponent(URenderer* InRenderer)
 {
     Renderer = InRenderer;
@@ -25,6 +29,12 @@ void UCubeComponent::Initialize()
 UCubeComponent::~UCubeComponent()
 {
 }
+
+//UClass* UCubeComponent::GetClass()
+//{
+//    static UClass CubeClass("UCubeComponent", []() -> UObject* { return new UCubeComponent(); });
+//    return &CubeClass;
+//}
 
 void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {

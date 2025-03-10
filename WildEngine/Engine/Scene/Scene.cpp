@@ -11,6 +11,8 @@
 
 #include "Math/Matrix.h"
 #include "Types/CommonTypes.h"
+#include "Object/ObjectManager.h"
+#include "Object/ObjectFactory.h"
 
 UScene::UScene(URenderer* InRenderer)
 {
@@ -29,9 +31,15 @@ UScene::~UScene()
 
 void UScene::Initialize()
 {
+
+    UObjectManager& ObjManager = UObjectManager::GetInstance();
+    UObjectFactory& ObjFactory = UObjectFactory::GetInsantce();
+
     // Camera 설정
+
     if (PrimaryCamera == nullptr)
     {
+        //PrimaryCamera = static_cast<UCameraComponent*>(ObjFactory.ConstructObject(UCameraComponent::GetClass()));
         PrimaryCamera = new UCameraComponent();
     }
 	PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
@@ -39,6 +47,7 @@ void UScene::Initialize()
     // Test Cube
     if (Cube1 == nullptr)
     {
+        //Cube1 = static_cast<UCubeComponent*>(ObjFactory.ConstructObject(UCubeComponent::GetClass()));
         Cube1 = new UCubeComponent(Renderer);
     }
 

@@ -5,7 +5,9 @@
 class URenderer;
 class UCameraComponent;
 class UCubeComponent;
+class USphereComponent;
 class UGizmoComponent;
+
 
 class UScene
 {
@@ -28,6 +30,7 @@ private:
 	URenderer* Renderer = nullptr;
 	UCameraComponent* PrimaryCamera = nullptr;
 	UCubeComponent* Cube1 = nullptr;
+	USphereComponent* Sphere1 = nullptr;
 	UGizmoComponent* SceneGizmo = nullptr;
 
 	FMatrix WorldMatrix;

@@ -10,6 +10,8 @@ public:
 	UCameraComponent(const UCameraComponent&);
 	~UCameraComponent();
 
+	static UClass* GetClass();
+
 	void Render();
 
 	void SetPosition(float x, float y, float z);
