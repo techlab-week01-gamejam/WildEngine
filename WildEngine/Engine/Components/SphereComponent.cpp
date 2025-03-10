@@ -2,6 +2,10 @@
 
 #include "Renderer/URenderer.h"
 
+USphereComponent::USphereComponent()
+{
+}
+
 USphereComponent::USphereComponent(URenderer* InRenderer)
 {
     Renderer = InRenderer;
@@ -11,6 +15,7 @@ USphereComponent::USphereComponent(URenderer* InRenderer)
 USphereComponent::USphereComponent(const USphereComponent&)
 {
 }
+
 
 void USphereComponent::Initialize()
 {
@@ -25,6 +30,12 @@ void USphereComponent::Initialize()
 USphereComponent::~USphereComponent()
 {
 }
+
+//UClass* USphereComponent::GetClass()
+//{
+//    static UClass SphereClass("USphereComponent", []() -> UObject* { return new USphereComponent(); });
+//    return &SphereClass;
+//}
 
 void USphereComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {

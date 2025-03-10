@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Types/Types.h"
 
+
 struct FVector
 {
     float X;
@@ -127,5 +128,6 @@ struct FVector
         Z /= Scalar;
         return *this;
     }
+
 
 };

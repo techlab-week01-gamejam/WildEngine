@@ -1,4 +1,4 @@
-#include "Scene.h"
+ï»¿#include "Scene.h"
 
 #include "d3d11.h"
 #include "DirectXMath.h"
@@ -11,6 +11,8 @@
 
 #include "Math/Matrix.h"
 #include "Types/CommonTypes.h"
+#include "Object/ObjectManager.h"
+#include "Object/ObjectFactory.h"
 
 UScene::UScene(URenderer* InRenderer)
 {
@@ -29,7 +31,12 @@ UScene::~UScene()
 
 void UScene::Initialize()
 {
-    // Camera ¼³Á¤
+
+    UObjectManager& ObjManager = UObjectManager::GetInstance();
+    UObjectFactory& ObjFactory = UObjectFactory::GetInsantce();
+
+    // Camera ì„¤ì •
+
     if (PrimaryCamera == nullptr)
     {
         PrimaryCamera = new UCameraComponent();
@@ -40,27 +47,27 @@ void UScene::Initialize()
     {
         Cube1 = new UCubeComponent(Renderer);
     }
-
+    
     if (SceneGizmo == nullptr)
     {
         SceneGizmo = new UGizmoComponent(Renderer);
     }
 
 
-    // ¿ùµå Çà·Ä ÃÊ±âÈ­
+    // ì›”ë“œ í–‰ë ¬ ì´ˆê¸°í™”
     WorldMatrix = FMatrix::Identity();
 
     // Projection Init
-    CreateProjectionView();
+    ProjectionMatrix = CreateProjectionView();
 
     // Ortho
-    OrthoMatrix = FMatrix::Identity(); // XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+    OrthoMatrix = CreateOrthogonalView(); // XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 }
 
-void UScene::CreateProjectionView()
+FMatrix UScene::CreateProjectionView()
 {
     D3D11_VIEWPORT ViewPort = Renderer->ViewportInfo;
-    float ScreenAspect = ViewPort.Width / ViewPort.Height; // È­¸é ºñÀ² ex 1280x1080 = 1.18...
+    float ScreenAspect = ViewPort.Width / ViewPort.Height; // í™”ë©´ ë¹„ìœ¨ ex 1280x1080 = 1.18...
     float FarZ = PrimaryCamera->FarZ;
     float NearZ = PrimaryCamera->NearZ;
 
@@ -69,36 +76,90 @@ void UScene::CreateProjectionView()
     float ToRadian = DirectX::XMConvertToRadians(0.5 * PrimaryCamera->FieldOfView);
     DirectX::XMScalarSinCos(&SinFov, &CosFov, ToRadian);
 
-    // 0~1 »çÀÌÀÇ Á¤±ÔÈ­µÈ °ªÀ¸·Î Height¿Í width°¡ Ç¥ÇöµÇ¾î¾ßÇÔ
+    // 0~1 ì‚¬ì´ì˜ ì •ê·œí™”ëœ ê°’ìœ¼ë¡œ Heightì™€ widthê°€ í‘œí˜„ë˜ì–´ì•¼í•¨
     float Height = CosFov / SinFov; // tan(0.5*FOV);
-    float Width = Height / ScreenAspect; // Á¾È¾ºñ ¼öÆò ½ºÄÉÀÏ
-    float fRange = FarZ / (FarZ - NearZ); // z °ª º¸Á¤ : near ¿Í far clip planeÀÇ Â÷ÀÌ¿¡ µû¸¥ z Ãà ½ºÄÉÀÏ °ª
+    float Width = Height / ScreenAspect; // ì¢…íš¡ë¹„ ìˆ˜í‰ ìŠ¤ì¼€ì¼
+    float fRange = FarZ / (FarZ - NearZ); // z ê°’ ë³´ì • : near ì™€ far clip planeì˜ ì°¨ì´ì— ë”°ë¥¸ z ì¶• ìŠ¤ì¼€ì¼ ê°’
 
     float Projection[4][4] = {
         { Width, 0, 0, 0 },
         { 0, Height, 0, 0},
         { 0, 0, fRange, 1},
-        { 0, 0, -fRange * NearZ, 0} // ¹°Ã¼ÀÇ z ÁÂÇ¥ Åõ¿µ ÈÄ ¿Ã¹Ù¸¥ ±íÀÌ °ª ¸ÅÇÎ
+        { 0, 0, -fRange * NearZ, 0} // ë¬¼ì²´ì˜ z ì¢Œí‘œ íˆ¬ì˜ í›„ ì˜¬ë°”ë¥¸ ê¹Šì´ ê°’ ë§¤í•‘
     };
 
     FMatrix FinalProjectionMatrix(Projection);
 
-    ProjectionMatrix = FinalProjectionMatrix;
+    return FinalProjectionMatrix;
+}
+
+FMatrix UScene::CreateOrthogonalView()
+{
+    D3D11_VIEWPORT ViewPort = Renderer->ViewportInfo;
+
+    float Width = ViewPort.Width;
+    float Height = ViewPort.Height;
+
+    float FarZ = PrimaryCamera->FarZ;
+    float NearZ = PrimaryCamera->NearZ;
+
+    float Projection[4][4] = {
+        { 2.0f / Width, 0.0f,           0.0f,                   0.0f },
+        { 0.0f,         2.0f / Height,  0.0f,                   0.0f },
+        { 0.0f,         0.0f,         1.0f / (FarZ - NearZ),    0.0f },
+        { 0.0f,         0.0f,         -NearZ / (FarZ - NearZ),  1.0f }
+    };
+
+    FMatrix FinalOrthoMatrix(Projection);
+
+    return FinalOrthoMatrix;
 }
 
 void UScene::Render()
 {
-    // Ä«¸Þ¶ó À§Ä¡¿¡¼­ ºä Çà·Ä »ý¼º
+    // ì¹´ë©”ë¼ ìœ„ì¹˜ì—ì„œ ë·° í–‰ë ¬ ìƒì„±
     PrimaryCamera->Render();
 
-    // ºä Çà·Ä °¡Á®¿À±â
+    // ë·° í–‰ë ¬ ê°€ì ¸ì˜¤ê¸°
     PrimaryCamera->GetViewMatrix(ViewMatrix);
 
     SceneGizmo->Render(Cube1->GetWorldTransform(), ViewMatrix, ProjectionMatrix);
 
-    // ¼ÎÀÌ´õ »ó¼ö ¹öÆÛ ¾÷µ¥ÀÌÆ®
+    // ì…°ì´ë” ìƒìˆ˜ ë²„í¼ ì—…ë°ì´íŠ¸
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
-    
+
+}
+
+UObject* UScene::GetSelectedObject()
+{
+    return SelectedObject;
+}
+
+void UScene::SetSelectedObject(UObject* newSelectObject)
+{
+    SelectedObject = newSelectObject;
+}
+
+bool UScene::wasSelectedObject()
+{
+    return nullptr != SelectedObject;
+}
+
+void UScene::LoadScene(void* data)
+{
+}
+
+void UScene::SaveScene(void* data)
+{
+}
+
+UCameraComponent* UScene::GetPrimaryCamera()
+{
+    return PrimaryCamera;
+}
+
+void UScene::CreateNewObject(UObject* newObject)
+{
 }
 
 

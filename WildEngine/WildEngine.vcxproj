@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{4245f17a-59bb-46e5-9b21-310fd509ac42}</ProjectGuid>
     <RootNamespace>WildEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -119,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,10 +130,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\json.hpp" />
+    <ClInclude Include="CommonTypes.h" />
+    <ClInclude Include="Core\Font\IconDefs.h" />
+    <ClInclude Include="Core\Font\RawFonts.h" />
+    <ClInclude Include="Core\Interface\IScene.h" />
+    <ClInclude Include="Core\Interface\ISwitchable.h" />
+    <ClInclude Include="Core\Class\Class.h" />
+    <ClInclude Include="Core\Log\DebugConsole.h" />
+    <ClInclude Include="Core\Input\InputManager.h" />
+    <ClInclude Include="Core\Interface\ISingleton.h" />
     <ClInclude Include="Core\Gizmo.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />
     <ClInclude Include="Core\Object\Object.h" />
+    <ClInclude Include="Core\Object\ObjectFactory.h" />
+    <ClInclude Include="Core\Object\ObjectManager.h" />
     <ClInclude Include="Core\Primitive.h" />
     <ClInclude Include="Core\Types\Types.h" />
     <ClInclude Include="Engine\Components\CameraComponent.h" />
@@ -142,8 +154,16 @@
     <ClInclude Include="Engine\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Components\SphereComponent.h" />
     <ClInclude Include="Engine\Components\TriangleComponent.h" />
+    <ClInclude Include="Engine\Editor\EditorDesigner.h" />
+    <ClInclude Include="Engine\Editor\EditorWindow.h" />
+    <ClInclude Include="Engine\Editor\WildEditor.h" />
+    <ClInclude Include="Engine\Editor\Windows\ConsoleWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\ControlWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\PropertyWindow.h" />
+    <ClInclude Include="Engine\Editor\Windows\StatWindow.h" />
     <ClInclude Include="Engine\Renderer\URenderer.h" />
     <ClInclude Include="Engine\Scene\Scene.h" />
+    <ClInclude Include="Engine\Statics\EngineStatics.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -154,18 +174,32 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Log\DebugConsole.cpp" />
+    <ClCompile Include="Core\Object\Object.cpp" />
+    <ClCompile Include="Core\Object\ObjectFactory.cpp" />
+    <ClCompile Include="Core\Object\ObjectManager.cpp" />
+    <ClCompile Include="Engine\Components\CameraComponent.cpp" />
+    <ClCompile Include="Engine\Components\CubeComponent.cpp" />
+    <ClCompile Include="Engine\Components\PrimitiveComponent.cpp" />
     <FxCompile Include="ShaderW0.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Input\InputManager.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\CubeComponent.cpp" />
     <ClCompile Include="Engine\Components\GizmoComponent.cpp" />
     <ClCompile Include="Engine\Components\SphereComponent.cpp" />
     <ClCompile Include="Engine\Components\TriangleComponent.cpp" />
+    <ClCompile Include="Engine\Editor\WildEditor.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ConsoleWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\ControlWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\PropertyWindow.cpp" />
+    <ClCompile Include="Engine\Editor\Windows\StatWindow.cpp" />
     <ClCompile Include="Engine\Renderer\URenderer.cpp" />
     <ClCompile Include="Engine\Scene\Scene.cpp" />
+    <ClCompile Include="Engine\Statics\EngineStatics.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -174,6 +208,12 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ShaderW0.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

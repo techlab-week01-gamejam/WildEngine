@@ -6,45 +6,54 @@
 #include "../Core/Object/Object.h"
 #include "../Engine/Components/PrimitiveComponent.h"
 #include <fstream>
+#include "Editor/WildEditor.h"
 
-// ·»´õ·¯ ÃÊ±âÈ­: ÀåÄ¡, ½º¿Ò Ã¼ÀÎ, ÇÁ·¹ÀÓ ¹öÆÛ, ·¡½ºÅÍ¶óÀÌÀú »óÅÂ »ı¼º
+#include "Input/InputManager.h"
+
+// ë Œë”ëŸ¬ ì´ˆê¸°í™”: ì¥ì¹˜, ìŠ¤ì™‘ ì²´ì¸, í”„ë ˆì„ ë²„í¼, ë˜ìŠ¤í„°ë¼ì´ì € ìƒíƒœ ìƒì„±
 void URenderer::Create(HWND hWindow)
 {
     CreateDeviceAndSwapChain(hWindow);
     CreateFrameBuffer();
     CreateRasterizerState();
-    // (±íÀÌ ½ºÅÙ½Ç ¹öÆÛ ¹× ºí·»µå »óÅÂ µî Ãß°¡ »óÅÂ ¼³Á¤Àº ÇÊ¿ä¿¡ µû¶ó ±¸Çö)
+    // (ê¹Šì´ ìŠ¤í…ì‹¤ ë²„í¼ ë° ë¸”ë Œë“œ ìƒíƒœ ë“± ì¶”ê°€ ìƒíƒœ ì„¤ì •ì€ í•„ìš”ì— ë”°ë¼ êµ¬í˜„)
     CreateStencilState();
 
     CreateShader();
     CreateMatrixBuffer();
+
+    if (PrimaryEditor == nullptr)
+    {
+        PrimaryEditor = new UWildEditor(this);
+    }
+    PrimaryEditor->Create(Device, DeviceContext, hWindow);
 }
 
-// Direct3D ÀåÄ¡ ¹× ½º¿Ò Ã¼ÀÎ »ı¼º
+// Direct3D ì¥ì¹˜ ë° ìŠ¤ì™‘ ì²´ì¸ ìƒì„±
 void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
 {
-    // Áö¿øÇÒ Direct3D ±â´É ·¹º§ Á¤ÀÇ
+    // ì§€ì›í•  Direct3D ê¸°ëŠ¥ ë ˆë²¨ ì •ì˜
     D3D_FEATURE_LEVEL featurelevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
-    // ½º¿Ò Ã¼ÀÎ ¼³Á¤ ±¸Á¶Ã¼ ÃÊ±âÈ­
+    // ìŠ¤ì™‘ ì²´ì¸ ì„¤ì • êµ¬ì¡°ì²´ ì´ˆê¸°í™”
     DXGI_SWAP_CHAIN_DESC swapchaindesc = {};
-    swapchaindesc.BufferDesc.Width = 0;      // Ã¢ Å©±â¿¡ ¸Â°Ô ÀÚµ¿ ¼³Á¤
-    swapchaindesc.BufferDesc.Height = 0;     // Ã¢ Å©±â¿¡ ¸Â°Ô ÀÚµ¿ ¼³Á¤
+    swapchaindesc.BufferDesc.Width = 0;      // ì°½ í¬ê¸°ì— ë§ê²Œ ìë™ ì„¤ì •
+    swapchaindesc.BufferDesc.Height = 0;     // ì°½ í¬ê¸°ì— ë§ê²Œ ìë™ ì„¤ì •
     swapchaindesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-    swapchaindesc.SampleDesc.Count = 1;      // ¸ÖÆ¼ »ùÇÃ¸µ ºñÈ°¼ºÈ­
+    swapchaindesc.SampleDesc.Count = 1;      // ë©€í‹° ìƒ˜í”Œë§ ë¹„í™œì„±í™”
     swapchaindesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    swapchaindesc.BufferCount = 2;           // ´õºí ¹öÆÛ¸µ
+    swapchaindesc.BufferCount = 2;           // ë”ë¸” ë²„í¼ë§
     swapchaindesc.OutputWindow = hWindow;
     swapchaindesc.Windowed = TRUE;
     swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-    // Direct3D ÀåÄ¡¿Í ½º¿Ò Ã¼ÀÎ »ı¼º
+    // Direct3D ì¥ì¹˜ì™€ ìŠ¤ì™‘ ì²´ì¸ ìƒì„±
     D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
         D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
         featurelevels, ARRAYSIZE(featurelevels), D3D11_SDK_VERSION,
         &swapchaindesc, &SwapChain, &Device, nullptr, &DeviceContext);
 
-    // ½º¿Ò Ã¼ÀÎ Á¤º¸ ÀçÁ¶È¸ ÈÄ ºäÆ÷Æ® ¼³Á¤
+    // ìŠ¤ì™‘ ì²´ì¸ ì •ë³´ ì¬ì¡°íšŒ í›„ ë·°í¬íŠ¸ ì„¤ì •
     SwapChain->GetDesc(&swapchaindesc);
     ViewportInfo.TopLeftX = 0.0f;
     ViewportInfo.TopLeftY = 0.0f;
@@ -54,7 +63,7 @@ void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
     ViewportInfo.MaxDepth = 1.0f;
 }
 
-// Direct3D ÀåÄ¡ ¹× ½º¿Ò Ã¼ÀÎ ÇØÁ¦
+// Direct3D ì¥ì¹˜ ë° ìŠ¤ì™‘ ì²´ì¸ í•´ì œ
 void URenderer::ReleaseDeviceAndSwapChain()
 {
     if (DeviceContext)
@@ -78,7 +87,7 @@ void URenderer::ReleaseDeviceAndSwapChain()
     }
 }
 
-// ÇÁ·¹ÀÓ ¹öÆÛ(¹é ¹öÆÛ ÅØ½ºÃ³) »ı¼º ¹× ·»´õ Å¸°Ù ºä »ı¼º
+// í”„ë ˆì„ ë²„í¼(ë°± ë²„í¼ í…ìŠ¤ì²˜) ìƒì„± ë° ë Œë” íƒ€ê²Ÿ ë·° ìƒì„±
 void URenderer::CreateFrameBuffer()
 {
     SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&FrameBuffer);
@@ -92,7 +101,7 @@ void URenderer::CreateFrameBuffer()
     CreateStencilBuffer();
 }
 
-// ÇÁ·¹ÀÓ ¹öÆÛ ÇØÁ¦
+// í”„ë ˆì„ ë²„í¼ í•´ì œ
 void URenderer::ReleaseFrameBuffer()
 {
     if (FrameBuffer)
@@ -107,7 +116,7 @@ void URenderer::ReleaseFrameBuffer()
     }
 }
 
-// ·¡½ºÅÍ¶óÀÌÀú »óÅÂ »ı¼º (Ã¤¿ì±â ¸ğµå, ÄÃ¸µ ¼³Á¤ µî)
+// ë˜ìŠ¤í„°ë¼ì´ì € ìƒíƒœ ìƒì„± (ì±„ìš°ê¸° ëª¨ë“œ, ì»¬ë§ ì„¤ì • ë“±)
 void URenderer::CreateRasterizerState()
 {
     D3D11_RASTERIZER_DESC rasterizerdesc = {};
@@ -117,7 +126,7 @@ void URenderer::CreateRasterizerState()
     Device->CreateRasterizerState(&rasterizerdesc, &RasterizerState);
 }
 
-// ·¡½ºÅÍ¶óÀÌÀú »óÅÂ ÇØÁ¦
+// ë˜ìŠ¤í„°ë¼ì´ì € ìƒíƒœ í•´ì œ
 void URenderer::ReleaseRasterizerState()
 {
     if (RasterizerState)
@@ -134,32 +143,32 @@ void URenderer::CreateStencilState()
     dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
     dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-    // ½ºÅÙ½Ç Å×½ºÆ® È°¼ºÈ­
+    // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ í™œì„±í™”
     dsDesc.StencilEnable = TRUE;
     dsDesc.StencilReadMask = 0xFF;
     dsDesc.StencilWriteMask = 0xFF;
 
-    // Àü¸é (Front) ¹× ÈÄ¸é (Back) ¸ğµÎ µ¿ÀÏÇÏ°Ô ¼³Á¤
-    dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // Ç×»ó Åë°ú
-    dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE; // ÇÈ¼¿ÀÌ ±×·ÁÁú ¶§ ½ºÅÙ½Ç °ªÀ» ±³Ã¼ 
+    // ì „ë©´ (Front) ë° í›„ë©´ (Back) ëª¨ë‘ ë™ì¼í•˜ê²Œ ì„¤ì •
+    dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // í•­ìƒ í†µê³¼
+    dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE; // í”½ì…€ì´ ê·¸ë ¤ì§ˆ ë•Œ ìŠ¤í…ì‹¤ ê°’ì„ êµì²´ 
     dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
     dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
     dsDesc.BackFace = dsDesc.FrontFace;
 
     Device->CreateDepthStencilState(&dsDesc, &DepthStencilState);
 
-    // ±âÁî¸ğ ·»´õ¸µ ½Ã, ½ºÅÙ½Ç °ªÀÌ 1ÀÎ ÇÈ¼¿Àº ·»´õ¸µÇÏÁö ¾Êµµ·Ï ¼³Á¤ (Áï, Å¥ºê ³»ºÎ Å¬¸®ÇÎ)
+    // ê¸°ì¦ˆëª¨ ë Œë”ë§ ì‹œ, ìŠ¤í…ì‹¤ ê°’ì´ 1ì¸ í”½ì…€ì€ ë Œë”ë§í•˜ì§€ ì•Šë„ë¡ ì„¤ì • (ì¦‰, íë¸Œ ë‚´ë¶€ í´ë¦¬í•‘)
     D3D11_DEPTH_STENCIL_DESC dsDescGizmo = {};
-    dsDescGizmo.DepthEnable = TRUE;  // ±âÁî¸ğ¿¡ ±íÀÌ Å×½ºÆ®°¡ ÇÊ¿äÇÏ´Ù¸é TRUE, ÇÊ¿ä¾øÀ¸¸é FALSE
+    dsDescGizmo.DepthEnable = TRUE;  // ê¸°ì¦ˆëª¨ì— ê¹Šì´ í…ŒìŠ¤íŠ¸ê°€ í•„ìš”í•˜ë‹¤ë©´ TRUE, í•„ìš”ì—†ìœ¼ë©´ FALSE
     dsDescGizmo.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
     dsDescGizmo.DepthFunc = D3D11_COMPARISON_LESS;
 
-    // ½ºÅÙ½Ç Å×½ºÆ® È°¼ºÈ­
+    // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ í™œì„±í™”
     dsDescGizmo.StencilEnable = TRUE;
     dsDescGizmo.StencilReadMask = 0xFF;
-    dsDescGizmo.StencilWriteMask = 0x00; // ±âÁî¸ğ´Â ½ºÅÙ½Ç °ªÀ» º¯°æÇÏÁö ¾ÊÀ½
+    dsDescGizmo.StencilWriteMask = 0x00; // ê¸°ì¦ˆëª¨ëŠ” ìŠ¤í…ì‹¤ ê°’ì„ ë³€ê²½í•˜ì§€ ì•ŠìŒ
 
-    // ±âÁî¸ğ ÇÈ¼¿Àº ½ºÅÙ½Ç °ªÀÌ 1ÀÎ °÷¿¡¼­´Â ·»´õ¸µµÇÁö ¾ÊÀ½
+    // ê¸°ì¦ˆëª¨ í”½ì…€ì€ ìŠ¤í…ì‹¤ ê°’ì´ 1ì¸ ê³³ì—ì„œëŠ” ë Œë”ë§ë˜ì§€ ì•ŠìŒ
     dsDescGizmo.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
     dsDescGizmo.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     dsDescGizmo.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
@@ -171,24 +180,24 @@ void URenderer::CreateStencilState()
 
 void URenderer::CreateStencilBuffer()
 {
-    // ±íÀÌ-½ºÅÙ½Ç ÅØ½ºÃ³ ¼³¸í ±¸Á¶Ã¼
+    // ê¹Šì´-ìŠ¤í…ì‹¤ í…ìŠ¤ì²˜ ì„¤ëª… êµ¬ì¡°ì²´
     D3D11_TEXTURE2D_DESC depthStencilDesc = {};
     depthStencilDesc.Width = static_cast<UINT>(ViewportInfo.Width);
     depthStencilDesc.Height = static_cast<UINT>(ViewportInfo.Height);
     depthStencilDesc.MipLevels = 1;
     depthStencilDesc.ArraySize = 1;
-    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // 24ºñÆ® ±íÀÌ + 8ºñÆ® ½ºÅÙ½Ç
-    depthStencilDesc.SampleDesc.Count = 1; // ¸ÖÆ¼»ùÇÃ¸µ ºñÈ°¼ºÈ­
+    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // 24ë¹„íŠ¸ ê¹Šì´ + 8ë¹„íŠ¸ ìŠ¤í…ì‹¤
+    depthStencilDesc.SampleDesc.Count = 1; // ë©€í‹°ìƒ˜í”Œë§ ë¹„í™œì„±í™”
     depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
     depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
     ID3D11Texture2D* depthStencilBuffer = nullptr;
     Device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilBuffer);
 
-    // ±íÀÌ-½ºÅÙ½Ç ºä »ı¼º
+    // ê¹Šì´-ìŠ¤í…ì‹¤ ë·° ìƒì„±
     Device->CreateDepthStencilView(depthStencilBuffer, nullptr, &DepthStencilView);
 
-    // ÅØ½ºÃ³´Â ºä »ı¼º ÈÄ ¹Ù·Î ÇØÁ¦ °¡´É
+    // í…ìŠ¤ì²˜ëŠ” ë·° ìƒì„± í›„ ë°”ë¡œ í•´ì œ ê°€ëŠ¥
     depthStencilBuffer->Release();
 }
 
@@ -224,17 +233,23 @@ void URenderer::Update(float deltaTime)
 
 
     // Loop Code
-    //
+    FInputManager::GetInst().Tick(deltaTime);
     //
     if (PrimaryScene)
     {
         PrimaryScene->Render();
     }
 
+    // Editor Render
+    if (PrimaryEditor)
+    {
+        PrimaryEditor->Render();
+    }
+
     SwapBuffer();
 }
 
-// ·»´õ·¯ Á¾·á ½Ã ¸ğµç ¸®¼Ò½º ÇØÁ¦
+// ë Œë”ëŸ¬ ì¢…ë£Œ ì‹œ ëª¨ë“  ë¦¬ì†ŒìŠ¤ í•´ì œ
 void URenderer::Release()
 {
     ReleaseMatrixBuffer();
@@ -251,27 +266,27 @@ void URenderer::Release()
     ReleaseDeviceAndSwapChain();
 }
 
-// ¹é ¹öÆÛ¿Í ÇÁ·ĞÆ® ¹öÆÛ ±³Ã¼ (È­¸é Ãâ·Â)
+// ë°± ë²„í¼ì™€ í”„ë¡ íŠ¸ ë²„í¼ êµì²´ (í™”ë©´ ì¶œë ¥)
 void URenderer::SwapBuffer()
 {
-    SwapChain->Present(1, 0); // VSync È°¼ºÈ­
+    SwapChain->Present(1, 0); // VSync í™œì„±í™”
 }
 
-// ½¦ÀÌ´õ »ı¼º ¹× ÀÔ·Â ·¹ÀÌ¾Æ¿ô ¼³Á¤
+// ì‰ì´ë” ìƒì„± ë° ì…ë ¥ ë ˆì´ì•„ì›ƒ ì„¤ì •
 void URenderer::CreateShader()
 {
     ID3DBlob* vertexshaderCSO = nullptr;
     ID3DBlob* pixelshaderCSO = nullptr;
 
-    // ¹öÅØ½º ½¦ÀÌ´õ ÄÄÆÄÀÏ ¹× »ı¼º
+    // ë²„í…ìŠ¤ ì‰ì´ë” ì»´íŒŒì¼ ë° ìƒì„±
     D3DCompileFromFile(L"ShaderW0.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &vertexshaderCSO, nullptr);
     Device->CreateVertexShader(vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), nullptr, &SimpleVertexShader);
 
-    // ÇÈ¼¿ ½¦ÀÌ´õ ÄÄÆÄÀÏ ¹× »ı¼º
+    // í”½ì…€ ì‰ì´ë” ì»´íŒŒì¼ ë° ìƒì„±
     D3DCompileFromFile(L"ShaderW0.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &pixelshaderCSO, nullptr);
     Device->CreatePixelShader(pixelshaderCSO->GetBufferPointer(), pixelshaderCSO->GetBufferSize(), nullptr, &SimplePixelShader);
 
-    // ÀÔ·Â ·¹ÀÌ¾Æ¿ô ¼³Á¤
+    // ì…ë ¥ ë ˆì´ì•„ì›ƒ ì„¤ì •
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -283,14 +298,14 @@ void URenderer::CreateShader()
         vertexshaderCSO->GetBufferSize(),
         &SimpleInputLayout);
 
-    // ¹öÅØ½º ±¸Á¶Ã¼ÀÇ Å©±â¸¦ ±âÁØÀ¸·Î ½ºÆ®¶óÀÌµå ¼³Á¤ (FVertexSimple Á¤ÀÇ ÇÊ¿ä)
+    // ë²„í…ìŠ¤ êµ¬ì¡°ì²´ì˜ í¬ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìŠ¤íŠ¸ë¼ì´ë“œ ì„¤ì • (FVertexSimple ì •ì˜ í•„ìš”)
     Stride = sizeof(FVertexType);
 
     vertexshaderCSO->Release();
     pixelshaderCSO->Release();
 }
 
-// ½¦ÀÌ´õ ÇØÁ¦
+// ì‰ì´ë” í•´ì œ
 void URenderer::ReleaseShader()
 {
     if (SimpleInputLayout)
@@ -310,20 +325,20 @@ void URenderer::ReleaseShader()
     }
 }
 
-// ·»´õ¸µ Àü ÁØºñ: ·»´õ Å¸°Ù Å¬¸®¾î, ÅäÆú·ÎÁö, ºäÆ÷Æ®, »óÅÂ ¼³Á¤
+// ë Œë”ë§ ì „ ì¤€ë¹„: ë Œë” íƒ€ê²Ÿ í´ë¦¬ì–´, í† í´ë¡œì§€, ë·°í¬íŠ¸, ìƒíƒœ ì„¤ì •
 void URenderer::Prepare()
 {
     DeviceContext->ClearRenderTargetView(FrameBufferRTV, ClearColor);
-    DeviceContext->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // ½ºÅÙ½Ç ÃÊ±âÈ­
+    DeviceContext->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // ìŠ¤í…ì‹¤ ì´ˆê¸°í™”
     DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     DeviceContext->RSSetViewports(1, &ViewportInfo);
     DeviceContext->RSSetState(RasterizerState);
-    DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView); // ±íÀÌ-½ºÅÙ½Ç ºä Ãß°¡
+    DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView); // ê¹Šì´-ìŠ¤í…ì‹¤ ë·° ì¶”ê°€
     DeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
     DeviceContext->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
-// ½¦ÀÌ´õ ¹× »ó¼ö ¹öÆÛ µî ·»´õ¸µ »óÅÂ ¼³Á¤
+// ì‰ì´ë” ë° ìƒìˆ˜ ë²„í¼ ë“± ë Œë”ë§ ìƒíƒœ ì„¤ì •
 void URenderer::PrepareShader()
 {
     DeviceContext->VSSetShader(SimpleVertexShader, nullptr, 0);
@@ -336,7 +351,7 @@ void URenderer::PrepareShader()
     }
 }
 
-// Á¤Á¡ ¹öÆÛ¸¦ ¹ÙÀÎµùÇÏ°í ¿ø½Ã µµÇüÀ» ±×¸®±â À§ÇÑ ÇÔ¼ö
+// ì •ì  ë²„í¼ë¥¼ ë°”ì¸ë”©í•˜ê³  ì›ì‹œ ë„í˜•ì„ ê·¸ë¦¬ê¸° ìœ„í•œ í•¨ìˆ˜
 void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
 {
     UINT offset = 0;
@@ -351,12 +366,12 @@ void URenderer::RenderGizmo(ID3D11Buffer* pBuffer, UINT numVertices)
     DeviceContext->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
-// Á¤Á¡ ¹öÆÛ »ı¼º
+// ì •ì  ë²„í¼ ìƒì„±
 ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexType* vertices, UINT byteWidth)
 {
     D3D11_BUFFER_DESC vertexbufferdesc = {};
     vertexbufferdesc.ByteWidth = byteWidth;
-    vertexbufferdesc.Usage = D3D11_USAGE_IMMUTABLE; // ¾÷µ¥ÀÌÆ®µÇÁö ¾ÊÀ½
+    vertexbufferdesc.Usage = D3D11_USAGE_IMMUTABLE; // ì—…ë°ì´íŠ¸ë˜ì§€ ì•ŠìŒ
     vertexbufferdesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
     D3D11_SUBRESOURCE_DATA vertexbufferSRD = { vertices };
@@ -367,7 +382,7 @@ ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexType* vertices, UINT byteWidt
     return vertexBuffer;
 }
 
-// Á¤Á¡ ¹öÆÛ ÇØÁ¦
+// ì •ì  ë²„í¼ í•´ì œ
 void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
 {
     if (vertexBuffer)
@@ -376,19 +391,19 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
     }
 }
 
-// »ó¼ö ¹öÆÛ »ı¼º
+// ìƒìˆ˜ ë²„í¼ ìƒì„±
 void URenderer::CreateMatrixBuffer()
 {
     D3D11_BUFFER_DESC constantbufferdesc = {};
-    constantbufferdesc.ByteWidth = (sizeof(FMatrix) + 0xf) & 0xfffffff0; // 16¹ÙÀÌÆ® ¹è¼ö º¸Àå
-    constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;   // ¸Å ÇÁ·¹ÀÓ CPU¿¡ ÀÇÇØ ¾÷µ¥ÀÌÆ®
+    constantbufferdesc.ByteWidth = (sizeof(FMatrix) + 0xf) & 0xfffffff0; // 16ë°”ì´íŠ¸ ë°°ìˆ˜ ë³´ì¥
+    constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;   // ë§¤ í”„ë ˆì„ CPUì— ì˜í•´ ì—…ë°ì´íŠ¸
     constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     Device->CreateBuffer(&constantbufferdesc, nullptr, &MatrixBuffer);
 }
 
-// »ó¼ö ¹öÆÛ ÇØÁ¦
+// ìƒìˆ˜ ë²„í¼ í•´ì œ
 void URenderer::ReleaseMatrixBuffer()
 {
     if (MatrixBuffer)
@@ -398,7 +413,7 @@ void URenderer::ReleaseMatrixBuffer()
     }
 }
 
-// Çà·Ä ¹öÆÛ ¾÷µ¥ÀÌÆ® (½¦ÀÌ´õ¿¡ Àü´ŞÇÒ ¿ÀÇÁ¼Â°ú ½ºÄÉÀÏ)
+// í–‰ë ¬ ë²„í¼ ì—…ë°ì´íŠ¸ (ì‰ì´ë”ì— ì „ë‹¬í•  ì˜¤í”„ì…‹ê³¼ ìŠ¤ì¼€ì¼)
 void URenderer::UpdateShaderParameters(FMatrix World, FMatrix View, FMatrix Projection)
 {
     if (MatrixBuffer)
@@ -427,13 +442,13 @@ void URenderer::SetPrimaryScene(UScene* NewScene)
 
 void URenderer::SaveJson()
 {
-    //Å×½ºÆ®¿ë º¯¼ö
+    //ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     uint32 Version = 1;
     uint32 NextUUID = 8;
     TArray<UObject*> GUObjectArray;
     FString SceneName = "TestScene";
 
-    // Å×½ºÆ® °´Ã¼ »ı¼º: µÎ °³ÀÇ UPrimitiveComponent »ı¼º
+    // ï¿½×½ï¿½Æ® ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UPrimitiveComponent ï¿½ï¿½ï¿½ï¿½
     UPrimitiveComponent* Sphere = new UPrimitiveComponent();
     Sphere->UUID = 0;
     Sphere->RelativeLocation = { 0.29f, 1.21f, 0.0f };
@@ -448,17 +463,17 @@ void URenderer::SaveJson()
     Cube->RelativeScale3D = { 1.f, 1.f, 1.f };
     GUObjectArray.push_back(Cube);
 
-    // Primitives¸¦ °´Ã¼·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+    // Primitivesï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Õ´Ï´ï¿½.
     json::JSON Scene;
     Scene["Version"] = Version;
     Scene["NextUUID"] = NextUUID;
 
-    // GUObjectArrayÀÇ °¢ °´Ã¼¿¡ ´ëÇØ JSON µ¥ÀÌÅÍ¸¦ Ãß°¡
+    // GUObjectArrayï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ß°ï¿½
     for (uint32 i = 0; i < GUObjectArray.size(); i++)
     {
         if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
         {
-            // UUID ¶Ç´Â ¿øÇÏ´Â ÀÎµ¦½º¸¦ ¹®ÀÚ¿­ Å°·Î »ç¿ë
+            // UUID ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½
             std::string key = std::to_string(Primitive->UUID);
             Scene["Primitives"][key]["Location"] = json::FVectorToJSON(Primitive->RelativeLocation);
             Scene["Primitives"][key]["Rotation"] = json::FVectorToJSON(Primitive->RelativeRotation);
@@ -473,10 +488,10 @@ void URenderer::SaveJson()
 	{
 		outFile << jsonData;
 		outFile.close();
-        std::cout << "JSON µ¥ÀÌÅÍ¸¦ output.json¿¡ ÀúÀåÇß½À´Ï´Ù." << std::endl;
+        std::cout << "JSON ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ output.jsonï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½." << std::endl;
     }
     else {
-        std::cerr << "ÆÄÀÏ ¿­±â¿¡ ½ÇÆĞÇß½À´Ï´Ù." << std::endl;
+        std::cerr << "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½." << std::endl;
     }
 }
 
@@ -512,12 +527,12 @@ void URenderer::LoadJson()
                 Sphere->RelativeScale3D = Scale;
             }
         }
-        std::cout << "JSON µ¥ÀÌÅÍ¸¦ ¼º°øÀûÀ¸·Î ºÒ·¯¿Ô½À´Ï´Ù." << std::endl;
+        std::cout << "JSON ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½Ô½ï¿½ï¿½Ï´ï¿½." << std::endl;
 
 		//std::cout << "Version: " + std::to_string(Version) << std::endl;
 		//std::cout << "NextUUID: " + std::to_string(NextUUID) << std::endl;
 
-  //      // Primitive Parsing: Primitives ³» °¢ ÇÁ¸®¹ÌÆ¼ºê Á¤º¸¸¦ Ãâ·ÂÇÕ´Ï´Ù.
+  //      // Primitive Parsing: Primitives ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
   //      for (auto it = Primitives.ObjectRange().begin(); it != Primitives.ObjectRange().end(); ++it)
   //      {
   //          uint32 UUID = std::stoi(it->first);
@@ -527,7 +542,7 @@ void URenderer::LoadJson()
   //          FVector Rotation = json::JSONToFVector(Primitive["Rotation"]);
   //          FVector Scale = json::JSONToFVector(Primitive["Scale"]);
 
-  //          // µğ¹ö±ë: ÇÁ¸®¹ÌÆ¼ºê µ¥ÀÌÅÍ Ãâ·Â (OutputDebugStringA »ç¿ë)
+  //          // ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (OutputDebugStringA ï¿½ï¿½ï¿½)
   //          std::string debugMsg;
   //          debugMsg = "Primitive UUID: " + std::to_string(UUID) + "\n";
   //          debugMsg += "  Type: " + Type + "\n";
@@ -545,7 +560,7 @@ void URenderer::LoadJson()
 
     }
     else {
-        std::cerr << "ÆÄÀÏ ¿­±â¿¡ ½ÇÆĞÇß½À´Ï´Ù." << std::endl;
+        std::cerr << "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½." << std::endl;
     }
 }
 

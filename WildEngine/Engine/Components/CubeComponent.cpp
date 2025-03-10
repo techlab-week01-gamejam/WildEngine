@@ -2,6 +2,10 @@
 
 #include "Renderer/URenderer.h"
 
+UCubeComponent::UCubeComponent()
+{
+}
+
 UCubeComponent::UCubeComponent(URenderer* InRenderer)
 {
     Renderer = InRenderer;
@@ -26,10 +30,16 @@ UCubeComponent::~UCubeComponent()
 {
 }
 
+//UClass* UCubeComponent::GetClass()
+//{
+//    static UClass CubeClass("UCubeComponent", []() -> UObject* { return new UCubeComponent(); });
+//    return &CubeClass;
+//}
+
 void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix)
 {
-    if (rot == 180) rot = 0;
-    rot += 0.01f;
+   /* if (rot == 180) rot = 0;
+    rot += 0.01f;*/
 
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
     FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(0, rot, 0);

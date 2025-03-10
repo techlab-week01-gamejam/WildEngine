@@ -1,10 +1,19 @@
 #pragma once
-#include "../Types/Types.h"
+#include "Types/Types.h"
+#include "Class/Class.h"
+#include "ObjectManager.h"
 
 class UObject
 {
 public:
-	virtual ~UObject() {}	//RTTI È£ÃâÀ» À§ÇÑ °¡»ó ¼Ò¸êÀÚ Ãß°¡
+	virtual ~UObject();
+  
 	uint32 UUID;
 	uint32 InternalIndex; // Index of GUObjectArray
+
+	static UClass* GetClass(); // í´ë˜ìŠ¤ì—ì„œ í˜¸ì¶œ ê°€ëŠ¥
+
+	// new ì—°ì‚°ì ì˜¤ë²„ë¡œë”©
+	void* operator new(size_t size);
+	void operator delete(void* ptr);
 };
