@@ -23,6 +23,8 @@ private:
 
 	void CreateUsingFont();
 
+	void SetupControlWindow();
+
 private:
 	URenderer* Renderer;
 };

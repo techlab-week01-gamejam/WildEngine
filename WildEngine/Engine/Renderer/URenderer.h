@@ -61,6 +61,8 @@ public:
 
     void SetPrimaryScene(UScene* NewScene);
 
+    UScene* GetPrimaryScene() { return PrimaryScene; }
+
 private:
     // 렌더링 처리 함수
     void SwapBuffer();

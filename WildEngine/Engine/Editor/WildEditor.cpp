@@ -7,6 +7,7 @@
 #include "../imGui/imgui_impl_win32.h"
 
 #include "Renderer/URenderer.h"
+#include "Scene/Scene.h"
 
 #include "EditorDesigner.h"
 #include "Editor/Windows/ControlWindow.h"
@@ -70,6 +71,8 @@ void UWildEditor::Render()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    SetupControlWindow();
+
     UEditorDesigner::Get().Render();
 
     ImGui::Render();
@@ -129,4 +132,19 @@ void UWildEditor::CreateUsingFont()
         0 };
 
     io.Fonts->AddFontFromMemoryTTF(FeatherRawData, FontSizeOfFeather, 22.0f, &FeatherFontConfig, IconRanges);
+}
+
+void UWildEditor::SetupControlWindow()
+{
+    UScene* PrimaryScene = Renderer->GetPrimaryScene();
+
+    auto Window = UEditorDesigner::Get().GetWindow("ControlWindow");
+    if (Window)
+    {
+        // dynamic_cast를 통해 MyWindow 타입으로 변환 후 setter 호출
+        if (ControlWindow* Control = dynamic_cast<ControlWindow*>(Window.get()))
+        {
+            Control->SetPrimaryGizmo(PrimaryScene->GetGizmo());
+        }
+    }
 }
