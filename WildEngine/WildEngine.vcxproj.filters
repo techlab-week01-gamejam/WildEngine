@@ -93,9 +93,6 @@
     <ClInclude Include="Engine\Components\SphereComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="CommonTypes.h">
-      <Filter>소스 파일\Core\Types</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Scene\Scene.h">
       <Filter>소스 파일\Engine\Scene</Filter>
     </ClInclude>
@@ -109,6 +106,15 @@
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Components\TriangleComponent.h">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Types\CommonTypes.h">
+      <Filter>소스 파일\Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Gizmo.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\GizmoComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,6 +164,9 @@
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\TriangleComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\GizmoComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>

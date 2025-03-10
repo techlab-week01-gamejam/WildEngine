@@ -48,8 +48,12 @@ public:
     // 상수 버퍼 생성
     ID3D11Buffer* CreateVertexBuffer(FVertexType* vertices, UINT byteWidth);
 
+    ID3D11Buffer* CreateIndexBuffer(const TArray<uint16_t>& indices);
+
     // 그리기
     void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
+
+    void RenderGizmo(ID3D11Buffer* VertexBuffer, ID3D11Buffer* IndexBuffer, int NumVertices, int NumIndices);
 
     void SetPrimaryScene(UScene* NewScene);
 
@@ -60,6 +64,8 @@ private:
     void PrepareShader();
 
     void ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer);
+
+    void ReleaseIndexBuffer(ID3D11Buffer* indexBuffer);
 
     // 상수 버퍼 관련 함수
     void CreateMatrixBuffer();

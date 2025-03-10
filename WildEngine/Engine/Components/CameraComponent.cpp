@@ -15,7 +15,7 @@ UCameraComponent::~UCameraComponent()
 
 void UCameraComponent::Initialize()
 {
-	FieldOfView = 90.0f;
+	FieldOfView = 60.0f;
 
 	NearZ = 0.1f;
 	FarZ = 1000.0f;

@@ -19,7 +19,7 @@ void UCubeComponent::Initialize()
 
     RelativeLocation.X = 0.0f;
     RelativeLocation.Y = 0.0f;
-    RelativeLocation.Z = 3.0f;
+    RelativeLocation.Z = 5.0f;
 }
 
 UCubeComponent::~UCubeComponent()
@@ -30,9 +30,11 @@ void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix Pro
 {
     if (rot == 180) rot = 0;
     rot += 0.01f;
+    RelativeRotation.X = rot;
+    RelativeRotation.Z = rot;
 
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
-    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(rot, 0, rot);
+    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(RelativeRotation.X, RelativeRotation.Y, RelativeRotation.Z);
     FMatrix Scaling = FMatrix::Scaling(1, 1, 1);
 
     FMatrix World = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동

@@ -249,6 +249,15 @@ void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
     DeviceContext->Draw(numVertices, 0);
 }
 
+void URenderer::RenderGizmo(ID3D11Buffer* VertexBuffer, ID3D11Buffer* IndexBuffer, int NumVertices, int NumIndices)
+{
+    UINT offset = 0;
+    DeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &offset);
+    DeviceContext->IASetIndexBuffer(IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+    DeviceContext->Draw(NumVertices, 0);
+    DeviceContext->DrawIndexed(NumIndices, 0, 0);
+}
+
 // 정점 버퍼 생성
 ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexType* vertices, UINT byteWidth)
 {
@@ -265,12 +274,47 @@ ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexType* vertices, UINT byteWidt
     return vertexBuffer;
 }
 
+// 인덱스 버퍼 생성
+ID3D11Buffer* URenderer::CreateIndexBuffer(const TArray<uint16_t>& indices)
+{
+    D3D11_BUFFER_DESC indexbufferdesc = {};
+    indexbufferdesc.Usage = D3D11_USAGE_DEFAULT;
+    indexbufferdesc.ByteWidth = static_cast<UINT>(indices.size() * sizeof(uint16_t));
+    indexbufferdesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    indexbufferdesc.CPUAccessFlags = 0;
+    indexbufferdesc.MiscFlags = 0;
+
+    // 인덱스 데이터 초기화
+    D3D11_SUBRESOURCE_DATA initData = {};
+    initData.pSysMem = indices.data();
+
+    ID3D11Buffer* GizmoIndexBuffer = nullptr;
+
+    // GPU에 버퍼 생성
+    HRESULT hr = Device->CreateBuffer(&indexbufferdesc, &initData, &GizmoIndexBuffer);
+    if (FAILED(hr)) {
+        MessageBoxA(0, "Failed to create Gizmo Index Buffer", "Error", MB_OK);
+    }
+
+    return GizmoIndexBuffer;
+}
+
 // 정점 버퍼 해제
 void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
 {
     if (vertexBuffer)
     {
         vertexBuffer->Release();
+    }
+}
+
+
+// 인덱스 버퍼 해제
+void URenderer::ReleaseIndexBuffer(ID3D11Buffer* indexBuffer)
+{
+    if (indexBuffer)
+    {
+        indexBuffer->Release();
     }
 }
 

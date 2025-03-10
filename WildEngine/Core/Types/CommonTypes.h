@@ -12,3 +12,10 @@ enum class PrimitiveType
     Sphere,
     Triangle
 };
+
+enum class EGizmoType 
+{
+    Translation,
+    Roation,
+    Scale
+};
