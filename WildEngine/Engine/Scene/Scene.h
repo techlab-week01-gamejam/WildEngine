@@ -15,6 +15,10 @@ public:
 	~UScene();
 
 	void Render();
+	URenderer* GetRenderer() const
+	{
+		return Renderer;
+	};
 
 private:
 	void Initialize();

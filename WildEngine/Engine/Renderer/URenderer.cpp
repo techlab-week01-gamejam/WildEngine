@@ -3,6 +3,8 @@
 #include "Scene/Scene.h"
 #include "Types/CommonTypes.h"
 
+#include "Input/InputManager.h"
+
 // 렌더러 초기화: 장치, 스왑 체인, 프레임 버퍼, 래스터라이저 상태 생성
 void URenderer::Create(HWND hWindow)
 {
@@ -218,9 +220,8 @@ void URenderer::Update(float deltaTime)
     Prepare();
     PrepareShader();
 
-
     // Loop Code
-    //
+    FInputManager::GetInst().Tick(deltaTime);
     //
     if (PrimaryScene)
     {
@@ -230,7 +231,7 @@ void URenderer::Update(float deltaTime)
     SwapBuffer();
 }
 
-// 렌더러 종료 시 모든 리소스 해제
+// 렌더러 종료 시 모든 리소스 해제guswo 
 void URenderer::Release()
 {
     ReleaseMatrixBuffer();

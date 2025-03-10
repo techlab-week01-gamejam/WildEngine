@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components/SceneComponent.h"
+#include "Input/InputManager.h"
 
 class UCameraComponent : public USceneComponent
 {
@@ -14,10 +15,19 @@ public:
 	void SetPosition(float x, float y, float z);
 	void SetRotation(float x, float y, float z);
 
+	// 뷰포트 크기 설정
+	void SetViewportSize(float Width, float Height);
+
 	FVector GetPosition();
 	FVector GetRotation();
 
 	void GetViewMatrix(FMatrix& InViewMatrix);
+
+	// 마우스로 회전 처리
+	void UpdateRotationFromMouse();
+
+	// Ray Casting 함수 추가
+	FVector GetRayDirection(int ScreenX, int ScreenY);
 
 public:
 	// Default FOV : 90
@@ -42,7 +52,15 @@ private:
 	// Camera Rotation
 	FVector CameraRotation;
 
+	// Camera Target
+	//FVector CameraTarget;
+
 	// Camera ViewMatrix
 	FMatrix ViewMatrix;
+	FMatrix RotationMatrix;
+
+	// Viewport 크기
+	float ViewportWidth;
+	float ViewportHeight;
 };
 
