@@ -202,9 +202,9 @@ void UWildEditor::NewScene(FString SceneName)
     TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
     for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; i--)
     {
-        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        if (GUObjectArray[i]->IsA(UCubeComponent::GetClass()) || GUObjectArray[i]->IsA(USphereComponent::GetClass()) || GUObjectArray[i]->IsA(UTriangleComponent::GetClass()))
         {
-            delete Primitive;
+            delete GUObjectArray[i];
         }
     }
 }
@@ -217,9 +217,9 @@ void UWildEditor::LoadScene(FString SceneName)
         TArray<UObject*>& GUObjectArray = UObjectManager::GetInst().GetObjectsArray();
         for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; i--)
         {
-            if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+            if (GUObjectArray[i]->IsA(UCubeComponent::GetClass()) || GUObjectArray[i]->IsA(USphereComponent::GetClass()) || GUObjectArray[i]->IsA(UTriangleComponent::GetClass()))
             {
-                delete Primitive;
+                delete GUObjectArray[i];
             }
         }
 
@@ -273,24 +273,6 @@ void UWildEditor::LoadScene(FString SceneName)
     }
 }
 
-void UWildEditor::SetupPropertyWindow()
-{
-    auto Window = UEditorDesigner::Get().GetWindow("PropertyWindow");
-    if (Window)
-    {
-        if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
-        {
-            if (Scene->GetSelectedObject()) {
-                Property->SetLocation(Scene->GetSelectedObject()->RelativeLocation);
-                Property->SetRotation(Scene->GetSelectedObject()->RelativeRotation);
-                Property->SetScale(Scene->GetSelectedObject()->RelativeScale3D);
-
-                Property->SetUUID(Scene->GetSelectedObject()->UUID);
-            }
-        }
-    }
-}
-
 void UWildEditor::SetupConsoleWindow()
 {
     auto Window = UEditorDesigner::Get().GetWindow("ConsoleWindow");
@@ -313,17 +295,17 @@ void UWildEditor::SaveScene(FString SceneName)
     Scene["Version"] = Version;
     Scene["NextUUID"] = NextUUID;
 
-    // GUObjectArray�� �� ��ü�� ���� JSON �����͸� �߰�
+    // GUObjectArray를 순회하면서 Primitive만 저장
     for (uint32 i = 0; i < GUObjectArray.size(); i++)
     {
-        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        if (GUObjectArray[i]->IsA(UCubeComponent::GetClass()) || GUObjectArray[i]->IsA(USphereComponent::GetClass()) || GUObjectArray[i]->IsA(UTriangleComponent::GetClass()))
         {
-            // UUID �Ǵ� ���ϴ� �ε����� ���ڿ� Ű�� ���
-            FString key = std::to_string(Primitive->UUID);
+            UPrimitiveComponent* Primitive = static_cast<UPrimitiveComponent*>(GUObjectArray[i]);
+            FString key = std::to_string(GUObjectArray[i]->UUID);
             Scene["Primitives"][key]["Location"] = json::FVectorToJSON(Primitive->RelativeLocation);
             Scene["Primitives"][key]["Rotation"] = json::FVectorToJSON(Primitive->RelativeRotation);
             Scene["Primitives"][key]["Scale"] = json::FVectorToJSON(Primitive->RelativeScale3D);
-            FString RawTypeName = typeid(*Primitive).name();
+            FString RawTypeName = Primitive->GetInstanceClass()->ClassName;
             Scene["Primitives"][key]["Type"] = CleanTypeName(RawTypeName);
         }
     }
@@ -339,18 +321,39 @@ void UWildEditor::SaveScene(FString SceneName)
     }
 }
 
+void UWildEditor::SetupPropertyWindow()
+{
+    auto Window = UEditorDesigner::Get().GetWindow("PropertyWindow");
+    if (Window)
+    {
+        if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
+        {
+            if (Scene->GetSelectedObject()) {
+                if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
+                    Property->SetLocation(SelectedObject->RelativeLocation);
+                    Property->SetRotation(SelectedObject->RelativeRotation);
+                    Property->SetScale(SelectedObject->RelativeScale3D);
+                    Property->SetUUID(SelectedObject->UUID);
+                }
+            }
+
+        }
+    }
+}
+
+//String 분해
 FString UWildEditor::CleanTypeName(const FString& rawName)
 {
     FString result = rawName;
 
-    // "class U" ���ξ� ����
-    const FString prefix = "class U";
-    if (result.find(prefix) == 0)  // ���ξ ���ڿ��� ���ۿ� ������
+    // "U"분리
+    const FString prefix = "U";
+    if (result.find(prefix) == 0)
     {
         result = result.substr(prefix.length());
     }
 
-    // "Component" ���̾� ����
+    // "Component" 분리
     const FString suffix = "Component";
     size_t pos = result.rfind(suffix);
     if (pos != FString::npos)
