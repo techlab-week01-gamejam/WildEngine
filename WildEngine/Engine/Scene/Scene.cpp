@@ -197,15 +197,15 @@ void UScene::CreateNewObject(FString ObjectType, int Count)
 
     for (int i = 0; i < Count; ++i)
     {
-        if (ObjectType.compare("cube"))
+        if (!ObjectType.compare("cube"))
         {
             new UCubeComponent(Renderer, Location);
         }
-        else if (ObjectType.compare("sphere"))
+        else if (!ObjectType.compare("sphere"))
         {
             new USphereComponent(Renderer, Location);
         }
-        else if (ObjectType.compare("triangle"))
+        else if (!ObjectType.compare("triangle"))
         {
             new UTriangleComponent(Renderer, Location);
         }
