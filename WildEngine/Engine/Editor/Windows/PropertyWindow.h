@@ -15,17 +15,20 @@ public:
 	FVector GetLocation();
 	FVector GetRotation();
 	FVector GetScale();
+
 	void SetLocation(FVector& Vector);
 	void SetRotation(FVector& Vector);
 	void SetScale(FVector& Vector);
+	void SetFocusObject(bool NewState) { bIsFocused = bIsFocused; };
+
 	void SetUUID(uint32 UUID);
 
 private:
 	bool bIsFocused;
 
-	FVector Translation;
-	FVector Rotation;
-	FVector Scale;
+	FVector* Translation;
+	FVector* Rotation;
+	FVector* Scale;
 
 	float ObjectTranslation[3] = {0, 0, 0};
 	float ObjectRotation[3] = { 0, 0, 0 };
@@ -33,5 +36,7 @@ private:
 
 	INT32 ObjectUUID;
 
+private:
+	void UpdateVectorToFloat(FVector*, float f[]);
 };
 

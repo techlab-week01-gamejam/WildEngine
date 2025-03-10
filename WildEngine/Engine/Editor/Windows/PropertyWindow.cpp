@@ -9,9 +9,9 @@ PropertyWindow::PropertyWindow()
 {
 	bIsFocused = true;
 
-	Translation.Set(0,0,0);
-	Rotation.Set(0,0,0);
-	Scale.Set(0,0,0);
+	Translation = nullptr;
+	Rotation = nullptr;
+	Scale = nullptr;
 
 	ObjectUUID = -1;
 }
@@ -24,15 +24,32 @@ void PropertyWindow::Render()
 	ImGui::SetNextWindowSize(ImVec2(260, 280));
 	ImGui::Begin("Property Panel", nullptr, ImGuiWindowFlags_NoResize);
 
-	memcpy(ObjectTranslation, &Translation, sizeof(ObjectTranslation));
-	memcpy(ObjectRotation, &Rotation, sizeof(ObjectRotation));
-	memcpy(ObjectScale, &Scale, sizeof(Scale));
-
 	if (bIsFocused)
 	{
-		ImGui::DragFloat3("Location", ObjectTranslation);
-		ImGui::DragFloat3("Rotation", ObjectRotation);
-		ImGui::DragFloat3("Scale", ObjectScale);
+		UpdateVectorToFloat(Translation, ObjectTranslation);
+
+		if (ImGui::DragFloat3("Location", ObjectTranslation))
+		{
+			Translation->X = ObjectTranslation[0];
+			Translation->Y = ObjectTranslation[1];
+			Translation->Z = ObjectTranslation[2];
+		}
+		
+		UpdateVectorToFloat(Rotation, ObjectRotation);
+		if (ImGui::DragFloat3("Rotation", ObjectRotation))
+		{
+			Rotation->X = ObjectRotation[0];
+			Rotation->Y = ObjectRotation[1];
+			Rotation->Z = ObjectRotation[2];
+		}
+
+		UpdateVectorToFloat(Scale, ObjectScale);
+		if (ImGui::DragFloat3("Scale", ObjectScale))
+		{
+			Scale->X = ObjectScale[0];
+			Scale->Y = ObjectScale[1];
+			Scale->Z = ObjectScale[2];
+		}
 
 		ImGui::Text("GUID : %d", ObjectUUID);
 	}
@@ -58,20 +75,27 @@ FVector PropertyWindow::GetScale()
 
 void PropertyWindow::SetLocation(FVector& Vector)
 {
-	Translation = Vector;
+	Translation = &Vector;
 }
 
 void PropertyWindow::SetRotation(FVector& Vector)
 {
-	Rotation = Vector;
+	Rotation = &Vector;
 }
 
 void PropertyWindow::SetScale(FVector& Vector)
 {
-	Scale = Vector;
+	Scale = &Vector;
 }
 
 void PropertyWindow::SetUUID(uint32 UUID)
 {
 	ObjectUUID = UUID;
+}
+
+void PropertyWindow::UpdateVectorToFloat(FVector* v, float f[])
+{
+	f[0] = v->X;
+	f[1] = v->Y;
+	f[2] = v->Z;
 }

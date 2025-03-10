@@ -26,6 +26,8 @@ private:
 
 	void SetupControlWindow();
 
+	void SetupPropertyWindow();
+
 private:
 	URenderer* Renderer;
 	UScene* Scene;
