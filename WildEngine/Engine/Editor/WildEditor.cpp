@@ -98,6 +98,7 @@ void UWildEditor::Render()
 
     SetupControlWindow();
     SetupPropertyWindow();
+    SetupConsoleWindow();
 
     UEditorDesigner::Get().Render();
 
@@ -279,12 +280,12 @@ void UWildEditor::SetupPropertyWindow()
     {
         if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
         {
-            if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
-                Property->SetLocation(SelectedObject->RelativeLocation);
-                Property->SetRotation(SelectedObject->RelativeRotation);
-                Property->SetScale(SelectedObject->RelativeScale3D);
+            if (Scene->GetSelectedObject()) {
+                Property->SetLocation(Scene->GetSelectedObject()->RelativeLocation);
+                Property->SetRotation(Scene->GetSelectedObject()->RelativeRotation);
+                Property->SetScale(Scene->GetSelectedObject()->RelativeScale3D);
 
-                Property->SetUUID(SelectedObject->UUID);
+                Property->SetUUID(Scene->GetSelectedObject()->UUID);
             }
         }
     }

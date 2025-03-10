@@ -411,9 +411,11 @@ void ConsoleWindow::ExecCommand(const char* CommandLine)
 
                     for (int i = 0; i < count; i++)
                     {
-                        if (shape.compare("cube"))
+                        FVector pos(i * 2, 0, 0);
+                        if (shape == "cube")
                         {
-                            UObjectFactory::GetInst().ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), MainRenderer);
+                            UCubeComponent* c = UObjectFactory::GetInst().ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), MainRenderer);
+                            c->SetRelativeLocation(pos);
                         }
                         else if (shape.compare("sphere"))
                         {

@@ -20,7 +20,6 @@ public:
 	static UClass* GetClass();
 
 	UClass* GetInstanceClass() const override;
-	void Initialize();
 
 	URenderer* Renderer;
 
