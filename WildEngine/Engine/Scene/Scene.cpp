@@ -112,4 +112,36 @@ void UScene::Render()
     Cube1->Render(WorldMatrix, ViewMatrix, ProjectionMatrix);
 }
 
+UObject* UScene::GetSelectedObject()
+{
+    return SelectedObject;
+}
+
+void UScene::SetSelectedObject(UObject* newSelectObject)
+{
+    SelectedObject = newSelectObject;
+}
+
+bool UScene::wasSelectedObject()
+{
+    return nullptr != SelectedObject;
+}
+
+void UScene::LoadScene(void* data)
+{
+}
+
+void UScene::SaveScene(void* data)
+{
+}
+
+UCameraComponent* UScene::GetPrimaryCamera()
+{
+    return PrimaryCamera;
+}
+
+void UScene::CreateNewObject(UObject* newObject)
+{
+}
+
 

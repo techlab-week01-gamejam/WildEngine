@@ -131,6 +131,7 @@
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="Core\Font\IconDefs.h" />
     <ClInclude Include="Core\Font\RawFonts.h" />
+    <ClInclude Include="Core\Interface\IScene.h" />
     <ClInclude Include="Core\Interface\ISwitchable.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />

@@ -6,6 +6,8 @@
 #include "../ImGui/imgui_impl_dx11.h"
 #include "../imGui/imgui_impl_win32.h"
 
+#include "Renderer/URenderer.h"
+
 #include "EditorDesigner.h"
 #include "Editor/Windows/ControlWindow.h"
 #include "Editor/Windows/PropertyWindow.h"
@@ -15,8 +17,9 @@
 #include "Font/IconDefs.h"
 #include "Font/RawFonts.h"
 
-UWildEditor::UWildEditor()
+UWildEditor::UWildEditor(URenderer* InRenderer)
 {
+    Renderer = InRenderer;
 }
 
 UWildEditor::UWildEditor(const UWildEditor&)
@@ -52,6 +55,8 @@ void UWildEditor::Create(ID3D11Device* Device, ID3D11DeviceContext* DeviceContex
 
 void UWildEditor::Release()
 {
+    Renderer = nullptr;
+
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();

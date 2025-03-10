@@ -3,10 +3,13 @@
 #include "Windows.h"
 #include "Types/Types.h"
 
+
+class URenderer;
+
 class UWildEditor
 {
 public:
-	UWildEditor();
+	UWildEditor(URenderer* InRenderer);
 	UWildEditor(const UWildEditor&);
 	~UWildEditor();
 
@@ -19,5 +22,8 @@ private:
 	void PreferenceStyle();
 
 	void CreateUsingFont();
+
+private:
+	URenderer* Renderer;
 };
 

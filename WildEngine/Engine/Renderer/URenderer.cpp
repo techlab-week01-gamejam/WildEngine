@@ -18,7 +18,7 @@ void URenderer::Create(HWND hWindow)
     // Editor »ý¼º
     if (PrimaryEditor == nullptr)
     {
-        PrimaryEditor = new UWildEditor();
+        PrimaryEditor = new UWildEditor(this);
     }
     PrimaryEditor->Create(Device, DeviceContext, hWindow);
 }

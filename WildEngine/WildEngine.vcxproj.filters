@@ -153,6 +153,9 @@
     <ClInclude Include="Core\Font\IconDefs.h">
       <Filter>소스 파일\Core\Font</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Interface\IScene.h">
+      <Filter>소스 파일\Core\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderW0.hlsl">
