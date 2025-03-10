@@ -76,7 +76,7 @@ void UWildEditor::Render()
     ImGui::NewFrame();
 
     Scene = Renderer->GetPrimaryScene();
-    
+
     SetupControlWindow();
     SetupPropertyWindow();
 
@@ -160,12 +160,7 @@ void UWildEditor::SetupPropertyWindow()
     {
         if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
         {
-            bool bFocused = Scene->GetSelectedObject() != nullptr;
-            Property->SetFocusObject(bFocused);
-            if (bFocused)
-            {
-                UPrimitiveComponent* SelectedObject = static_cast<UPrimitiveComponent*>(Scene->GetSelectedObject());
-                
+            if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
                 Property->SetLocation(SelectedObject->RelativeLocation);
                 Property->SetRotation(SelectedObject->RelativeRotation);
                 Property->SetScale(SelectedObject->RelativeScale3D);
