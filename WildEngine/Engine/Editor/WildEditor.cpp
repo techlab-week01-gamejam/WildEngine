@@ -1,4 +1,4 @@
-#include "WildEditor.h"
+﻿#include "WildEditor.h"
 
 
 #include "../ImGui/imgui.h"
@@ -47,7 +47,7 @@ void UWildEditor::Create(ID3D11Device* Device, ID3D11DeviceContext* DeviceContex
     auto NewControlWindow = std::make_shared<ControlWindow>();
     UEditorDesigner::Get().AddWindow("ControlWindow", NewControlWindow);
 
-    NewPropertyWindow = std::make_shared<PropertyWindow>();
+    auto NewPropertyWindow = std::make_shared<PropertyWindow>();
     UEditorDesigner::Get().AddWindow("PropertyWindow", NewPropertyWindow);
 
     auto NewConsoleWindow = std::make_shared<ConsoleWindow>();
