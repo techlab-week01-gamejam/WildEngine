@@ -129,7 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core\json.hpp" />
     <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="Core\Font\IconDefs.h" />
     <ClInclude Include="Core\Font\RawFonts.h" />
