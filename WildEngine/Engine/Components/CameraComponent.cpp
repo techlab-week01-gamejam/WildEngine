@@ -20,9 +20,9 @@ void UCameraComponent::Initialize()
 	NearZ = 0.1f;
 	FarZ = 1000.0f;
 
-	CameraPosition.X = 10.0f;
-	CameraPosition.Y = 20.0f;
-	CameraPosition.Z = -1.0f;
+	CameraPosition.X = 0.0f;
+	CameraPosition.Y = 0.0f;
+	CameraPosition.Z = 0.0f;
 
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;
