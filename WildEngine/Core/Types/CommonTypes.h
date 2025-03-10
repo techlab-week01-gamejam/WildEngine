@@ -6,9 +6,16 @@ struct FVertexType
     float r, g, b, a; // Color
 };
 
-enum class PrimitiveType
+enum class EPrimitiveType
 {
     Cube,
     Sphere,
     Triangle
+};
+
+enum class EGizmoType
+{
+    Translation,
+    Rotation,
+    Scale
 };

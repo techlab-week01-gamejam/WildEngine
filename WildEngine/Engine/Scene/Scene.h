@@ -44,6 +44,9 @@ public:
 	/* Construct New Object */
 	void CreateNewObject(UObject* newObject) override;
 
+	/* Gizmo */
+	virtual UGizmoComponent* GetGizmo() { return SceneGizmo; };
+
 private:
 	void Initialize();
 	FMatrix CreateProjectionView();

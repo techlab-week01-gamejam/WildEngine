@@ -6,6 +6,8 @@
 
 #include "../ImGui/imgui.h"
 
+class UGizmoComponent;
+
 class ControlWindow : public UEditorWindow
 {
 public:
@@ -13,6 +15,8 @@ public:
 	ControlWindow(const ControlWindow&) {};
 
 	void Render() override;
+
+	void SetPrimaryGizmo(UGizmoComponent* NewGizmo);
 
 private:
 	bool CreateCustomInputInt(const char* label, ImGuiDataType data_type, void* p_data, const char* format, ImGuiInputTextFlags flags);
@@ -34,5 +38,7 @@ private:
 
 	float WindowWidth;
 	float WindowHeight;
+
+	UGizmoComponent* PrimaryGizmo;
 };
 

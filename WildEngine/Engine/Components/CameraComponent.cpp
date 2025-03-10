@@ -1,4 +1,4 @@
-#include "CameraComponent.h"
+﻿#include "CameraComponent.h"
 #include "Input/InputManager.h"
 #include "DirectXMath.h"
 #include "Math/Matrix.h"
@@ -95,7 +95,7 @@ void UCameraComponent::Render()
 	float MoveSpeed = 0.3f;
 
 	// 키보드 입력 처리
-	if(FInputManager::GetInst().GetKey('W') == EKeyState::Held)
+	if (FInputManager::GetInst().GetKey('W') == EKeyState::Held)
 	{
 		CameraPosition += RotationMatrix * FVector(0.0f, 0.0f, MoveSpeed);
 	}
@@ -183,9 +183,8 @@ void UCameraComponent::UpdateRotationFromMouse()
 }
 
 FVector UCameraComponent::GetRayDirection(int ScreenX, int ScreenY)
-{ 
+{
 	//스크린 좌표를 정규화된 장치 좌표로 변환
 	//float NDC_X = (2.0f * ScreenX)  /
 	return FVector();
 }
-

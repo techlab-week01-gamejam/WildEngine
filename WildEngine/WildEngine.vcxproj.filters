@@ -43,7 +43,6 @@
     <Filter Include="소스 파일\Engine\Scene">
       <UniqueIdentifier>{ccfffda4-2401-4ff4-b26d-970b5840a364}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="소스 파일\Engine\Editor">
       <UniqueIdentifier>{5e51bb81-8d50-4eed-82a5-b76d43560b1b}</UniqueIdentifier>
     </Filter>
@@ -62,9 +61,9 @@
     <Filter Include="소스 파일\Core\Log">
       <UniqueIdentifier>{dd1cc437-5a01-4058-bd10-a039c60b2e06}</UniqueIdentifier>
     </Filter>
-	<Filter Include="소스 파일\Engine\Statics">
-        <UniqueIdentifier>{1b133652-913b-46f1-8701-39a9e4d340e2}</UniqueIdentifier>
-	 </Filter>
+    <Filter Include="소스 파일\Engine\Statics">
+      <UniqueIdentifier>{1b133652-913b-46f1-8701-39a9e4d340e2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\Core\Input">
       <UniqueIdentifier>{4cf0611d-5136-4074-92a4-02f1561b7b8c}</UniqueIdentifier>
     </Filter>
@@ -120,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Components\SphereComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CommonTypes.h">
-      <Filter>소스 파일\Core\Types</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\Scene.h">
       <Filter>소스 파일\Engine\Scene</Filter>
@@ -190,14 +186,17 @@
     <ClInclude Include="Core\Input\InputManager.h">
       <Filter>소스 파일\Core\Input</Filter>
     </ClInclude>
-	 <ClInclude Include="Core\Interface\ISingleton.h">
+    <ClInclude Include="Core\Interface\ISingleton.h">
       <Filter>소스 파일\Core\Interface</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Engine\Components\GizmoComponent.h">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Core\Gizmo.h">
       <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Types\CommonTypes.h">
+      <Filter>소스 파일\Core\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +280,12 @@
     <ClCompile Include="Engine\Components\PrimitiveComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Components\CameraComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\CubeComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderW0.hlsl">
@@ -288,7 +293,7 @@
     </FxCompile>
     <ClCompile Include="Core\Input\InputManager.cpp">
       <Filter>소스 파일\Core\Input</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Engine\Components\GizmoComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>

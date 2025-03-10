@@ -3,6 +3,7 @@
 #include "../../../ImGui/imgui_internal.h"
 
 #include "Editor/EditorDesigner.h"
+#include "Components/GizmoComponent.h"
 
 ControlWindow::ControlWindow()
 {
@@ -49,15 +50,33 @@ void ControlWindow::Render()
     ImVec2 ControlButtonSize = ImVec2(32, 32);
 
     ImGui::PushFont(UnicodeFont);
-    ImGui::Button(u8"\ue9bc", ControlButtonSize); // MOVE
+    if (ImGui::Button(u8"\ue9bc", ControlButtonSize)) 
+    {
+        if (nullptr != PrimaryGizmo)
+        {
+            PrimaryGizmo->SetGizmoType(EGizmoType::Translation);
+        }
+    } // MOVE
 
     ImGui::SameLine(0, 5.0f);
 
-    ImGui::Button(u8"\ue9d3", ControlButtonSize); // ROTATE
+    if (ImGui::Button(u8"\ue9d3", ControlButtonSize))
+    {
+        if (nullptr != PrimaryGizmo)
+        {
+            PrimaryGizmo->SetGizmoType(EGizmoType::Rotation);
+        }
+    }// ROTATE
 
     ImGui::SameLine(0, 5.0f);
 
-    ImGui::Button(u8"\ue9ab", ControlButtonSize); // SCALE
+    if (ImGui::Button(u8"\ue9ab", ControlButtonSize))
+    {
+        if (nullptr != PrimaryGizmo)
+        {
+            PrimaryGizmo->SetGizmoType(EGizmoType::Scale);
+        }
+    } // SCALE
 
     ImGui::SameLine();
     // 창 내부의 전체 콘텐츠 영역 너비를 가져옵니다.
@@ -163,6 +182,13 @@ void ControlWindow::Render()
     }
 
 	ImGui::End();
+}
+
+void ControlWindow::SetPrimaryGizmo(UGizmoComponent* NewGizmo)
+{
+    if(PrimaryGizmo == NewGizmo) return;
+
+    PrimaryGizmo = NewGizmo;
 }
 
 bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_type, void* p_data, const char* format, ImGuiInputTextFlags flags)

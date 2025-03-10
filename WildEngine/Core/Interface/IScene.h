@@ -2,6 +2,7 @@
 
 class UObject;
 class UCameraComponent;
+class UGizmoComponent;
 
 class IScene
 {
@@ -21,4 +22,7 @@ public:
 
 	/* Construct New Object */
 	virtual void CreateNewObject(UObject*) = 0;
+
+	/* Gizmo */
+	virtual UGizmoComponent* GetGizmo() = 0;
 };
