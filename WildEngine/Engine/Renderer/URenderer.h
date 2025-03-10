@@ -59,7 +59,6 @@ public:
 
     void RenderGizmo(ID3D11Buffer* pBuffer, UINT numVertices);
 
-    UScene* GetPrimaryScene();
     void SetPrimaryScene(UScene* NewScene);
 
     UScene* GetPrimaryScene() { return PrimaryScene; }

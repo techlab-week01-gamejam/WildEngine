@@ -425,11 +425,6 @@ void URenderer::UpdateShaderParameters(FMatrix World, FMatrix View, FMatrix Proj
     }
 }
 
-UScene* URenderer::GetPrimaryScene()
-{
-    return PrimaryScene;
-}
-
 void URenderer::SetPrimaryScene(UScene* NewScene)
 {
     if (PrimaryScene)
