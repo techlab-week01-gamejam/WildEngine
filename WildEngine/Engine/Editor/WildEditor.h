@@ -31,6 +31,5 @@ private:
 private:
 	URenderer* Renderer;
 	UScene* Scene;
-	std::shared_ptr<PropertyWindow> NewPropertyWindow;
 };
 
