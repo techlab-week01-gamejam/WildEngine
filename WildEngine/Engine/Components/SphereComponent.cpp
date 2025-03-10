@@ -34,6 +34,7 @@ UClass* USphereComponent::GetInstanceClass() const
 {
     return GetClass();
 }
+
 bool USphereComponent::CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult)
 {
     FVector SphereCenter = RelativeLocation; // 구의 월드 좌표

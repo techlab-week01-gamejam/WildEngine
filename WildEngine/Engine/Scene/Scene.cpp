@@ -53,6 +53,7 @@ void UScene::Initialize()
 
     ObjFactory.RegisterClass<UCameraComponent>();
     ObjFactory.RegisterClassWithArgs<UCubeComponent, URenderer*>();
+	ObjFactory.RegisterClassWithArgs<USphereComponent, URenderer*>();
 
     // Camera 설정
 
@@ -85,9 +86,9 @@ void UScene::Initialize()
     // Test Sphere
     if (Sphere1 == nullptr)
     {
-        Sphere1 = ObjFactory.ConstructObject<USphereComponent>(USphereComponent::GetClass(), Renderer);
-        //Sphere1 = new USphereComponent(Renderer);
-        Sphere1->RelativeLocation = FVector(5.0f, 0.0f, 0.0f);
+        //Sphere1 = ObjFactory.ConstructObject<USphereComponent>(USphereComponent::GetClass(), Renderer);
+		Sphere1 = new USphereComponent(Renderer);
+        Sphere1->RelativeLocation = FVector(10.0f, 0.0f, 0.0f);
         Sphere1->RelativeRotation = FVector(0.f, 0.f, 0.f);
         Sphere1->RelativeScale3D = FVector(1.f, 1.f, 1.f);
     }
@@ -171,7 +172,7 @@ bool UScene::RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHit
     OutHitResult = FHitResult();
 
     // 모든 Primitive를 순회하며 충돌 검사
-    UPrimitiveComponent* Primitives[] = { Cube1, Cube2 };
+    UPrimitiveComponent* Primitives[] = { Cube1, Cube2, Sphere1 };
     for (UPrimitiveComponent* Primitive : Primitives)
     {
         FHitResult TempHit;
