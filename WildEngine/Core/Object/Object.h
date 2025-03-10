@@ -6,14 +6,15 @@
 class UObject
 {
 public:
+	UObject();
 	virtual ~UObject();
-  
+
 	uint32 UUID;
 	uint32 InternalIndex; // Index of GUObjectArray
 
-	static UClass* GetClass(); // í´ë˜ìŠ¤ì—ì„œ í˜¸ì¶œ ê°€ëŠ¥
+	static UClass* GetClass(); // Å¬·¡½º¿¡¼­ È£Ãâ °¡´É
 
-	// new ì—°ì‚°ì ì˜¤ë²„ë¡œë”©
+	// new ¿¬»êÀÚ ¿À¹ö·Îµù
 	void* operator new(size_t size);
 	void operator delete(void* ptr);
 };
