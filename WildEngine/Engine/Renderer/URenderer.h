@@ -61,6 +61,11 @@ public:
 
     void SetPrimaryScene(UScene* NewScene);
 
+
+    // JSON 파일 Save, Load함수
+    void SaveJson();
+    void LoadJson();
+
 private:
     // 렌더링 처리 함수
     void SwapBuffer();

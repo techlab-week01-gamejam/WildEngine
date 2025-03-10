@@ -1,7 +1,11 @@
-﻿#include "URenderer.h"
+#include "URenderer.h"
 
 #include "Scene/Scene.h"
 #include "Types/CommonTypes.h"
+#include "../Core/json.hpp"
+#include "../Core/Object/Object.h"
+#include "../Engine/Components/PrimitiveComponent.h"
+#include <fstream>
 #include "Editor/WildEditor.h"
 
 #include "Input/InputManager.h"
@@ -435,3 +439,128 @@ void URenderer::SetPrimaryScene(UScene* NewScene)
 
     PrimaryScene = NewScene;
 }
+
+void URenderer::SaveJson()
+{
+    //�׽�Ʈ�� ����
+    uint32 Version = 1;
+    uint32 NextUUID = 8;
+    TArray<UObject*> GUObjectArray;
+    FString SceneName = "TestScene";
+
+    // �׽�Ʈ ��ü ����: �� ���� UPrimitiveComponent ����
+    UPrimitiveComponent* Sphere = new UPrimitiveComponent();
+    Sphere->UUID = 0;
+    Sphere->RelativeLocation = { 0.29f, 1.21f, 0.0f };
+    Sphere->RelativeRotation = { 0.f, 0.f, 0.f };
+    Sphere->RelativeScale3D = { 1.f, 1.f, 1.f };
+    GUObjectArray.push_back(Sphere);
+
+    UPrimitiveComponent* Cube = new UPrimitiveComponent();
+    Cube->UUID = 1;
+    Cube->RelativeLocation = { -0.17f, 0.06f, 0.0f };
+    Cube->RelativeRotation = { 0.f, 0.f, 0.f };
+    Cube->RelativeScale3D = { 1.f, 1.f, 1.f };
+    GUObjectArray.push_back(Cube);
+
+    // Primitives�� ��ü�� �ʱ�ȭ�մϴ�.
+    json::JSON Scene;
+    Scene["Version"] = Version;
+    Scene["NextUUID"] = NextUUID;
+
+    // GUObjectArray�� �� ��ü�� ���� JSON �����͸� �߰�
+    for (uint32 i = 0; i < GUObjectArray.size(); i++)
+    {
+        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
+        {
+            // UUID �Ǵ� ���ϴ� �ε����� ���ڿ� Ű�� ���
+            std::string key = std::to_string(Primitive->UUID);
+            Scene["Primitives"][key]["Location"] = json::FVectorToJSON(Primitive->RelativeLocation);
+            Scene["Primitives"][key]["Rotation"] = json::FVectorToJSON(Primitive->RelativeRotation);
+            Scene["Primitives"][key]["Scale"] = json::FVectorToJSON(Primitive->RelativeScale3D);
+            Scene["Primitives"][key]["Type"] = "Sphere";
+        }
+    }
+
+    std::string jsonData = Scene.dump();
+    std::ofstream outFile(SceneName + ".Scene");
+	if (outFile.is_open())
+	{
+		outFile << jsonData;
+		outFile.close();
+        std::cout << "JSON �����͸� output.json�� �����߽��ϴ�." << std::endl;
+    }
+    else {
+        std::cerr << "���� ���⿡ �����߽��ϴ�." << std::endl;
+    }
+}
+
+void URenderer::LoadJson()
+{
+    std::ifstream inFile("TestScene.Scene");
+    if (inFile.is_open())
+    {
+        std::string jsonData;
+        inFile.seekg(0, std::ios::end);
+        jsonData.reserve(inFile.tellg());
+        inFile.seekg(0, std::ios::beg);
+        jsonData.assign((std::istreambuf_iterator<char>(inFile)),
+            std::istreambuf_iterator<char>());
+        json::JSON Scene = json::JSON::Load(jsonData);
+        uint32 Version = Scene["Version"].ToInt();
+        uint32 NextUUID = Scene["NextUUID"].ToInt();
+        json::JSON Primitives = Scene["Primitives"];
+        for (auto it = Primitives.ObjectRange().begin(); it != Primitives.ObjectRange().end(); ++it)
+        {
+            uint32 UUID = std::stoi(it->first);
+            json::JSON Primitive = it->second;
+            std::string Type = Primitive["Type"].ToString();
+            FVector Location = json::JSONToFVector(Primitive["Location"]);
+            FVector Rotation = json::JSONToFVector(Primitive["Rotation"]);
+            FVector Scale = json::JSONToFVector(Primitive["Scale"]);
+            if (Type == "Sphere")
+            {
+                UPrimitiveComponent* Sphere = new UPrimitiveComponent();
+                Sphere->UUID = UUID;
+                Sphere->RelativeLocation = Location;
+                Sphere->RelativeRotation = Rotation;
+                Sphere->RelativeScale3D = Scale;
+            }
+        }
+        std::cout << "JSON �����͸� ���������� �ҷ��Խ��ϴ�." << std::endl;
+
+		//std::cout << "Version: " + std::to_string(Version) << std::endl;
+		//std::cout << "NextUUID: " + std::to_string(NextUUID) << std::endl;
+
+  //      // Primitive Parsing: Primitives �� �� ������Ƽ�� ������ ����մϴ�.
+  //      for (auto it = Primitives.ObjectRange().begin(); it != Primitives.ObjectRange().end(); ++it)
+  //      {
+  //          uint32 UUID = std::stoi(it->first);
+  //          json::JSON Primitive = it->second;
+  //          std::string Type = Primitive["Type"].ToString();
+  //          FVector Location = json::JSONToFVector(Primitive["Location"]);
+  //          FVector Rotation = json::JSONToFVector(Primitive["Rotation"]);
+  //          FVector Scale = json::JSONToFVector(Primitive["Scale"]);
+
+  //          // �����: ������Ƽ�� ������ ��� (OutputDebugStringA ���)
+  //          std::string debugMsg;
+  //          debugMsg = "Primitive UUID: " + std::to_string(UUID) + "\n";
+  //          debugMsg += "  Type: " + Type + "\n";
+  //          debugMsg += "  Location: (" + std::to_string(Location.X) + ", "
+  //              + std::to_string(Location.Y) + ", "
+  //              + std::to_string(Location.Z) + ")\n";
+  //          debugMsg += "  Rotation: (" + std::to_string(Rotation.X) + ", "
+  //              + std::to_string(Rotation.Y) + ", "
+  //              + std::to_string(Rotation.Z) + ")\n";
+  //          debugMsg += "  Scale: (" + std::to_string(Scale.X) + ", "
+  //              + std::to_string(Scale.Y) + ", "
+  //              + std::to_string(Scale.Z) + ")\n";
+  //          std::cout << debugMsg << std::endl;
+  //      }
+
+    }
+    else {
+        std::cerr << "���� ���⿡ �����߽��ϴ�." << std::endl;
+    }
+}
+
