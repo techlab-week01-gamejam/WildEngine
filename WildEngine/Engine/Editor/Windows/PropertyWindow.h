@@ -20,7 +20,7 @@ public:
 	void SetLocation(FVector& Vector);
 	void SetRotation(FVector& Vector);
 	void SetScale(FVector& Vector);
-	void SetFocusObject(bool NewState) { bIsFocused = bIsFocused; };
+	void SetFocusObject(bool NewState) { bIsFocused = NewState; };
 
 	void SetUUID(uint32 UUID);
 

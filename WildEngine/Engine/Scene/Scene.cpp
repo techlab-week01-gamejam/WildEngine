@@ -67,7 +67,7 @@ void UScene::Initialize()
     }
     PrimaryCamera->SetViewportSize(Renderer->ViewportInfo.Width, Renderer->ViewportInfo.Height);
 
-    // Test Cube
+     //Test Cube
     if (Cube1 == nullptr)
     {
         //Cube1 = new UCubeComponent(Renderer);
@@ -171,20 +171,40 @@ bool UScene::RayCast(FVector RayOrigin, FVector RayDirection, FHitResult& OutHit
     OutHitResult = FHitResult();
 
     // 모든 Primitive를 순회하며 충돌 검사
-    UPrimitiveComponent* Primitives[] = { Cube1, Cube2, Sphere1 };
-    for (UPrimitiveComponent* Primitive : Primitives)
+    for (uint32 i = 0; i < GUObjectArray.size(); i++)
     {
         FHitResult TempHit;
-        if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+        if (UPrimitiveComponent* Primitive = dynamic_cast<UPrimitiveComponent*>(GUObjectArray[i]))
         {
-            if (TempHit.Distance < MinDistance)
+            if (Primitive)
             {
-                MinDistance = TempHit.Distance;
-                OutHitResult = TempHit;
-                bHasHit = true;
+                if(Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+                {
+                    if (TempHit.Distance < MinDistance)
+                    {
+                        MinDistance = TempHit.Distance;
+                        OutHitResult = TempHit;
+                        bHasHit = true;
+                    }
+                }
             }
         }
     }
+    //UPrimitiveComponent* Primitives[] = { Cube1, Cube2, Sphere1 };
+    //for (UPrimitiveComponent* Primitive : Primitives)
+    //{
+    //    FHitResult TempHit;
+    //    if (Primitive->CheckRayIntersection(RayOrigin, RayDirection, TempHit))
+    //    {
+    //        if (TempHit.Distance < MinDistance)
+    //        {
+    //            MinDistance = TempHit.Distance;
+    //            OutHitResult = TempHit;
+    //            bHasHit = true;
+    //        }
+    //    }
+    //}
+    
     return bHasHit;
 
     //  // 모든 Primitive를 순회하며 충돌 검사

@@ -207,6 +207,7 @@ void UWildEditor::NewScene(FString SceneName)
             delete GUObjectArray[i];
         }
     }
+    Scene->SetSelectedObject(nullptr);
 }
 
 void UWildEditor::LoadScene(FString SceneName)
@@ -222,6 +223,7 @@ void UWildEditor::LoadScene(FString SceneName)
                 delete GUObjectArray[i];
             }
         }
+        Scene->SetSelectedObject(nullptr);
 
         FString jsonData;
         inFile.seekg(0, std::ios::end);
@@ -346,25 +348,6 @@ void UWildEditor::SaveScene(FString SceneName)
     }
 }
 
-void UWildEditor::SetupPropertyWindow()
-{
-    auto Window = UEditorDesigner::Get().GetWindow("PropertyWindow");
-    if (Window)
-    {
-        if (PropertyWindow* Property = dynamic_cast<PropertyWindow*>(Window.get()))
-        {
-            if (Scene->GetSelectedObject()) {
-                if (UPrimitiveComponent* SelectedObject = dynamic_cast<UPrimitiveComponent*>(Scene->GetSelectedObject())) {
-                    Property->SetLocation(SelectedObject->RelativeLocation);
-                    Property->SetRotation(SelectedObject->RelativeRotation);
-                    Property->SetScale(SelectedObject->RelativeScale3D);
-                    Property->SetUUID(SelectedObject->UUID);
-                }
-            }
-
-        }
-    }
-}
 
 //String 분해
 FString UWildEditor::CleanTypeName(const FString& rawName)

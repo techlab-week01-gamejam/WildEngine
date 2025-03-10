@@ -7,7 +7,7 @@
 
 PropertyWindow::PropertyWindow()
 {
-	bIsFocused = true;
+	bIsFocused = false;
 
 	Translation = nullptr;
 	Rotation = nullptr;
@@ -22,7 +22,7 @@ void PropertyWindow::Render()
 
 	float scaleX = io.DisplaySize.x / 1920.0f;
 	float scaleY = io.DisplaySize.y / 1080.0f;
-
+	
 	ImVec2 WinSize(io.DisplaySize.x * 0.3f, io.DisplaySize.y * 0.3f);
 
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - WinSize.x - 5, 10), ImGuiCond_Once);

@@ -3,6 +3,7 @@
 #include "Scene/Scene.h"
 #include "Types/CommonTypes.h"
 #include "Editor/WildEditor.h"
+#include "Components/CameraComponent.h"
 
 #include "Input/InputManager.h"
 
@@ -315,6 +316,8 @@ void URenderer::OnResize(uint32 Width, uint32 Height)
     {
         DeviceContext->RSSetViewports(1, &ViewportInfo);
     }
+
+	PrimaryScene->GetPrimaryCamera()->SetViewportSize(ViewportInfo.Width, ViewportInfo.Height);
 }
 
 // 백 버퍼와 프론트 버퍼 교체 (화면 출력)
