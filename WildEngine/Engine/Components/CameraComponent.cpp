@@ -83,8 +83,13 @@ FMatrix UCameraComponent::CreateLookAt()
 
 UClass* UCameraComponent::GetClass()
 {
-	static UClass CameraClass("UCameraComponent", []() -> UObject* { return new UCameraComponent(); });
+	static UClass CameraClass("UCameraComponent", UObject::GetClass());
 	return &CameraClass;
+}
+
+UClass* UCameraComponent::GetInstanceClass() const
+{
+	return GetClass();
 }
 
 void UCameraComponent::Render()

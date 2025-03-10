@@ -276,9 +276,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\CubeComponent.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Components\CubeComponent.cpp">
+      <Filter>소스 파일\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\SceneComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -289,5 +292,10 @@
     <ClCompile Include="Engine\Components\GizmoComponent.cpp">
       <Filter>소스 파일\Engine\Components</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ShaderW0.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

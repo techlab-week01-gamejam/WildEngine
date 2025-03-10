@@ -1,5 +1,4 @@
 #include "ObjectManager.h"
-#pragma optimize("", off);
 
 void UObjectManager::RegisterObject(UObject* Object)
 {
@@ -54,5 +53,3 @@ void UObjectManager::PrintMemoryUsage()
 	FDebugConsole::DebugPrint("[UObjectManager] Total Allocated Objects: %d", TotalAllocationCount);
 	FDebugConsole::DebugPrint("[UObjectManager] Total Memory Used :: %d", TotalAllocationBytes);
 }
-
-#pragma optimize("", on);
