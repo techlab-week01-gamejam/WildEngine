@@ -10,7 +10,7 @@ public:
 
 	FVector RelativeLocation;
 	FVector RelativeRotation;
-	FVector RelativeScale3D = FVector(1, 1, 1);
+	FVector RelativeScale3D;
 
 	FMatrix WorldTransform;
 

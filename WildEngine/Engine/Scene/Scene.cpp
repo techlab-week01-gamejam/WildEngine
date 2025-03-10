@@ -58,8 +58,8 @@ void UScene::Initialize()
 
     if (PrimaryCamera == nullptr)
     {
-        //PrimaryCamera = new UCameraComponent();
-        PrimaryCamera = ObjFactory.ConstructObject<UCameraComponent>(UCameraComponent::GetClass());
+        PrimaryCamera = new UCameraComponent();
+        //PrimaryCamera = ObjFactory.ConstructObject<UCameraComponent>(UCameraComponent::GetClass());
         if (PrimaryCamera && PrimaryCamera->IsA(UCameraComponent::GetClass())) {
             FDebugConsole::DebugPrint("CameraComponent class selected!");
         }
@@ -70,7 +70,7 @@ void UScene::Initialize()
     if (Cube1 == nullptr)
     {
         //Cube1 = new UCubeComponent(Renderer);
-        Cube1 = ObjFactory.ConstructObject<UCubeComponent>(UCubeComponent::GetClass(), Renderer);
+        Cube1 = new UCubeComponent(Renderer);
         Cube1->SetRelativeLocation(FVector(1.f, 1.f, 1.f));
         Cube1->SetRelativeScale3D(FVector(2.f, 2.f, 2.f));
     }
@@ -86,6 +86,7 @@ void UScene::Initialize()
     if (Sphere1 == nullptr)
     {
         Sphere1 = ObjFactory.ConstructObject<USphereComponent>(USphereComponent::GetClass(), Renderer);
+        //Sphere1 = new USphereComponent(Renderer);
         Sphere1->RelativeLocation = FVector(5.0f, 0.0f, 0.0f);
         Sphere1->RelativeRotation = FVector(0.f, 0.f, 0.f);
         Sphere1->RelativeScale3D = FVector(1.f, 1.f, 1.f);
@@ -96,7 +97,7 @@ void UScene::Initialize()
         SceneGizmo = new UGizmoComponent(Renderer);
     }
 
-    CreateNewObject("cube", 2);
+    //CreateNewObject("cube", 2);
 
     // Test
     SelectedObject = Cube1;
