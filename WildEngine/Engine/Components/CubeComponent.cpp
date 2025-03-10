@@ -32,13 +32,13 @@ void UCubeComponent::Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix Pro
     rot += 0.01f;*/
 
     FMatrix Translation = FMatrix::Translation(RelativeLocation.X, RelativeLocation.Y, RelativeLocation.Z);
-    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(rot, 0, rot);
+    FMatrix Rotation = FMatrix::CreateRotationRollPitchYaw(0, rot, 0);
     FMatrix Scaling = FMatrix::Scaling(1, 1, 1);
 
-    FMatrix World = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
+    WorldTransform = Scaling * Rotation * Translation; // 스케일링 * 회전 * 이동
 
     // 셰이더 상수 버퍼 업데이트
-    Renderer->UpdateShaderParameters(World, ViewMatrix, ProjectionMatrix);
+    Renderer->UpdateShaderParameters(WorldTransform, ViewMatrix, ProjectionMatrix);
 
     Renderer->RenderPrimitive(VertexBuffer, NumVertices);
 }

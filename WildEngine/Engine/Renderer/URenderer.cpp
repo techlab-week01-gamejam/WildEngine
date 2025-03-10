@@ -12,6 +12,7 @@ void URenderer::Create(HWND hWindow)
     CreateFrameBuffer();
     CreateRasterizerState();
     // (깊이 스텐실 버퍼 및 블렌드 상태 등 추가 상태 설정은 필요에 따라 구현)
+    CreateStencilState();
 
     CreateShader();
     CreateMatrixBuffer();
@@ -85,6 +86,8 @@ void URenderer::CreateFrameBuffer()
     framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     Device->CreateRenderTargetView(FrameBuffer, &framebufferRTVdesc, &FrameBufferRTV);
+
+    CreateStencilBuffer();
 }
 
 // 프레임 버퍼 해제
@@ -122,6 +125,95 @@ void URenderer::ReleaseRasterizerState()
     }
 }
 
+void URenderer::CreateStencilState()
+{
+    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+    dsDesc.DepthEnable = TRUE;
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+    // 스텐실 테스트 활성화
+    dsDesc.StencilEnable = TRUE;
+    dsDesc.StencilReadMask = 0xFF;
+    dsDesc.StencilWriteMask = 0xFF;
+
+    // 전면 (Front) 및 후면 (Back) 모두 동일하게 설정
+    dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // 항상 통과
+    dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE; // 픽셀이 그려질 때 스텐실 값을 교체 
+    dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+    dsDesc.BackFace = dsDesc.FrontFace;
+
+    Device->CreateDepthStencilState(&dsDesc, &DepthStencilState);
+
+    // 기즈모 렌더링 시, 스텐실 값이 1인 픽셀은 렌더링하지 않도록 설정 (즉, 큐브 내부 클리핑)
+    D3D11_DEPTH_STENCIL_DESC dsDescGizmo = {};
+    dsDescGizmo.DepthEnable = TRUE;  // 기즈모에 깊이 테스트가 필요하다면 TRUE, 필요없으면 FALSE
+    dsDescGizmo.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsDescGizmo.DepthFunc = D3D11_COMPARISON_LESS;
+
+    // 스텐실 테스트 활성화
+    dsDescGizmo.StencilEnable = TRUE;
+    dsDescGizmo.StencilReadMask = 0xFF;
+    dsDescGizmo.StencilWriteMask = 0x00; // 기즈모는 스텐실 값을 변경하지 않음
+
+    // 기즈모 픽셀은 스텐실 값이 1인 곳에서는 렌더링되지 않음
+    dsDescGizmo.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
+    dsDescGizmo.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+    dsDescGizmo.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+    dsDescGizmo.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+    dsDescGizmo.BackFace = dsDescGizmo.FrontFace;
+
+    Device->CreateDepthStencilState(&dsDescGizmo, &GizmoDepthStencilState);
+}
+
+void URenderer::CreateStencilBuffer()
+{
+    // 깊이-스텐실 텍스처 설명 구조체
+    D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+    depthStencilDesc.Width = static_cast<UINT>(ViewportInfo.Width);
+    depthStencilDesc.Height = static_cast<UINT>(ViewportInfo.Height);
+    depthStencilDesc.MipLevels = 1;
+    depthStencilDesc.ArraySize = 1;
+    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // 24비트 깊이 + 8비트 스텐실
+    depthStencilDesc.SampleDesc.Count = 1; // 멀티샘플링 비활성화
+    depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+    ID3D11Texture2D* depthStencilBuffer = nullptr;
+    Device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilBuffer);
+
+    // 깊이-스텐실 뷰 생성
+    Device->CreateDepthStencilView(depthStencilBuffer, nullptr, &DepthStencilView);
+
+    // 텍스처는 뷰 생성 후 바로 해제 가능
+    depthStencilBuffer->Release();
+}
+
+void URenderer::ReleaseStencilState()
+{
+    if (DepthStencilState)
+    {
+        DepthStencilState->Release();
+        DepthStencilState = nullptr;
+    }
+
+    if (GizmoDepthStencilState)
+    {
+        GizmoDepthStencilState->Release();
+        GizmoDepthStencilState = nullptr;
+    }
+}
+
+void URenderer::ReleaseStencilBuffer()
+{
+    if (DepthStencilView)
+    {
+        DepthStencilView->Release();
+        DepthStencilView = nullptr;
+    }
+}
+
 void URenderer::Update(float deltaTime)
 {
 
@@ -144,12 +236,9 @@ void URenderer::Release()
 {
     ReleaseMatrixBuffer();
     ReleaseShader();
+    ReleaseRasterizerState();
+    ReleaseStencilBuffer();
 
-    if (RasterizerState)
-    {
-        RasterizerState->Release();
-        RasterizerState = nullptr;
-    }
     if (DeviceContext)
     {
         DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
@@ -222,11 +311,13 @@ void URenderer::ReleaseShader()
 void URenderer::Prepare()
 {
     DeviceContext->ClearRenderTargetView(FrameBufferRTV, ClearColor);
+    DeviceContext->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // 스텐실 초기화
     DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     DeviceContext->RSSetViewports(1, &ViewportInfo);
     DeviceContext->RSSetState(RasterizerState);
-    DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, nullptr);
+    DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView); // 깊이-스텐실 뷰 추가
     DeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+    DeviceContext->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
 // 쉐이더 및 상수 버퍼 등 렌더링 상태 설정
@@ -248,6 +339,13 @@ void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
     UINT offset = 0;
     DeviceContext->IASetVertexBuffers(0, 1, &pBuffer, &Stride, &offset);
     DeviceContext->Draw(numVertices, 0);
+}
+
+void URenderer::RenderGizmo(ID3D11Buffer* pBuffer, UINT numVertices)
+{
+    DeviceContext->OMSetDepthStencilState(GizmoDepthStencilState, 1);
+    RenderPrimitive(pBuffer, numVertices);
+    DeviceContext->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
 // 정점 버퍼 생성

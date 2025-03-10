@@ -11,6 +11,9 @@ public:
 	FVector RelativeRotation;
 	FVector RelativeScale3D;
 
+	FMatrix WorldTransform;
+
 public:
+	virtual FMatrix GetWorldTransform() { return WorldTransform; };
 
 };

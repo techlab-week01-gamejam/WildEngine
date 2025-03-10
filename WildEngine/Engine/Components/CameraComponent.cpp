@@ -25,44 +25,44 @@ void UCameraComponent::Initialize()
 
 	CameraPosition.X = 0.0f;
 	CameraPosition.Y = 0.0f;
-	CameraPosition.Z = -5.0f;
+	CameraPosition.Z = 0.0f;
 
 	CameraRotation.X = 0.0;
 	CameraRotation.Y = 0.0;
 	CameraRotation.Z = 0.0;
 
-	// ¸ñÇ¥Á¡À» ¿ùµå ÁÂÇ¥ÀÇ °íÁ¤µÈ À§Ä¡·Î ¼³Á¤
+	// ëª©í‘œì ì„ ì›”ë“œ ì¢Œí‘œì˜ ê³ ì •ëœ ìœ„ì¹˜ë¡œ ì„¤ì •
 	//CameraTarget = FVector(0.0f, 0.0f, 0.0f);
 }
 
 FMatrix UCameraComponent::CreateLookAt()
 {
-	// 1. Ä«¸Ş¶ó È¸Àü Çà·Ä »ı¼º (ÀÔ·Â °¢µµ´Â ¶óµğ¾È ´ÜÀ§)
+	// 1. ì¹´ë©”ë¼ íšŒì „ í–‰ë ¬ ìƒì„± (ì…ë ¥ ê°ë„ëŠ” ë¼ë””ì•ˆ ë‹¨ìœ„)
 	RotationMatrix = FMatrix::CreateRotationRollPitchYaw(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
 
-	// 2. È¸Àü Çà·ÄÀ» »ç¿ëÇØ ±âº» forward¿Í up º¤ÅÍ º¯È¯
-	//    (LH ÁÂÇ¥°è¿¡¼­ ±âº» forward = (0, 0, 1), up = (0, 1, 0))
+	// 2. íšŒì „ í–‰ë ¬ì„ ì‚¬ìš©í•´ ê¸°ë³¸ forwardì™€ up ë²¡í„° ë³€í™˜
+	//    (LH ì¢Œí‘œê³„ì—ì„œ ê¸°ë³¸ forward = (0, 0, 1), up = (0, 1, 0))
 	FVector Forward = RotationMatrix * FVector(0.0f, 0.0f, 1.0f);
 	FVector Up = RotationMatrix * FVector(0.0f, 1.0f, 0.0f);
 
-	// 3. LookAt ÁÂÇ¥ °è»ê: Ä«¸Ş¶ó À§Ä¡¿¡¼­ Forward ¹æÇâÀ¸·Î ÇÑ ´ÜÀ§ ÀÌµ¿
-	// -> ¸ñÇ¥Á¡Àº CameraTargetÀ» »ç¿ëÇÏ¿© °íÁ¤µÈ ÁÂÇ¥·Î ÁöÁ¤
+	// 3. LookAt ì¢Œí‘œ ê³„ì‚°: ì¹´ë©”ë¼ ìœ„ì¹˜ì—ì„œ Forward ë°©í–¥ìœ¼ë¡œ í•œ ë‹¨ìœ„ ì´ë™
+	// -> ëª©í‘œì ì€ CameraTargetì„ ì‚¬ìš©í•˜ì—¬ ê³ ì •ëœ ì¢Œí‘œë¡œ ì§€ì •
 	FVector LookAt = CameraPosition + Forward;
 
-	// 4. Á¤±ÔÁ÷±³ ÁÂÇ¥°è ±¸¼º
-	//    ForwardNormalized´Â Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ½ÇÁ¦ ¹æÇâ
+	// 4. ì •ê·œì§êµ ì¢Œí‘œê³„ êµ¬ì„±
+	//    ForwardNormalizedëŠ” ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ì‹¤ì œ ë°©í–¥
 	FVector ForwardNormalized = (LookAt - CameraPosition).Normalized();
-	// LH ÁÂÇ¥°è: Right = normalize(cross(Up, ForwardNormalized))
+	// LH ì¢Œí‘œê³„: Right = normalize(cross(Up, ForwardNormalized))
 	FVector Right = Up.Cross(ForwardNormalized).Normalized();
-	// º¸Á¤µÈ Up º¤ÅÍ: NewUp = cross(ForwardNormalized, Right)
+	// ë³´ì •ëœ Up ë²¡í„°: NewUp = cross(ForwardNormalized, Right)
 	FVector NewUp = ForwardNormalized.Cross(Right);
 
-	// 5. ÆòÇà ÀÌµ¿ ¿ä¼Ò °è»ê: °¢ Ãà º¤ÅÍ¿Í Ä«¸Ş¶ó À§Ä¡ÀÇ ³»ÀûÀÇ À½¼ö
+	// 5. í‰í–‰ ì´ë™ ìš”ì†Œ ê³„ì‚°: ê° ì¶• ë²¡í„°ì™€ ì¹´ë©”ë¼ ìœ„ì¹˜ì˜ ë‚´ì ì˜ ìŒìˆ˜
 	float D0 = -Right.Dot(CameraPosition);
 	float D1 = -NewUp.Dot(CameraPosition);
 	float D2 = -ForwardNormalized.Dot(CameraPosition);
 
-	// 6. ºä Çà·Ä ±¸¼º (row-major ¹æ½Ä)
+	// 6. ë·° í–‰ë ¬ êµ¬ì„± (row-major ë°©ì‹)
 	/*float m[4][4] = {
 		{ Right.X,         Right.Y,         Right.Z,         D0 },
 		{ NewUp.X,         NewUp.Y,         NewUp.Z,         D1 },
@@ -83,12 +83,12 @@ FMatrix UCameraComponent::CreateLookAt()
 
 void UCameraComponent::Render()
 {
-	// ¸¶¿ì½º ÀÌµ¿·®À» ÀÌ¿ëÇÑ È¸Àü Ã³¸®
+	// ë§ˆìš°ìŠ¤ ì´ë™ëŸ‰ì„ ì´ìš©í•œ íšŒì „ ì²˜ë¦¬
 	UpdateRotationFromMouse();
 
 	float MoveSpeed = 0.3f;
 
-	// Å°º¸µå ÀÔ·Â Ã³¸®
+	// í‚¤ë³´ë“œ ì…ë ¥ ì²˜ë¦¬
 	if(FInputManager::GetInst().GetKey('W') == EKeyState::Held)
 	{
 		CameraPosition += RotationMatrix * FVector(0.0f, 0.0f, MoveSpeed);
@@ -108,7 +108,7 @@ void UCameraComponent::Render()
 
 	ViewMatrix = CreateLookAt();
 
-	// ¸¶¿ì½º µ¨Å¸ ÃÊ±âÈ­
+	// ë§ˆìš°ìŠ¤ ë¸íƒ€ ì´ˆê¸°í™”
 	FInputManager::GetInst().ResetMouseDeltas();
 }
 
@@ -128,7 +128,7 @@ void UCameraComponent::SetRotation(float x, float y, float z)
 
 void UCameraComponent::SetViewportSize(float Width, float Height)
 {
-	// ºäÆ÷Æ® ¼³Á¤
+	// ë·°í¬íŠ¸ ì„¤ì •
 	ViewportWidth = Width;
 	ViewportHeight = Height;
 }
@@ -152,25 +152,25 @@ void UCameraComponent::GetViewMatrix(FMatrix& InViewMatrix)
 
 void UCameraComponent::UpdateRotationFromMouse()
 {
-	// ¸¶¿ì½º ¿ìÅ¬¸¯ÀÌ ´­¸®Áö ¾Ê¾Ò´Ù¸é È¸ÀüÇÏÁö ¾ÊÀ½ 
+	// ë§ˆìš°ìŠ¤ ìš°í´ë¦­ì´ ëˆŒë¦¬ì§€ ì•Šì•˜ë‹¤ë©´ íšŒì „í•˜ì§€ ì•ŠìŒ 
 	if (FInputManager::GetInst().GetKey(VK_RBUTTON) != EKeyState::Held)
 	{
 		return;
 	}
 
-	// ¸¶¿ì½º ÀÌµ¿·® °¡Á®¿À±â
+	// ë§ˆìš°ìŠ¤ ì´ë™ëŸ‰ ê°€ì ¸ì˜¤ê¸°
 	float DeltaX = FInputManager::GetInst().GetMouseDeltaX();
 	float DeltaY = FInputManager::GetInst().GetMouseDeltaY();
 
 
-	// °¨µµ ¼³Á¤
+	// ê°ë„ ì„¤ì •
 	float Sensitivity = 0.002f;
 
-	// È¸Àü °ª ¾÷µ¥ÀÌÆ®
-	CameraRotation.Y += DeltaX * Sensitivity; // Yaw (ÁÂ¿ì È¸Àü)
-	CameraRotation.X += DeltaY * Sensitivity; // Pitch (»óÇÏ È¸Àü)
+	// íšŒì „ ê°’ ì—…ë°ì´íŠ¸
+	CameraRotation.Y += DeltaX * Sensitivity; // Yaw (ì¢Œìš° íšŒì „)
+	CameraRotation.X += DeltaY * Sensitivity; // Pitch (ìƒí•˜ íšŒì „)
 
-	// Pitch È¸Àü Á¦ÇÑ (°í°³°¡ ³Ê¹« ¸¹ÀÌ ²ªÀÌ´Â °Í ¹æÁö)
+	// Pitch íšŒì „ ì œí•œ (ê³ ê°œê°€ ë„ˆë¬´ ë§ì´ êº¾ì´ëŠ” ê²ƒ ë°©ì§€)
 	float MaxPitch = DirectX::XMConvertToRadians(89.0f);
 	float MinPitch = DirectX::XMConvertToRadians(-89.0f);
 	CameraRotation.X = (CameraRotation.X < MinPitch) ? MinPitch : (CameraRotation.X > MaxPitch) ? MaxPitch : CameraRotation.X;
@@ -178,7 +178,7 @@ void UCameraComponent::UpdateRotationFromMouse()
 
 FVector UCameraComponent::GetRayDirection(int ScreenX, int ScreenY)
 { 
-	//½ºÅ©¸° ÁÂÇ¥¸¦ Á¤±ÔÈ­µÈ ÀåÄ¡ ÁÂÇ¥·Î º¯È¯
+	//ìŠ¤í¬ë¦° ì¢Œí‘œë¥¼ ì •ê·œí™”ëœ ì¥ì¹˜ ì¢Œí‘œë¡œ ë³€í™˜
 	//float NDC_X = (2.0f * ScreenX)  /
 	return FVector();
 }
