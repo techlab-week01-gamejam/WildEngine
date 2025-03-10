@@ -2,7 +2,8 @@
 
 #include "Windows.h"
 #include "Types/Types.h"
-
+#include "memory"
+#include "Windows/PropertyWindow.h"
 
 class URenderer;
 
@@ -25,5 +26,7 @@ private:
 
 private:
 	URenderer* Renderer;
+	UScene* Scene;
+	std::shared_ptr<PropertyWindow> NewPropertyWindow;
 };
 

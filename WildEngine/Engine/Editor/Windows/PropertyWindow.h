@@ -3,7 +3,7 @@
 #include "Math/Vector.h"
 #include "Types/Types.h"
 
-
+class UScene;
 
 class PropertyWindow : public UEditorWindow
 {
@@ -11,6 +11,14 @@ public:
 	PropertyWindow();
 
 	void Render() override;
+
+	FVector GetLocation();
+	FVector GetRotation();
+	FVector GetScale();
+	void SetLocation(FVector& Vector);
+	void SetRotation(FVector& Vector);
+	void SetScale(FVector& Vector);
+	void SetUUID(uint32 UUID);
 
 private:
 	bool bIsFocused;
@@ -24,5 +32,6 @@ private:
 	float ObjectScale[3] = { 0, 0, 0 };
 
 	INT32 ObjectUUID;
+
 };
 
