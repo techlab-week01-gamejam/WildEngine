@@ -20,8 +20,14 @@ void PropertyWindow::Render()
 {
 	ImGuiIO& io = ImGui::GetIO();
 
-	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - 270, 10));
-	ImGui::SetNextWindowSize(ImVec2(260, 280));
+	float scaleX = io.DisplaySize.x / 1920.0f;
+	float scaleY = io.DisplaySize.y / 1080.0f;
+
+	ImVec2 WinSize(io.DisplaySize.x * 0.3f, io.DisplaySize.y * 0.3f);
+
+	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - WinSize.x - 5, 10), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
+
 	ImGui::Begin("Property Panel", nullptr, ImGuiWindowFlags_NoResize);
 
 	if (bIsFocused)
@@ -56,6 +62,10 @@ void PropertyWindow::Render()
 
 	ImGui::Separator(); // 수평 구분선
 	ImGui::End();
+}
+
+void PropertyWindow::OnResize(UINT32 Width, UINT32 Height)
+{
 }
 
 FVector PropertyWindow::GetLocation()

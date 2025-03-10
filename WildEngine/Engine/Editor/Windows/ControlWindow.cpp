@@ -28,14 +28,22 @@ ControlWindow::ControlWindow()
     Rotation[2] = 0;
 
     WindowWidth = 360;
-    WindowHeight = 300;
+    WindowHeight = 320;
 }
 
 void ControlWindow::Render()
 {
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::SetNextWindowSize(ImVec2(WindowWidth, WindowHeight), ImGuiCond_Always);
+    float scaleX = io.DisplaySize.x / 1024.0f;
+    float scaleY = io.DisplaySize.y / 1024.0f;
+
+    ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
+
+    ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
+
+    // ImGui::SetNextWindowSize(ImVec2(WindowWidth, WindowHeight), ImGuiCond_Always);
 
 	ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
 
@@ -211,6 +219,10 @@ void ControlWindow::Render()
 	ImGui::End();
 }
 
+void ControlWindow::OnResize(UINT32 Width, UINT32 Height)
+{
+}
+
 void ControlWindow::SetPrimaryGizmo(UGizmoComponent* NewGizmo)
 {
     if(PrimaryGizmo == NewGizmo) return;
@@ -260,7 +272,7 @@ bool ControlWindow::CreateCustomInputInt(const char* label, ImGuiDataType data_t
         ImGui::BeginDisabled();
     ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
     ImGui::SameLine(0, style.ItemInnerSpacing.x);
-    if (ImGui::ButtonEx("Spawn", ImVec2(button_size * 4.2, button_size)))
+    if (ImGui::ButtonEx("Spawn", ImVec2(button_size * 4.2f, button_size)))
     {
         // "spawn" 버튼 클릭 시 원하는 동작을 수행합니다.
         // 예를 들어, 특별한 연산을 적용하거나 상태를 변경할 수 있습니다.

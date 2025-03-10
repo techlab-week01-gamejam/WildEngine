@@ -50,11 +50,13 @@ void ConsoleWindow::Render()
 
     ImGuiIO& io = ImGui::GetIO();
 
-    // 원하는 정상 윈도우 높이
-    float normalHeight = 250.0f;
+    float scaleX = io.DisplaySize.x / 1024.0f;
+    float scaleY = io.DisplaySize.y / 1024.0f;
 
-    ImGui::SetNextWindowPos(ImVec2(5, io.DisplaySize.y - normalHeight - 5), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x - 255, normalHeight), ImGuiCond_Always);
+    ImVec2 WinSize(io.DisplaySize.x * 0.8f, io.DisplaySize.y * 0.3f);
+
+    ImGui::SetNextWindowPos(ImVec2(0, io.DisplaySize.y - WinSize.y - 5), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(WinSize, ImGuiCond_Once);
 
     ImGuiWindowFlags WindowFlags = 
         ImGuiWindowFlags_NoMove | 
@@ -188,6 +190,11 @@ void ConsoleWindow::Render()
         ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
 
     ImGui::End();
+}
+
+void ConsoleWindow::OnResize(UINT32 Width, UINT32 Height)
+{
+
 }
 
 void ConsoleWindow::Toggle()

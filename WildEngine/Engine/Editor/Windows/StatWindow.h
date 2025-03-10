@@ -12,6 +12,8 @@ public:
 
 	void Render() override;
 
+	void OnResize(UINT32 Width, UINT32 Height) override;
+
 	void Toggle() override;
 private:
 	

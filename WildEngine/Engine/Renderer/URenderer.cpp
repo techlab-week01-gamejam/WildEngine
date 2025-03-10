@@ -262,6 +262,61 @@ void URenderer::Release()
     ReleaseDeviceAndSwapChain();
 }
 
+void URenderer::OnResize(uint32 Width, uint32 Height)
+{
+    // 렌더링이 진행 중이라면, 먼저 DeviceContext를 flush 합니다.
+    if (DeviceContext)
+    {
+        DeviceContext->Flush();
+    }
+
+    // 기존 렌더 타겟 및 깊이-스텐실 뷰 해제
+    if (FrameBufferRTV)
+    {
+        FrameBufferRTV->Release();
+        FrameBufferRTV = nullptr;
+    }
+    if (FrameBuffer)
+    {
+        FrameBuffer->Release();
+        FrameBuffer = nullptr;
+    }
+    if (DepthStencilView)
+    {
+        DepthStencilView->Release();
+        DepthStencilView = nullptr;
+    }
+
+    // 스왑 체인 버퍼 크기 재조정
+    // 첫번째 인자 0은 기존 설정을 그대로 유지하겠다는 의미입니다.
+    if (SwapChain)
+    {
+        HRESULT hr = SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
+        if (FAILED(hr))
+        {
+            // 실패 시 적절한 오류 처리
+            return;
+        }
+    }
+
+    // 뷰포트 정보 업데이트: 새 크기에 맞게 설정
+    ViewportInfo.TopLeftX = 0.0f;
+    ViewportInfo.TopLeftY = 0.0f;
+    ViewportInfo.Width = static_cast<float>(Width);
+    ViewportInfo.Height = static_cast<float>(Width);
+    ViewportInfo.MinDepth = 0.0f;
+    ViewportInfo.MaxDepth = 1.0f;
+
+    // 백 버퍼(렌더 타겟)와 깊이-스텐실 뷰 재생성
+    CreateFrameBuffer();
+
+    // 새 뷰포트 적용
+    if (DeviceContext)
+    {
+        DeviceContext->RSSetViewports(1, &ViewportInfo);
+    }
+}
+
 // 백 버퍼와 프론트 버퍼 교체 (화면 출력)
 void URenderer::SwapBuffer()
 {

@@ -15,6 +15,7 @@ public:
 	ControlWindow(const ControlWindow&) {};
 
 	void Render() override;
+	void OnResize(UINT32 Width, UINT32 Height) override;
 
 	void SetPrimaryGizmo(UGizmoComponent* NewGizmo);
 	void SetCameraLocation(FVector& Location) { CameraLocation = &Location; };
