@@ -139,6 +139,7 @@
     <ClInclude Include="Core\Log\DebugConsole.h" />
     <ClInclude Include="Core\Input\InputManager.h" />
     <ClInclude Include="Core\Interface\ISingleton.h" />
+    <ClInclude Include="CommonTypes.h" />
     <ClInclude Include="Core\Gizmo.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
     <ClInclude Include="Core\Math\Vector.h" />
