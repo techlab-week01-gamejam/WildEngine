@@ -7,7 +7,9 @@
 #include "Math/Matrix.h"
 
 struct FVertexType;
+
 class UScene;
+class UWildEditor;
 
 // 렌더러 클래스 선언
 class URenderer
@@ -59,6 +61,11 @@ public:
 
     void SetPrimaryScene(UScene* NewScene);
 
+    UScene* GetPrimaryScene() { return PrimaryScene; }
+
+    UWildEditor* GetPrimaryEditor() { return PrimaryEditor; }
+
+    void OnResize(uint32 Width, uint32 Height);
 private:
     // 렌더링 처리 함수
     void SwapBuffer();
@@ -95,6 +102,8 @@ private:
 
 private:
     UScene* PrimaryScene;
+
+    UWildEditor* PrimaryEditor;
 
     struct FMatrixType
     {

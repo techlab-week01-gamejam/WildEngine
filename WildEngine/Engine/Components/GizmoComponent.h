@@ -4,13 +4,7 @@
 #include "SceneComponent.h"
 
 class URenderer;
-
-enum class GizmoType
-{
-	Translation,
-	Rotation,
-	Scale
-};
+enum class EGizmoType;
 
 class UGizmoComponent : public USceneComponent
 {
@@ -19,13 +13,18 @@ public:
 	UGizmoComponent(const UGizmoComponent&) = delete;
 	~UGizmoComponent();
 
+	static UClass* GetClass();
+	UClass* GetInstanceClass() const override;
+
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
 
-	void SetGizmoType(GizmoType NewType);
+	void SetGizmoType(EGizmoType NewType);
+
+	EGizmoType GetCurrentGizmo() { return CurrentType; }
 private:
 	URenderer* Renderer;
 
-	GizmoType CurrentType;
+	EGizmoType CurrentType;
 	
 	UINT NumVerticesX;
 	ID3D11Buffer* VertexBufferX;

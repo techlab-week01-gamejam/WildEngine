@@ -16,9 +16,16 @@
 #include "imGui/imgui_impl_win32.h"
 
 #include "Renderer/URenderer.h"
+#include "Editor/WildEditor.h"
 #include "Scene/Scene.h"
+#include "Editor/EditorDesigner.h"
+
+// Manager
+#include "Input/InputManager.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+URenderer* g_pRenderer = nullptr;
 
 // 각종 메시지를 처리할 함수
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -27,6 +34,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     }
 
     switch (message) {
+    case WM_MOUSEMOVE:
+    {
+        int32 x = LOWORD(lParam);
+        int32 y = HIWORD(lParam);
+        FInputManager::GetInst().ProcessMouseMovement(x, y);
+    }
+    break;
+
+    case WM_SIZE:
+    {
+        UINT32 width = LOWORD(lParam);
+        UINT32 height = HIWORD(lParam);
+        UEditorDesigner::Get().OnResize(width, height);
+
+        if (g_pRenderer)
+        {
+            g_pRenderer->OnResize(width, height);
+            g_pRenderer->GetPrimaryEditor()->OnResize();
+        }
+    }
+    break;
+
     case WM_DESTROY:
         // Signal that the app should quit
         PostQuitMessage(0);
@@ -34,7 +63,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
-
     return 0;
 }
 
@@ -57,8 +85,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
 
+
+    // 매니저 Class 초기화
+    FInputManager::GetInst().Init();
+
     // Renderer Class를 생성합니다.
     URenderer* MainRender = new URenderer();
+
+    g_pRenderer = MainRender;
 
     // D3D11 생성하는 함수를 호출합니다.
     MainRender->Create(hWnd);
@@ -121,10 +155,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         } while (elapsedTime < targetFrameTime);
 
-        deltaTime = elapsedTime / 1000.0;
+        deltaTime = elapsedTime / 1000.0f;
     }
 
     MainRender->Release();
+
+    _CrtDumpMemoryLeaks(); // 메모리 누수 체크
 
     return 0;
 }

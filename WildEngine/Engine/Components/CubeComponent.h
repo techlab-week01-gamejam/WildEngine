@@ -8,22 +8,19 @@ class URenderer;
 
 class UCubeComponent : public UPrimitiveComponent
 {
-
 public:
+	UCubeComponent();
+	UCubeComponent(URenderer* InRenderer, FVector InLocation);
 	UCubeComponent(URenderer* InRenderer);
 	UCubeComponent(const UCubeComponent&);
 	~UCubeComponent();
 
+	static UClass* GetClass();
+	UClass* GetInstanceClass() const override;
+
 	void Render(FMatrix WorldMatrix, FMatrix ViewMatrix, FMatrix ProjectionMatrix);
+	bool CheckRayIntersection(FVector RayOrigin, FVector RayDirection, FHitResult& OutHitResult) override;
 
 private:
 	void Initialize();
-
-private:
-	URenderer* Renderer;
-
-	UINT NumVertices;
-	ID3D11Buffer* VertexBuffer;
-
-	float rot;
 };
